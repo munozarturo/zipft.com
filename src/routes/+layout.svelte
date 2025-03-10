@@ -8,6 +8,6 @@
 	<title>zipft</title>
 </svelte:head>
 
-<div class="min-h-screen text-primary bg-secondary">
+<div class="min-h-screen text-primary-800 bg-secondary">
 	{@render children()}
 </div>

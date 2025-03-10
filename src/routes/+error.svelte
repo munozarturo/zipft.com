@@ -1,6 +1,4 @@
 <script>
-	import { page } from '$app/state';
-	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
 	import NavBar from '$lib/components/nav/NavBar.svelte';
 </script>
 
@@ -11,9 +9,18 @@
 <div>
 	<NavBar />
 	<div class="w-full flex flex-row items-center justify-center mt-40">
-		<div class="flex flex-col w-fit h-fit gap-4">
-			<h1 class="font-bold text-5xl">404 Not Found</h1>
-			<h2 class="text-3xl">We couldn't find the page you are looking for.</h2>
+		<div class="flex flex-col w-fit h-fit gap-8">
+			<div class="flex flex-col gap-2">
+				<h1 class="font-bold text-5xl">404 Not Found</h1>
+				<h2 class="text-3xl">We couldn't find the page you are looking for.</h2>
+			</div>
+			<div class="flex flex-row items-center justify-center">
+				<a
+					href="/"
+					class="p-2 text-xl transition-all outline w-fit hover:text-secondary hover:bg-primary-800"
+					>Go home</a
+				>
+			</div>
 		</div>
 	</div>
 </div>

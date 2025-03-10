@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/state';
 	import LogoCore from '$lib/assets/brand/LogoCore.ts.svelte';
 	import Account from '$lib/assets/icons/Account.svelte';
 
