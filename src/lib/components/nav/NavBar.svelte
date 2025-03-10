@@ -21,18 +21,26 @@
 
 	let mobileActionsMenuOpen = $state(false);
 	function toggleMobileActionsMenu() {
+		mobileAccountMenuOpen = false;
 		mobileActionsMenuOpen = !mobileActionsMenuOpen;
 	}
 
 	let mobileAccountMenuOpen = $state(false);
 	function toggleMobileAccountMenu() {
+		mobileActionsMenuOpen = false;
 		mobileAccountMenuOpen = !mobileAccountMenuOpen;
+	}
+
+	function closeMobileMenus() {
+		mobileAccountMenuOpen = false;
+		mobileActionsMenuOpen = false;
 	}
 </script>
 
 <div>
+	<!-- Mobile Actions Menu -->
 	{#if mobileActionsMenuOpen}
-		<div class="absolute w-full top-20 flex flex-row items-center justify-center">
+		<div class="absolute w-full top-20 flex flex-row items-center justify-center z-20">
 			<div
 				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
 			>
@@ -60,6 +68,40 @@
 			</div>
 		</div>
 	{/if}
+	<!-- Mobile Account Menu -->
+	{#if mobileAccountMenuOpen}
+		<div class="absolute w-full top-20 flex flex-row items-center justify-center z-20">
+			<div
+				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
+			>
+				<!-- Account Options -->
+				<div class="flex flex-col">
+					<a
+						href="/send"
+						class={twMerge(
+							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
+							isActive('/send') && 'underline'
+						)}
+					>
+						sign in
+					</a>
+					<a
+						href="/receive"
+						class={twMerge(
+							'p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
+							isActive(['/receive', '/r'], true) && 'underline'
+						)}
+					>
+						sign up
+					</a>
+				</div>
+			</div>
+		</div>
+	{/if}
+	<!-- Close Menu when click out of menu excluding navbar interaction -->
+	{#if mobileAccountMenuOpen || mobileActionsMenuOpen}
+		<div aria-hidden="true" onclick={closeMobileMenus} class="fixed top-20 inset-0 z-10"></div>
+	{/if}
 	<nav class="flex flex-row items-center justify-between w-full h-20 px-4 md:px-10">
 		<!-- Mobile Actions -->
 		<div class="flex flex-row items-center justify-center md:hidden">
@@ -70,13 +112,12 @@
 				<Menu className="w-7 h-7" />
 			</button>
 		</div>
-		<!-- Mobile Actions Menu -->
-
 		<!-- Logo -->
 		<a href="/"><LogoCore className="h-auto w-30 md:w-40" /></a>
 		<!-- Mobile Account -->
 		<div class="flex flex-row items-center">
 			<button
+				onclick={toggleMobileAccountMenu}
 				class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
 			>
 				<Account className="w-8 h-8" />
