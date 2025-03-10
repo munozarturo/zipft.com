@@ -1,5 +1,5 @@
 <script>
-	export let className = '';
+	let { className } = $props();
 </script>
 
 <div class={className}>
