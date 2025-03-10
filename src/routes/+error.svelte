@@ -8,10 +8,10 @@
 
 <div>
 	<NavBar />
-	<div class="w-full flex flex-row items-center justify-center px-4 mt-20 md:mt-40">
-		<div class="flex flex-col w-full max-w-md h-fit gap-6 md:gap-8 text-center">
+	<div class="w-full flex flex-row items-center justify-center mt-40 text-center px-4">
+		<div class="flex flex-col w-fit h-fit gap-2 md:gap-8">
 			<div class="flex flex-col gap-2">
-				<h1 class="font-bold text-3xl md:text-5xl">404 Not Found</h1>
+				<h1 class="font-bold text-4xl md:text-5xl">404 Not Found</h1>
 				<h2 class="text-xl md:text-3xl">We couldn't find the page you are looking for.</h2>
 			</div>
 			<div class="flex flex-row items-center justify-center">

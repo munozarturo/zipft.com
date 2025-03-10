@@ -31,7 +31,7 @@
 						href="/signin"
 						class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
 					>
-						<Account className="" />
+						<Account className="w-8 h-8" />
 						<p class="text-lg">sign in</p>
 					</a>
 				</li>
