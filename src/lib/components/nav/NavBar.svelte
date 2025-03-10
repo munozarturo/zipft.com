@@ -43,6 +43,8 @@
 		<div class="absolute w-full top-20 flex flex-row items-center justify-center z-20">
 			<div
 				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
+				role="menu"
+				aria-label="Mobile actions menu"
 			>
 				<!-- Menu Options -->
 				<div class="flex flex-col">
@@ -52,6 +54,7 @@
 							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
 							isActive('/send') && 'underline'
 						)}
+						role="menuitem"
 					>
 						send
 					</a>
@@ -61,6 +64,7 @@
 							'p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
+						role="menuitem"
 					>
 						receive
 					</a>
@@ -73,6 +77,8 @@
 		<div class="absolute w-full top-20 flex flex-row items-center justify-center z-20">
 			<div
 				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
+				role="menu"
+				aria-label="Mobile account menu"
 			>
 				<!-- Account Options -->
 				<div class="flex flex-col">
@@ -82,6 +88,7 @@
 							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
 							isActive('/send') && 'underline'
 						)}
+						role="menuitem"
 					>
 						sign in
 					</a>
@@ -91,6 +98,7 @@
 							'p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
+						role="menuitem"
 					>
 						sign up
 					</a>
@@ -100,25 +108,39 @@
 	{/if}
 	<!-- Close Menu when click out of menu excluding navbar interaction -->
 	{#if mobileAccountMenuOpen || mobileActionsMenuOpen}
-		<div aria-hidden="true" onclick={closeMobileMenus} class="fixed top-20 inset-0 z-10"></div>
+		<button
+			class="fixed top-20 inset-0 z-10"
+			onclick={closeMobileMenus}
+			tabindex="0"
+			aria-label="Close mobile menu"
+		></button>
 	{/if}
-	<nav class="flex flex-row items-center justify-between w-full h-20 px-4 md:px-10">
+	<nav
+		class="flex flex-row items-center justify-between w-full h-20 px-4 md:px-10"
+		aria-label="Main navigation"
+	>
 		<!-- Mobile Actions -->
 		<div class="flex flex-row items-center justify-center md:hidden">
 			<button
 				onclick={toggleMobileActionsMenu}
 				class="flex flex-row items-center justify-center gap-2 hover:underline underline-offset-2 decoration-2"
+				aria-expanded={mobileActionsMenuOpen}
+				aria-controls="mobile-actions-menu"
+				aria-label="Toggle mobile menu"
 			>
 				<Menu className="w-7 h-7" />
 			</button>
 		</div>
 		<!-- Logo -->
-		<a href="/"><LogoCore className="h-auto w-30 md:w-40" /></a>
+		<a href="/" aria-label="Home page"><LogoCore className="h-auto w-30 md:w-40" /></a>
 		<!-- Mobile Account -->
 		<div class="flex flex-row items-center">
 			<button
 				onclick={toggleMobileAccountMenu}
 				class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
+				aria-expanded={mobileAccountMenuOpen}
+				aria-controls="mobile-account-menu"
+				aria-label="Toggle account menu"
 			>
 				<Account className="w-8 h-8" />
 			</button>
@@ -127,25 +149,27 @@
 		<div class="hidden md:flex flex-row items-center gap-12">
 			<!-- Nav Links -->
 			<div class="flex flex-row items-center">
-				<ul class="flex flex-row items-center">
-					<li>
+				<ul class="flex flex-row items-center" role="menubar" aria-label="Main navigation">
+					<li role="none">
 						<a
 							href="/"
 							class={twMerge(
 								'text-lg p-1.5 hover:underline underline-offset-2 decoration-2',
 								isActive('/') && 'underline'
 							)}
+							role="menuitem"
 						>
 							send
 						</a>
 					</li>
-					<li>
+					<li role="none">
 						<a
 							href="/receive"
 							class={twMerge(
 								'text-lg p-2 hover:underline underline-offset-2 decoration-2',
 								isActive(['/receive', '/r'], true) && 'underline'
 							)}
+							role="menuitem"
 						>
 							receive
 						</a>
@@ -154,11 +178,12 @@
 			</div>
 			<!-- Account -->
 			<div class="flex flex-row items-center">
-				<ul class="flex flex-row items-center">
-					<li>
+				<ul class="flex flex-row items-center" role="menubar" aria-label="Account navigation">
+					<li role="none">
 						<a
 							href="/signin"
 							class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
+							role="menuitem"
 						>
 							<Account className="w-8 h-8" />
 							<p class="text-lg">sign in</p>
