@@ -4,6 +4,17 @@
 	import Menu from '$lib/assets/icons/Menu.svelte';
 	import { page } from '$app/state';
 	import { twMerge } from 'tailwind-merge';
+	import Cog from '$lib/assets/icons/Cog.svelte';
+	import Exit from '$lib/assets/icons/Exit.svelte';
+	import Enter from '$lib/assets/icons/Enter.svelte';
+	import Send from '$lib/assets/icons/Send.svelte';
+	import Person from '$lib/assets/icons/Person.svelte';
+
+	// let user = {
+	// 	name: 'John Doe',
+	// 	email: 'john@example.com'
+	// };
+	let user: { name: string; email: string } | null = null;
 
 	let {} = $props();
 
@@ -80,29 +91,59 @@
 				role="menu"
 				aria-label="Mobile account menu"
 			>
-				<!-- Account Options -->
-				<div class="flex flex-col">
-					<a
-						href="/send"
-						class={twMerge(
-							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
-							isActive('/send') && 'underline'
-						)}
-						role="menuitem"
-					>
-						sign in
-					</a>
-					<a
-						href="/receive"
-						class={twMerge(
-							'p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
-							isActive(['/receive', '/r'], true) && 'underline'
-						)}
-						role="menuitem"
-					>
-						sign up
-					</a>
-				</div>
+				{#if user}
+					<div class="flex flex-col">
+						<div
+							class="flex flex-row items-center gap-4 border-b p-4 border-primary-50 bg-gray-100 text-md underline-offset-2 decoration-1.5"
+						>
+							<Account className="w-10 h-10" />
+							<div class="flex flex-col">
+								<p class="text-lg">{user.name}</p>
+								<p class="text-sm text-primary-500">{user.email}</p>
+							</div>
+						</div>
+						<a
+							href="/account"
+							class="p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
+							role="menuitem"
+						>
+							<span class="flex flex-row justify-between items-center"
+								>settings <Cog className="w-6 h-6" /></span
+							>
+						</a>
+						<a
+							href="/signout"
+							class="p-4 border-primary-50 text-md underline-offset-2 decoration-1.5"
+							role="menuitem"
+						>
+							<span class="flex flex-row justify-between items-center"
+								>sign out <Exit className="w-6 h-6" /></span
+							>
+						</a>
+					</div>
+				{:else}
+					<!-- Account Options -->
+					<div class="flex flex-col">
+						<a
+							href="/signup"
+							class="p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
+							role="menuitem"
+						>
+							<span class="flex flex-row justify-between items-center"
+								>sign up <Person className="w-6 h-6" /></span
+							>
+						</a>
+						<a
+							href="/signin"
+							class="p-4 border-primary-50 text-md underline-offset-2 decoration-1.5"
+							role="menuitem"
+						>
+							<span class="flex flex-row justify-between items-center"
+								>sign in <Enter className="w-6 h-6" /></span
+							>
+						</a>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{/if}

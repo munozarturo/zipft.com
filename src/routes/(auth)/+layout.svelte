@@ -9,8 +9,10 @@
 </svelte:head>
 
 <div class="flex flex-col items-center justify-center">
-	<nav class="flex flex-row items-center justify-between w-full h-20 px-10">
-		<a href="/"><LogoCore className="h-3/4" /></a>
+	<nav
+		class="flex flex-row items-center justify-center md:justify-between w-full h-20 px-4 md:px-10"
+	>
+		<a href="/" aria-label="Home page"><LogoCore className="h-auto w-40" /></a>
 	</nav>
 	{@render children()}
 </div>
