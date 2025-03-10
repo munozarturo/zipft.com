@@ -9,6 +9,7 @@
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Send from '$lib/assets/icons/Send.svelte';
 	import Person from '$lib/assets/icons/Person.svelte';
+	import Cross from '$lib/assets/icons/Cross.svelte';
 
 	// let user = {
 	// 	name: 'John Doe',
@@ -169,7 +170,13 @@
 				aria-controls="mobile-actions-menu"
 				aria-label="Toggle mobile menu"
 			>
-				<Menu className="w-7 h-7" />
+				{#if mobileActionsMenuOpen}
+					<div class="w-7 h-7 flex flex-row items-center justify-center">
+						<Cross className="w-6 h-6" />
+					</div>
+				{:else}
+					<Menu className="w-7 h-7" />
+				{/if}
 			</button>
 		</div>
 		<!-- Logo -->
@@ -183,7 +190,13 @@
 				aria-controls="mobile-account-menu"
 				aria-label="Toggle account menu"
 			>
-				<Account className="w-8 h-8" />
+				{#if mobileAccountMenuOpen}
+					<div class="w-8 h-8 flex flex-row items-center justify-center">
+						<Cross className="w-6 h-6" />
+					</div>
+				{:else}
+					<Account className="w-8 h-8" />
+				{/if}
 			</button>
 		</div>
 		<!-- Actions -->
