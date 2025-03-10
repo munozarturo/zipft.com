@@ -15,9 +15,7 @@
 		<div class="flex flex-row items-center">
 			<ul class="flex flex-row items-center">
 				<li>
-					<a href="/send" class="text-lg p-2 hover:underline underline-offset-2 decoration-2">
-						send
-					</a>
+					<a href="/" class="text-lg p-2 hover:underline underline-offset-2 decoration-2"> send </a>
 				</li>
 				<li>
 					<a href="/receive" class="text-lg p-2 hover:underline underline-offset-2 decoration-2">
