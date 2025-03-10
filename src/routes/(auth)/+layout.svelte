@@ -4,9 +4,13 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+	<title>Authentication :: zipft</title>
+</svelte:head>
+
 <div class="flex flex-col items-center justify-center">
-	<nav class="flex flex-row w-full h-20">
-		<a href="/"><LogoCore className="h-3/4 fm:h-full p-2 ml-4" /></a>
+	<nav class="flex flex-row items-center justify-between w-full h-20 px-10">
+		<a href="/"><LogoCore className="h-3/4" /></a>
 	</nav>
 	{@render children()}
 </div>
