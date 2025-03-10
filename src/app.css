@@ -2,12 +2,9 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-.theme-light {
-	--background: #fefefe;
-	--foreground: #1e1e1e;
-}
+@theme {
+	--font-inter: Inter, sans-serif;
 
-.theme-dark {
-	--background: #1e1e1e;
-	--foreground: #fefefe;
+	--color-primary: #fefefe;
+	--color-secondary: #1e1e1e;
 }
