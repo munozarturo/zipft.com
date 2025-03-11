@@ -23,7 +23,7 @@ export const sessionTable = schema.table('session', {
 
 	userId: integer('user_id')
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: 'cascade' }),
 
 	ipAddr: text('ip_addr'),
 	userAgent: text('user_agent'),
@@ -47,7 +47,7 @@ export const communicationTable = schema.table('communication', {
 
 	userId: integer('user_id')
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: 'cascade' }),
 
 	type: communicationType().notNull(),
 	purpose: communicationPurpose().notNull(),
@@ -65,7 +65,7 @@ export const verificationChallengeTable = schema.table('verification_challenges'
 
 	userId: integer('user_id')
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: 'cascade' }),
 
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	expiresAt: timestamp('expires_at')
@@ -84,7 +84,7 @@ export const passwordResetTable = schema.table('password_resets', {
 
 	userId: integer('user_id')
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: 'cascade' }),
 
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	expiresAt: timestamp('expires_at')
