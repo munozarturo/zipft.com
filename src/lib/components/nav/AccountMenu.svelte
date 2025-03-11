@@ -47,7 +47,7 @@
 				class="focus-visible:text-primary-500 text-md hover:text-primary-500 hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline focus:-outline-offset-2 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:flex md:text-lg"
 				aria-label="Sign in to your account"
 			>
-				Sign In
+				Sign in
 			</a>
 			<a
 				href="/signup"
@@ -55,7 +55,7 @@
 				aria-label="Sign up for a new account"
 			>
 				<span class="flex flex-row items-center justify-center gap-2">
-					Sign Up <ChevronRight
+					Sign up <ChevronRight
 						class="hidden h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0 md:flex"
 					/>
 				</span>
@@ -133,7 +133,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Sign Up <Person class="h-6 w-6" aria-hidden="true" />
+								Sign up <Person class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<a
@@ -143,7 +143,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Sign In <Enter class="h-6 w-6" aria-hidden="true" />
+								Sign in <Enter class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 					</div>

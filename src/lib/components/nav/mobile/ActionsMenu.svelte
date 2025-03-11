@@ -86,7 +86,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Sign In <Enter class="h-6 w-6" aria-hidden="true" />
+								Sign in <Enter class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 					{/if}

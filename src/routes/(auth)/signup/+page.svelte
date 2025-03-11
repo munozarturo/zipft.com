@@ -22,10 +22,10 @@
 	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		<div class="flex flex-col gap-1">
 			<h1 class="text-4xl font-bold">Welcome</h1>
-			<span class="flex flex-row text-slate-600">
+			<span class="text-primary-700 flex flex-row">
 				<p>Have an account?&nbsp;</p>
 				<a
-					href="/auth/signin"
+					href="/signin"
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Sign in</a
 				>
@@ -34,14 +34,26 @@
 		<div class="flex flex-col gap-2">
 			<label for="email" class="flex flex-col">
 				Email
-				<input name="email" type="email" placeholder="email@example.com" bind:value={$form.email} />
+				<input
+					name="email"
+					type="email"
+					placeholder="email@example.com"
+					class="w-full"
+					bind:value={$form.email}
+				/>
 			</label>
 			{#if $errors.email}
 				<small>{$errors.email}</small>
 			{/if}
 			<label for="password" class="flex flex-col">
 				Password
-				<input name="password" type="password" placeholder="Password" bind:value={$form.password} />
+				<input
+					name="password"
+					type="password"
+					placeholder="Password"
+					class="w-full"
+					bind:value={$form.password}
+				/>
 			</label>
 			{#if $errors.password}
 				<small>{$errors.password}</small>
@@ -60,7 +72,7 @@
 				/>
 			{/if}
 		</button>
-		<span class="text-slate-600">
+		<span class="text-primary-700">
 			<p class="text-sm">
 				By creating an account, you agree to zipft's&nbsp;<a
 					href="/legal/terms-of-service"
