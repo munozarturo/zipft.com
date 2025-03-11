@@ -1,108 +1,72 @@
-import { db } from '$lib/server/db/index.js';
-import { eq } from 'drizzle-orm';
+import type { Actions, PageServerLoad } from './$types';
+import {
+	createCommunication,
+	getUserByEmail,
+	validateVerficiationChallenge
+} from '$lib/server/db/actions.js';
+
+import { ROOT_DOMAIN } from '$env/static/private';
+import { generateToken } from '$lib/server/auth.js';
 import { redirect } from '@sveltejs/kit';
+import { sendEmail } from '$lib/server/aws/ses';
 
-export const load = async (event) => {
-	const token = event.url.searchParams.get('token');
-	event.url.searchParams.delete('token');
-	const secret = event.url.searchParams.get('secret');
-	event.url.searchParams.delete('secret');
+export const load: PageServerLoad = async ({ url }) => {
+	// if token is defined then try to validate the token to verify account
+	const t = url.searchParams.get('t');
+	// if email is defined then this means that a verification request is being made
+	const email = url.searchParams.get('e');
 
-	if (!token || !secret) {
-		return {
-			status: 'info',
-			title: 'Verify your identity',
-			message: 'A verification link was sent to your email. Open it to verify your identity.'
-		};
+	// if neither is defined then there is an issue
+	if (!t && !email) throw redirect(302, '/');
+
+	if (t) {
+		const {
+			error: verificationError,
+			message: verificationMessage,
+			data
+		} = await validateVerficiationChallenge(t);
+		if (verificationError) {
+			return { message: verificationMessage, verified: false };
+		}
+
+		return { verified: true };
 	}
 
-	try {
-		const [challenge] = await db
-			.select()
-			.from(verificationChallenges)
-			.where(eq(verificationChallenges.token, token))
-			.execute();
-
-		if (!challenge) {
-			return {
-				status: 'error',
-				title: 'Verification error',
-				message: 'Verification link not found. Please request a new one.'
-			};
-		}
-
-		const [user] = await db.select().from(users).where(eq(users.id, challenge.userId)).execute();
-		if (user.verified) {
-			return {
-				status: 'info',
-				title: 'Verification successful',
-				message: 'Your account is already verified. You can proceed to sign in.'
-			};
-		}
-
-		if (challenge.defeated) {
-			return {
-				status: 'error',
-				title: 'Verification error',
-				message: 'This verification link has already been used.'
-			};
-		}
-
-		const currentTime = new Date(Date.now());
-		if (currentTime < challenge.createdAt || currentTime > challenge.expiresAt) {
-			return {
-				status: 'error',
-				title: 'Verification error',
-				message: 'Verification link has expired. Please request a new one.'
-			};
-		}
-
-		const correctSecret = await argon2.verify(challenge.secretHash, secret);
-		if (!correctSecret) {
-			return {
-				status: 'error',
-				title: 'Verification error',
-				message: 'Invalid verification link. Please request a new link.'
-			};
-		}
-
-		await db.transaction(async (tx) => {
-			await tx
-				.update(verificationChallenges)
-				.set({ defeated: true, defeatedAt: currentTime })
-				.where(eq(verificationChallenges.token, token))
-				.execute();
-
-			await tx
-				.update(users)
-				.set({ verified: true })
-				.where(eq(users.id, challenge.userId))
-				.execute();
-		});
-
-		const sessionToken = csprng(256, 32);
-
-		await db.insert(sessions).values({
-			token: sessionToken,
-			userId: user.id,
-			ipAddr: event.getClientAddress(),
-			userAgent: event.request.headers.get('user-agent')
-		});
-
-		event.cookies.set('token', sessionToken, {
-			path: '/',
-			secure: true,
-			sameSite: 'lax',
-			httpOnly: false
-		});
-
-		throw redirect(303, '/dashboard');
-	} catch (error) {
-		console.error('Verification error:', error);
-		return {
-			status: 'error',
-			title: 'Verification error',
-			message: 'An error occurred during verification. Please try again.'
-		};
+	// Return early if no email is provided
+	if (!email) {
+		return { verified: false, message: 'No email provided' };
 	}
+
+	// Get user by email
+	const { error: userError, message: userMessage, data } = await getUserByEmail(email);
+
+	if (userError) {
+		return { verified: false, message: userMessage || 'User not found' };
+	}
+
+	const user = data.user;
+
+	// If user is already verified, redirect to home
+	if (user.verified) throw redirect(302, '/');
+
+	// Generate token and create communication record
+	const token = generateToken();
+	const {
+		error: communicationError,
+		data: commData,
+		message: commMessage
+	} = await createCommunication(user.id, 'email', 'verification');
+
+	if (communicationError) return { verified: false, message: commMessage };
+
+	const communication = commData.communication;
+
+	await sendEmail({
+		source: `zipft Security <security@auth.${ROOT_DOMAIN}>`,
+		destination: { to: email },
+		subject: 'Account Verification Token',
+		body: { text: `https://${ROOT_DOMAIN}/verify?t=${token}\n${communication.id}` }
+	});
+
+	return { verified: false, message: 'Verification email sent' };
 };
