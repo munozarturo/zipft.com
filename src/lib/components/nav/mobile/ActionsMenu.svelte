@@ -70,11 +70,11 @@
 						href="/receive"
 						class={twMerge(
 							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
-							isActive(['/receive', '/r'], true) && 'underline'
+							isActive(['/receive', '/r/'], true) && 'underline'
 						)}
 						role="menuitem"
 						tabindex="0"
-						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
+						aria-current={isActive(['/receive', '/r/'], true) ? 'page' : undefined}
 					>
 						Receive
 					</a>

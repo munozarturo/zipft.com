@@ -89,10 +89,10 @@
 						class={twMerge(
 							'text-lg p-2 hover:underline underline-offset-2 decoration-2 hover:text-primary-500',
 							'focus-visible:text-primary-500 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
-							isActive(['/receive', '/r'], true) && 'underline'
+							isActive(['/receive', '/r/'], true) && 'underline'
 						)}
 						role="menuitem"
-						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
+						aria-current={isActive(['/receive', '/r/'], true) ? 'page' : undefined}
 					>
 						Receive
 					</a>
