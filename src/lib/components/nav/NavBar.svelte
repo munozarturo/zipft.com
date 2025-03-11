@@ -11,8 +11,8 @@
 		last: 'Doe',
 		email: 'john@example.com'
 	};
-	// let session = { user };
-	let session = null;
+	let session = { user };
+	// session = null;
 
 	let {} = $props();
 
