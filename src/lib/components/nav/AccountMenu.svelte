@@ -26,7 +26,7 @@
 	{#if session}
 		<button
 			onclick={toggleOpen}
-			class="flex flex-row items-center gap-2 decoration-2 underline-offset-2 hover:underline"
+			class="focus-visible:text-primary-500 flex flex-row items-center gap-2 decoration-2 underline-offset-2 hover:underline focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 			aria-expanded={isOpen}
 			aria-controls="account-menu"
 			aria-label="Account menu"
@@ -40,18 +40,20 @@
 		<div class="flex flex-row items-center justify-center">
 			<a
 				href="/signin"
-				class="text-md hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline md:flex md:text-lg"
+				class="focus-visible:text-primary-500 text-md hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:flex md:text-lg"
 				aria-label="Sign in to your account"
 			>
 				sign in
 			</a>
 			<a
 				href="/signup"
-				class="text-md bg-primary-800 text-secondary hover:bg-primary-700 group p-2 decoration-2 outline transition-all md:text-lg"
+				class="text-md bg-primary-800 text-secondary hover:bg-primary-700 focus-visible:bg-primary-700 group p-2 decoration-2 outline transition-all focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:text-lg"
 				aria-label="Sign up for a new account"
 			>
 				<span class="flex flex-row items-center justify-center gap-2">
-					sign up <ChevronRight class="hidden h-3 w-3 group-hover:translate-x-1 md:flex" />
+					sign up <ChevronRight
+						class="hidden h-3 w-3 group-hover:translate-x-1 group-focus-visible:translate-x-1 md:flex"
+					/>
 				</span>
 			</a>
 		</div>
@@ -89,7 +91,7 @@
 							<!-- Close Button -->
 							<button
 								onclick={close}
-								class="flex items-center justify-center px-4 hover:bg-gray-50"
+								class="flex items-center justify-center px-4 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 								aria-label="Close menu"
 							>
 								<Cross class="h-5 w-5" aria-hidden="true" />
@@ -98,7 +100,7 @@
 
 						<a
 							href="/account"
-							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50"
+							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -108,7 +110,7 @@
 						</a>
 						<a
 							href="/signout"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
+							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -122,7 +124,7 @@
 					<div class="flex flex-col">
 						<a
 							href="/signup"
-							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50"
+							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -132,7 +134,7 @@
 						</a>
 						<a
 							href="/signin"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
+							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>

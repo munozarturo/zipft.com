@@ -26,7 +26,7 @@
 	<!-- Toggle Button -->
 	<button
 		onclick={toggleOpen}
-		class="flex flex-row items-center justify-center gap-2 decoration-2 underline-offset-2 hover:underline"
+		class="focus:outline-primary-800 flex flex-row items-center justify-center gap-2 decoration-2 underline-offset-2 focus:outline-2"
 		aria-expanded={isOpen}
 		aria-controls="mobile-actions-menu"
 		aria-label="Toggle mobile menu"
@@ -57,7 +57,7 @@
 					<a
 						href="/"
 						class={twMerge(
-							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50',
+							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
@@ -69,7 +69,7 @@
 					<a
 						href="/receive"
 						class={twMerge(
-							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50',
+							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
 						role="menuitem"
@@ -81,7 +81,7 @@
 					{#if !session}
 						<a
 							href="/signin"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
+							class="border-primary-50 text-md p-4 decoration-2 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>

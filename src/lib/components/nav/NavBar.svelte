@@ -11,8 +11,8 @@
 		last: 'Doe',
 		email: 'john@example.com'
 	};
-	let session = { user };
-	// let session = null;
+	// let session = { user };
+	let session = null;
 
 	let {} = $props();
 
@@ -60,7 +60,11 @@
 	/>
 
 	<!-- Logo -->
-	<a href="/" aria-label="Home page" class="flex items-center">
+	<a
+		href="/"
+		aria-label="Home page"
+		class="focus-visible:text-primary-500 focus:outline-primary-500 flex items-center focus:outline-2"
+	>
 		<LogoCore class="w-30 h-auto md:w-40" aria-hidden="true" />
 	</a>
 
@@ -68,12 +72,13 @@
 	<div class="flex flex-row items-center gap-12">
 		<!-- Nav Links (Desktop) -->
 		<div class="hidden flex-row items-center md:flex">
-			<ul class="flex flex-row items-center gap-4" role="menu" aria-label="Main navigation">
+			<ul class="flex flex-row items-center" role="menu" aria-label="Main navigation">
 				<li role="none">
 					<a
 						href="/"
 						class={twMerge(
-							'text-lg p-1.5 hover:underline underline-offset-2 decoration-2',
+							'text-lg p-1.5 hover:underline underline-offset-2 decoration-2 hover:text-primary-500',
+							'focus-visible:text-primary-500 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
@@ -86,7 +91,8 @@
 					<a
 						href="/receive"
 						class={twMerge(
-							'text-lg p-2 hover:underline underline-offset-2 decoration-2',
+							'text-lg p-2 hover:underline underline-offset-2 decoration-2 hover:text-primary-500',
+							'focus-visible:text-primary-500 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
 						role="menuitem"
