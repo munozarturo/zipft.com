@@ -158,6 +158,19 @@ export async function createCommunication(
 	return { error: false, data: { communication: inserted } };
 }
 
+export async function getLastCommunication(
+	userId: number
+): Promise<DatabaseResult<{ communication: Communication | null }>> {
+	const res = await db
+		.select()
+		.from(communicationTable)
+		.where(eq(communicationTable.userId, userId));
+	if (res.length < 1) return { error: false, data: { communication: null } };
+
+	const fetched = res[0];
+	return { error: false, data: { communication: fetched } };
+}
+
 export async function createVerificationChallenge(
 	token: string,
 	userId: number
@@ -165,7 +178,8 @@ export async function createVerificationChallenge(
 	const tokenHash = sha256Hash(token);
 
 	const res = await db.insert(verificationChallengeTable).values({ tokenHash, userId }).returning();
-	if (res.length < 1) return { error: true, data: null, message: 'Error creating communication' };
+	if (res.length < 1)
+		return { error: true, data: null, message: 'Error creating verification token' };
 
 	const inserted = res[0];
 	return { error: false, data: { challenge: inserted } };
