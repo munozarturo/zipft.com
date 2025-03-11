@@ -1,21 +1,22 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { twMerge } from 'tailwind-merge';
+
 	import LogoCore from '$lib/assets/brand/LogoCore.ts.svelte';
 	import Account from '$lib/assets/icons/Account.svelte';
 	import Menu from '$lib/assets/icons/Menu.svelte';
-	import { page } from '$app/state';
-	import { twMerge } from 'tailwind-merge';
 	import Cog from '$lib/assets/icons/Cog.svelte';
 	import Exit from '$lib/assets/icons/Exit.svelte';
 	import Enter from '$lib/assets/icons/Enter.svelte';
-	import Send from '$lib/assets/icons/Send.svelte';
 	import Person from '$lib/assets/icons/Person.svelte';
 	import Cross from '$lib/assets/icons/Cross.svelte';
 
-	// let user = {
-	// 	name: 'John Doe',
-	// 	email: 'john@example.com'
-	// };
-	let user: { name: string; email: string } | null = null;
+	let user = {
+		firstName: 'John',
+		lastName: 'Doe',
+		email: 'john@example.com'
+	};
+	// let user: { name: string; email: string } | null = null;
 
 	let {} = $props();
 
@@ -33,18 +34,18 @@
 
 	let mobileActionsMenuOpen = $state(false);
 	function toggleMobileActionsMenu() {
-		mobileAccountMenuOpen = false;
+		accountMenuOpen = false;
 		mobileActionsMenuOpen = !mobileActionsMenuOpen;
 	}
 
-	let mobileAccountMenuOpen = $state(false);
-	function toggleMobileAccountMenu() {
+	let accountMenuOpen = $state(false);
+	function toggleAccountMenu() {
 		mobileActionsMenuOpen = false;
-		mobileAccountMenuOpen = !mobileAccountMenuOpen;
+		accountMenuOpen = !accountMenuOpen;
 	}
 
-	function closeMobileMenus() {
-		mobileAccountMenuOpen = false;
+	function closeMenus() {
+		accountMenuOpen = false;
 		mobileActionsMenuOpen = false;
 	}
 </script>
@@ -84,9 +85,11 @@
 			</div>
 		</div>
 	{/if}
-	<!-- Mobile Account Menu -->
-	{#if mobileAccountMenuOpen}
-		<div class="absolute w-full top-20 flex flex-row items-center justify-center z-20">
+	<!-- Account Menu -->
+	{#if accountMenuOpen}
+		<div
+			class="absolute w-full md:w-[300px] md:right-5 top-20 flex flex-row items-center justify-center z-20"
+		>
 			<div
 				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
 				role="menu"
@@ -95,26 +98,31 @@
 				{#if user}
 					<div class="flex flex-col">
 						<div
-							class="flex flex-row items-center gap-4 border-b p-4 border-primary-50 bg-gray-100 text-md underline-offset-2 decoration-1.5"
+							class="flex flex-row items-center justify-between gap-4 border-b p-4 border-primary-50 bg-gray-100 text-md underline-offset-2 decoration-1.5"
 						>
-							<Account className="w-10 h-10" />
-							<div class="flex flex-col">
-								<p class="text-lg">{user.name}</p>
-								<p class="text-sm text-primary-500">{user.email}</p>
+							<div class="flex flex-row items-center gap-2 justify-center">
+								<Account className="w-10 h-10" />
+								<div class="flex flex-col">
+									<p class="text-lg">{user.firstName}&nbsp;{user.lastName}</p>
+									<p class="text-sm text-primary-500">{user.email}</p>
+								</div>
 							</div>
+							<button onclick={closeMenus}>
+								<Cross className="w-4 h-4" />
+							</button>
 						</div>
 						<a
 							href="/account"
-							class="p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
+							class="p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50"
 							role="menuitem"
 						>
 							<span class="flex flex-row justify-between items-center"
-								>settings <Cog className="w-6 h-6" /></span
+								>account <Cog className="w-6 h-6" /></span
 							>
 						</a>
 						<a
 							href="/signout"
-							class="p-4 border-primary-50 text-md underline-offset-2 decoration-1.5"
+							class="p-4 border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50"
 							role="menuitem"
 						>
 							<span class="flex flex-row justify-between items-center"
@@ -148,15 +156,16 @@
 			</div>
 		</div>
 	{/if}
-	<!-- Close Menu when click out of menu excluding navbar interaction -->
-	{#if mobileAccountMenuOpen || mobileActionsMenuOpen}
+	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
+	{#if accountMenuOpen || mobileActionsMenuOpen}
 		<button
-			class="fixed top-20 inset-0 z-10"
-			onclick={closeMobileMenus}
+			class="fixed top-20 md:top-0 inset-0 z-10"
+			onclick={closeMenus}
 			tabindex="0"
 			aria-label="Close mobile menu"
 		></button>
 	{/if}
+	<!-- Navigation -->
 	<nav
 		class="flex flex-row items-center justify-between w-full h-20 px-4 md:px-10"
 		aria-label="Main navigation"
@@ -181,16 +190,16 @@
 		</div>
 		<!-- Logo -->
 		<a href="/" aria-label="Home page"><LogoCore className="h-auto w-30 md:w-40" /></a>
-		<!-- Mobile Account -->
-		<div class="flex flex-row items-center">
+		<!-- Account -->
+		<div class="flex flex-row items-center justify-center md:hidden">
 			<button
-				onclick={toggleMobileAccountMenu}
+				onclick={toggleAccountMenu}
 				class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
-				aria-expanded={mobileAccountMenuOpen}
+				aria-expanded={accountMenuOpen}
 				aria-controls="mobile-account-menu"
 				aria-label="Toggle account menu"
 			>
-				{#if mobileAccountMenuOpen}
+				{#if accountMenuOpen}
 					<div class="w-8 h-8 flex flex-row items-center justify-center">
 						<Cross className="w-6 h-6" />
 					</div>
@@ -232,18 +241,30 @@
 			</div>
 			<!-- Account -->
 			<div class="flex flex-row items-center">
-				<ul class="flex flex-row items-center" role="menubar" aria-label="Account navigation">
-					<li role="none">
-						<a
-							href="/signin"
+				{#if user}
+					<div class="flex flex-row items-center justify-center">
+						<button
+							onclick={toggleAccountMenu}
 							class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
-							role="menuitem"
+							aria-expanded={accountMenuOpen}
+							aria-controls="mobile-account-menu"
+							aria-label="Toggle account menu"
 						>
-							<Account className="w-8 h-8" />
-							<p class="text-lg">sign in</p>
-						</a>
-					</li>
-				</ul>
+							<span class="flex flex-row items-center justify-center gap-2"
+								><Account className="w-8 h-8" /> {user.firstName}</span
+							>
+						</button>
+					</div>
+				{:else}
+					<a
+						href="/signin"
+						class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
+						role="menuitem"
+					>
+						<Account className="w-8 h-8" />
+						<p class="text-lg">sign in</p>
+					</a>
+				{/if}
 			</div>
 		</div>
 	</nav>
