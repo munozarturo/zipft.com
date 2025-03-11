@@ -63,7 +63,7 @@
 	<a
 		href="/"
 		aria-label="Home page"
-		class="focus-visible:text-primary-500 focus:outline-primary-500 flex items-center focus:outline-2"
+		class="focus:outline-primary-500 flex items-center focus:outline-2"
 	>
 		<LogoCore class="w-30 h-auto md:w-40" aria-hidden="true" />
 	</a>

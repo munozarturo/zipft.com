@@ -17,7 +17,9 @@
 	--color-primary-50: #dadada;
 
 	--color-secondary: #fefefe;
-	--color-accent: #004e89;
+	--color-accent: #155dfc;
+
+	----breakpoint-xs: 22rem;
 }
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */
