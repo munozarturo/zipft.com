@@ -96,20 +96,33 @@
 				aria-label="Mobile account menu"
 			>
 				{#if user}
+					<!-- Session Data -->
 					<div class="flex flex-col">
-						<button
-							class="flex flex-row items-center justify-between gap-4 border-b p-4 border-primary-50 bg-gray-100 text-md underline-offset-2 decoration-1.5"
-							onclick={closeMenus}
-						>
-							<div class="flex flex-row items-center gap-2 justify-center">
-								<Account className="w-10 h-10" />
-								<div class="flex flex-col items-start justify-start">
-									<p class="text-lg">{user.firstName}&nbsp;{user.lastName}</p>
-									<p class="text-sm text-primary-500">{user.email}</p>
+						<div class="flex flex-col">
+							<div
+								class="flex flex-row items-center justify-between border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
+							>
+								<!-- Account Information -->
+								<div
+									class="flex flex-row h-full w-full items-center gap-2 p-4 justify-start bg-gray-100 border-primary-50 border-r"
+								>
+									<Account className="w-10 h-10" />
+									<div class="flex flex-col">
+										<p class="text-lg">{user.firstName}&nbsp;{user.lastName}</p>
+										<p class="text-sm text-primary-500">{user.email}</p>
+									</div>
+								</div>
+								<!-- Close Button -->
+								<div class="flex h-full">
+									<button
+										onclick={closeMenus}
+										class="flex items-center justify-center px-4 bg-red-500 hover:bg-gray-50 h-full"
+									>
+										<Cross className="w-6 h-6" />
+									</button>
 								</div>
 							</div>
-							<Cross className="w-6 h-6" />
-						</button>
+						</div>
 						<a
 							href="/account"
 							class="p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50"
@@ -233,12 +246,12 @@
 				</ul>
 			</div>
 			<!-- Account -->
-			<div class="flex flex-row items-center cursor-pointer">
+			<div class="flex flex-row items-center">
 				{#if user}
 					<div class="flex flex-row items-center justify-center">
 						<button
 							onclick={toggleAccountMenu}
-							class="flex flex-row items-center justify-center gap-2 hover:underline underline-offset-2 decoration-2"
+							class="flex flex-row items-center gap-2 hover:underline underline-offset-2 decoration-2"
 							aria-expanded={accountMenuOpen}
 							aria-controls="mobile-account-menu"
 							aria-label="Toggle account menu"
