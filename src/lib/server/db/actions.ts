@@ -49,6 +49,14 @@ export async function emailInUse(email: string): Promise<DatabaseResult<{ used: 
 	return { error: false, data: { used: count > 0 } };
 }
 
+export async function getUserByEmail(email: string): Promise<DatabaseResult<{ user: User }>> {
+	const res = await db.select().from(userTable).where(eq(userTable.email, email));
+	if (res.length < 1) return { error: true, data: null, message: 'Invalid email address.' };
+
+	const fetched = res[0];
+	return { error: false, data: { user: fetched } };
+}
+
 export async function createUser(
 	email: string,
 	first: string,
