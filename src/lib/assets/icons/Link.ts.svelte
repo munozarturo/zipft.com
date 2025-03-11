@@ -1,8 +1,8 @@
 <script>
-	let { className } = $props();
+	let { ...props } = $props();
 </script>
 
-<div class={className}>
+<div {...props}>
 	<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<path
 			d="M9.77778 16.4444H6.44444C3.98984 16.4444 2 14.4545 2 12C2 9.54539 3.98984 7.55554 6.44444 7.55554H9.77778"
