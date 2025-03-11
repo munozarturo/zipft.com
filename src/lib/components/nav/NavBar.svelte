@@ -62,10 +62,10 @@
 				<!-- Menu Options -->
 				<div class="flex flex-col">
 					<a
-						href="/send"
+						href="/"
 						class={twMerge(
 							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
-							isActive('/send') && 'underline'
+							isActive('/') && 'underline'
 						)}
 						role="menuitem"
 					>

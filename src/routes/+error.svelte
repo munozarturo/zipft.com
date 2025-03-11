@@ -18,7 +18,7 @@
 				<a
 					href="/"
 					class="p-2 text-lg md:text-xl outline w-fit hover:text-secondary hover:bg-primary-800"
-					>Go home</a
+					>go home</a
 				>
 			</div>
 		</div>
