@@ -26,7 +26,7 @@
 	{#if session}
 		<button
 			onclick={toggleOpen}
-			class="focus-visible:text-primary-500 focus:outline-primary-800 flex flex-row items-center gap-2 decoration-2 underline-offset-2 hover:underline focus:outline-2 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:focus:outline-none"
+			class="focus-visible:text-primary-500 flex flex-row items-center gap-2 p-2 decoration-2 underline-offset-2 hover:underline focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 			aria-expanded={isOpen}
 			aria-controls="account-menu"
 			aria-label="Account menu"

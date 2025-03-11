@@ -60,11 +60,7 @@
 	/>
 
 	<!-- Logo -->
-	<a
-		href="/"
-		aria-label="Home page"
-		class="focus:outline-primary-500 flex items-center focus:outline-2"
-	>
+	<a href="/" aria-label="Home page" class="flex items-center">
 		<LogoCore class="w-30 h-auto md:w-40" aria-hidden="true" />
 	</a>
 
@@ -78,7 +74,7 @@
 						href="/"
 						class={twMerge(
 							'text-lg p-1.5 hover:underline underline-offset-2 decoration-2 hover:text-primary-500',
-							'focus-visible:text-primary-500 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
+							'focus-visible:text-primary-500 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
@@ -92,7 +88,7 @@
 						href="/receive"
 						class={twMerge(
 							'text-lg p-2 hover:underline underline-offset-2 decoration-2 hover:text-primary-500',
-							'focus-visible:text-primary-500 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
+							'focus-visible:text-primary-500 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
 						role="menuitem"

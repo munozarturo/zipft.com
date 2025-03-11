@@ -26,7 +26,7 @@
 	<!-- Toggle Button -->
 	<button
 		onclick={toggleOpen}
-		class="focus:outline-primary-800 flex flex-row items-center justify-center gap-2 decoration-2 underline-offset-2 focus:outline-2"
+		class="flex flex-row items-center justify-center gap-2 p-2 decoration-2 underline-offset-2"
 		aria-expanded={isOpen}
 		aria-controls="mobile-actions-menu"
 		aria-label="Toggle mobile menu"
