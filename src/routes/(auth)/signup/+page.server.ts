@@ -22,7 +22,7 @@ export const actions = {
 			return fail(500, { form });
 		}
 		if (checkEmailData.used) {
-			setError(form, 'email', 'Email in use');
+			setError(form, 'email', 'Email already in use.');
 			return fail(400, { form });
 		}
 
@@ -38,6 +38,6 @@ export const actions = {
 		}
 		const { user } = createUserData;
 
-		throw redirect(303, '/verify');
+		throw redirect(303, `/verify?e=${user.email}`);
 	}
 };
