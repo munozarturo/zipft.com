@@ -1,4 +1,4 @@
-import { PgSchema, boolean, integer, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { PgSchema, boolean, integer, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { sql, type InferSelectModel } from 'drizzle-orm';
 
@@ -25,8 +25,9 @@ export const sessionTable = schema.table('session', {
 		.notNull()
 		.references(() => userTable.id),
 
-	ipAddr: text('ip_addr').notNull(),
-	userAgent: text('user_agent').notNull(),
+	ipAddr: text('ip_addr'),
+	userAgent: text('user_agent'),
+	fingerprint: text('fingerprint'),
 
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	expiresAt: timestamp('expires_at')
@@ -42,7 +43,7 @@ export const communicationPurpose = schema.enum('communication_purpose', [
 ]);
 
 export const communicationTable = schema.table('communication', {
-	id: serial('id').primaryKey(),
+	id: uuid('id').defaultRandom().primaryKey(),
 
 	userId: integer('user_id')
 		.notNull()
@@ -54,14 +55,13 @@ export const communicationTable = schema.table('communication', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 export type Communication = InferSelectModel<typeof communicationTable>;
+export type CommunicationType = typeof communicationTable.$inferSelect.type;
+export type CommunicationPurpose = typeof communicationTable.$inferSelect.purpose;
 
 export const verificationChallengeTable = schema.table('verification_challenges', {
 	// token generated using CSPRNG
 	// SHA256 hash
 	tokenHash: text('token_hash').notNull().primaryKey(),
-	// secret generated using CSPRNG
-	// argon2 hash
-	secretHash: text('secret_hash').notNull(),
 
 	userId: integer('user_id')
 		.notNull()
@@ -81,9 +81,6 @@ export const passwordResetTable = schema.table('password_resets', {
 	// token generated using CSPRNG
 	// SHA256 hash
 	tokenHash: text('token_hash').notNull().primaryKey(),
-	// secret generated using CSPRNG
-	// argon2 hash
-	secretHash: text('secret_hash').notNull(),
 
 	userId: integer('user_id')
 		.notNull()
