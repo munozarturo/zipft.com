@@ -64,7 +64,7 @@
 						tabindex="0"
 						aria-current={isActive('/') ? 'page' : undefined}
 					>
-						send
+						Send
 					</a>
 					<a
 						href="/receive"
@@ -76,7 +76,7 @@
 						tabindex="0"
 						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
 					>
-						receive
+						Receive
 					</a>
 					{#if !session}
 						<a
@@ -86,7 +86,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								sign in <Enter class="h-6 w-6" aria-hidden="true" />
+								Sign In <Enter class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 					{/if}

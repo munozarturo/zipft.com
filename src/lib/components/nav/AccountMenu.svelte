@@ -26,14 +26,18 @@
 	{#if session}
 		<button
 			onclick={toggleOpen}
-			class="focus-visible:text-primary-500 flex flex-row items-center gap-2 p-2 decoration-2 underline-offset-2 hover:underline focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+			class="group flex flex-row items-center gap-2 p-2 decoration-2 underline-offset-2 hover:underline focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 			aria-expanded={isOpen}
 			aria-controls="account-menu"
 			aria-label="Account menu"
 		>
 			<span class="flex flex-row items-center justify-center gap-2">
 				<Account class="h-8 w-8" />
-				<p class="hidden md:flex">{session.user.first}</p>
+				<p
+					class="group-hover:text-primary-600 group-focus-visible:text-primary-600 hidden text-lg md:flex"
+				>
+					{session.user.first}
+				</p>
 			</span>
 		</button>
 	{:else}
@@ -43,7 +47,7 @@
 				class="focus-visible:text-primary-500 text-md hover:text-primary-500 hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline focus:-outline-offset-2 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:flex md:text-lg"
 				aria-label="Sign in to your account"
 			>
-				sign in
+				Sign In
 			</a>
 			<a
 				href="/signup"
@@ -51,7 +55,7 @@
 				aria-label="Sign up for a new account"
 			>
 				<span class="flex flex-row items-center justify-center gap-2">
-					sign up <ChevronRight
+					Sign Up <ChevronRight
 						class="hidden h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0 md:flex"
 					/>
 				</span>
@@ -105,7 +109,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								account <Cog class="h-6 w-6" aria-hidden="true" />
+								Account <Cog class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<a
@@ -115,7 +119,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								sign out <Exit class="h-6 w-6" aria-hidden="true" />
+								Sign Out <Exit class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 					</div>
@@ -129,7 +133,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								sign up <Person class="h-6 w-6" aria-hidden="true" />
+								Sign Up <Person class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<a
@@ -139,7 +143,7 @@
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								sign in <Enter class="h-6 w-6" aria-hidden="true" />
+								Sign In <Enter class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 					</div>

@@ -80,7 +80,7 @@
 						role="menuitem"
 						aria-current={isActive('/') ? 'page' : undefined}
 					>
-						send
+						Send
 					</a>
 				</li>
 				<li role="none">
@@ -94,7 +94,7 @@
 						role="menuitem"
 						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
 					>
-						receive
+						Receive
 					</a>
 				</li>
 			</ul>
