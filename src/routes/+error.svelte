@@ -17,7 +17,7 @@
 			<div class="flex flex-row items-center justify-center">
 				<a
 					href="/"
-					class="hover:text-secondary hover:bg-primary-800 focus-visible:text-secondary focus-visible:bg-primary-800 w-fit p-2 text-lg outline focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:text-xl"
+					class="hover:text-secondary hover:bg-primary-800 focus-visible:text-secondary focus-visible:bg-primary-800 w-fit p-2 text-lg outline focus-visible:decoration-2 focus-visible:underline-offset-2 md:text-xl"
 					>go home</a
 				>
 			</div>

@@ -19,7 +19,7 @@
 	--color-secondary: #fefefe;
 	--color-accent: #155dfc;
 
-	----breakpoint-xs: 22rem;
+	--breakpoint-xs: 22rem;
 }
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */

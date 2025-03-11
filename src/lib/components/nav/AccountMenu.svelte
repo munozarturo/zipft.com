@@ -40,19 +40,19 @@
 		<div class="flex flex-row items-center justify-center">
 			<a
 				href="/signin"
-				class="focus-visible:text-primary-500 text-md hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:flex md:text-lg"
+				class="focus-visible:text-primary-500 text-md hover:text-primary-500 hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline focus:-outline-offset-2 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:flex md:text-lg"
 				aria-label="Sign in to your account"
 			>
 				sign in
 			</a>
 			<a
 				href="/signup"
-				class="text-md bg-primary-800 text-secondary hover:bg-primary-700 focus-visible:bg-primary-700 group p-2 decoration-2 outline transition-all focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2 md:text-lg"
+				class="text-md bg-primary-800 text-secondary hover:bg-accent focus-visible:bg-accent group p-2 decoration-2 outline transition-all md:text-lg"
 				aria-label="Sign up for a new account"
 			>
 				<span class="flex flex-row items-center justify-center gap-2">
 					sign up <ChevronRight
-						class="hidden h-3 w-3 group-hover:translate-x-1 group-focus-visible:translate-x-1 md:flex"
+						class="hidden h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0 md:flex"
 					/>
 				</span>
 			</a>
