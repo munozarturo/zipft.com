@@ -33,65 +33,73 @@
 	>
 		{#if isOpen}
 			<div class="flex h-7 w-7 flex-row items-center justify-center">
-				<Cross className="w-6 h-6" />
+				<Cross class="h-6 w-6" aria-hidden="true" />
 			</div>
 		{:else}
-			<Menu className="w-7 h-7" />
+			<Menu class="h-7 w-7" aria-hidden="true" />
 		{/if}
 	</button>
+
 	{#if isOpen}
 		<!-- Menu -->
-		<div class="fixed left-0 top-20 z-20 flex w-full flex-row items-center justify-center">
-			<div
+		<div
+			id="mobile-actions-menu"
+			class="fixed left-0 top-20 z-20 flex w-full flex-row items-center justify-center"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Mobile navigation options"
+		>
+			<nav
 				class="bg-secondary border-primary-50 w-11/12 overflow-hidden rounded-md border shadow-lg"
-				role="menu"
-				aria-label="Mobile actions menu"
 			>
 				<!-- Options -->
 				<div class="flex flex-col">
 					<a
 						href="/"
 						class={twMerge(
-							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5',
+							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50',
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
+						tabindex="0"
+						aria-current={isActive('/') ? 'page' : undefined}
 					>
 						send
 					</a>
 					<a
 						href="/receive"
 						class={twMerge(
-							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5',
+							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-1.5 hover:bg-gray-50',
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
 						role="menuitem"
+						tabindex="0"
+						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
 					>
 						receive
 					</a>
 					{#if !session}
 						<a
 							href="/signin"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2"
+							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
 							role="menuitem"
+							tabindex="0"
 						>
-							<span class="flex flex-row items-center justify-between"
-								>sign in <Enter className="w-6 h-6" /></span
-							>
+							<span class="flex flex-row items-center justify-between">
+								sign in <Enter class="h-6 w-6" aria-hidden="true" />
+							</span>
 						</a>
 					{/if}
 				</div>
-			</div>
+			</nav>
 		</div>
-	{/if}
 
-	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
-	{#if isOpen}
+		<!-- Backdrop to close menu -->
 		<button
 			class="fixed inset-0 top-20 z-10 md:top-0"
 			onclick={close}
-			tabindex="0"
-			aria-label="Close menu"
+			tabindex="-1"
+			aria-label="Close mobile menu"
 		></button>
 	{/if}
 </div>

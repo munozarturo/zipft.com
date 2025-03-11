@@ -58,13 +58,17 @@
 		{session}
 		{close}
 	/>
+
 	<!-- Logo -->
-	<a href="/" aria-label="Home page"><LogoCore className="h-auto w-30 md:w-40" /></a>
+	<a href="/" aria-label="Home page" class="flex items-center">
+		<LogoCore class="w-30 h-auto md:w-40" aria-hidden="true" />
+	</a>
+
 	<!-- Actions -->
 	<div class="flex flex-row items-center gap-12">
-		<!-- Nav Links -->
+		<!-- Nav Links (Desktop) -->
 		<div class="hidden flex-row items-center md:flex">
-			<ul class="flex flex-row items-center" role="menubar" aria-label="Main navigation">
+			<ul class="flex flex-row items-center gap-4" role="menu" aria-label="Main navigation">
 				<li role="none">
 					<a
 						href="/"
@@ -73,6 +77,7 @@
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
+						aria-current={isActive('/') ? 'page' : undefined}
 					>
 						send
 					</a>
@@ -85,13 +90,15 @@
 							isActive(['/receive', '/r'], true) && 'underline'
 						)}
 						role="menuitem"
+						aria-current={isActive(['/receive', '/r'], true) ? 'page' : undefined}
 					>
 						receive
 					</a>
 				</li>
 			</ul>
 		</div>
-		<!-- Account -->
+
+		<!-- Account Menu -->
 		<AccountMenu isOpen={accountMenuOpen} toggleOpen={toggleAccountMenu} {session} {close} />
 	</div>
 </nav>

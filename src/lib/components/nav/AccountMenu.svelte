@@ -29,10 +29,10 @@
 			class="flex flex-row items-center gap-2 decoration-2 underline-offset-2 hover:underline"
 			aria-expanded={isOpen}
 			aria-controls="account-menu"
-			aria-label="Toggle account menu"
+			aria-label="Account menu"
 		>
 			<span class="flex flex-row items-center justify-center gap-2">
-				<Account className="w-8 h-8" />
+				<Account class="h-8 w-8" />
 				<p class="hidden md:flex">{session.user.first}</p>
 			</span>
 		</button>
@@ -41,73 +41,80 @@
 			<a
 				href="/signin"
 				class="text-md hidden p-2 px-4 decoration-2 underline-offset-2 transition-all hover:underline md:flex md:text-lg"
-				>sign in</a
+				aria-label="Sign in to your account"
 			>
+				sign in
+			</a>
 			<a
 				href="/signup"
 				class="text-md bg-primary-800 text-secondary hover:bg-primary-700 group p-2 decoration-2 outline transition-all md:text-lg"
-				><span class="flex flex-row items-center justify-center gap-2"
-					>sign up <ChevronRight
-						className="hidden md:flex group-hover:translate-x-1 w-3 h-3"
-					/></span
-				></a
+				aria-label="Sign up for a new account"
 			>
+				<span class="flex flex-row items-center justify-center gap-2">
+					sign up <ChevronRight class="hidden h-3 w-3 group-hover:translate-x-1 md:flex" />
+				</span>
+			</a>
 		</div>
 	{/if}
 
 	<!-- Account Menu -->
 	{#if isOpen}
 		<div
+			id="account-menu"
 			class="fixed right-0 top-20 z-20 flex w-full flex-row items-center justify-center sm:right-5 sm:w-[300px]"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Account options"
 		>
 			<div
 				class="bg-secondary border-primary-50 w-11/12 overflow-hidden rounded-md border shadow-lg"
 				role="menu"
-				aria-label="Mobile account menu"
 			>
 				{#if session}
 					<!-- Session Data -->
 					<div class="flex flex-col">
-						<div class="flex flex-col">
+						<div
+							class="border-primary-50 text-md decoration-1.5 flex flex-row items-stretch border-b underline-offset-2"
+						>
+							<!-- Account Information -->
 							<div
-								class="border-primary-50 text-md decoration-1.5 flex flex-row items-stretch border-b underline-offset-2"
+								class="border-primary-50 flex w-full flex-row items-center justify-start gap-2 border-r bg-gray-100 px-4 py-3"
 							>
-								<!-- Account Information -->
-								<div
-									class="border-primary-50 flex w-full flex-row items-center justify-start gap-2 border-r bg-gray-100 px-4 py-3"
-								>
-									<Account className="w-10 h-10" />
-									<div class="flex flex-col">
-										<p class="text-lg">{session.user.first}&nbsp;{session.user.last}</p>
-										<p class="text-primary-500 -mt-1 text-sm">{session.user.email}</p>
-									</div>
+								<Account class="h-10 w-10" aria-hidden="true" />
+								<div class="flex flex-col">
+									<p class="text-lg">{session.user.first}&nbsp;{session.user.last}</p>
+									<p class="text-primary-500 -mt-1 text-sm">{session.user.email}</p>
 								</div>
-								<!-- Close Button - Make it stretch to fill the entire height -->
-								<button
-									onclick={close}
-									class="flex items-center justify-center px-4 hover:bg-gray-50"
-								>
-									<Cross className="w-5 h-5" />
-								</button>
 							</div>
+							<!-- Close Button -->
+							<button
+								onclick={close}
+								class="flex items-center justify-center px-4 hover:bg-gray-50"
+								aria-label="Close menu"
+							>
+								<Cross class="h-5 w-5" aria-hidden="true" />
+							</button>
 						</div>
+
 						<a
 							href="/account"
 							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50"
 							role="menuitem"
+							tabindex="0"
 						>
-							<span class="flex flex-row items-center justify-between"
-								>account <Cog className="w-6 h-6" /></span
-							>
+							<span class="flex flex-row items-center justify-between">
+								account <Cog class="h-6 w-6" aria-hidden="true" />
+							</span>
 						</a>
 						<a
 							href="/signout"
 							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
 							role="menuitem"
+							tabindex="0"
 						>
-							<span class="flex flex-row items-center justify-between"
-								>sign out <Exit className="w-6 h-6" /></span
-							>
+							<span class="flex flex-row items-center justify-between">
+								sign out <Exit class="h-6 w-6" aria-hidden="true" />
+							</span>
 						</a>
 					</div>
 				{:else}
@@ -115,34 +122,34 @@
 					<div class="flex flex-col">
 						<a
 							href="/signup"
-							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2"
+							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50"
 							role="menuitem"
+							tabindex="0"
 						>
-							<span class="flex flex-row items-center justify-between"
-								>sign up <Person className="w-6 h-6" /></span
-							>
+							<span class="flex flex-row items-center justify-between">
+								sign up <Person class="h-6 w-6" aria-hidden="true" />
+							</span>
 						</a>
 						<a
 							href="/signin"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2"
+							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50"
 							role="menuitem"
+							tabindex="0"
 						>
-							<span class="flex flex-row items-center justify-between"
-								>sign in <Enter className="w-6 h-6" /></span
-							>
+							<span class="flex flex-row items-center justify-between">
+								sign in <Enter class="h-6 w-6" aria-hidden="true" />
+							</span>
 						</a>
 					</div>
 				{/if}
 			</div>
 		</div>
-	{/if}
 
-	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
-	{#if isOpen}
+		<!-- Backdrop to close menu when clicking outside -->
 		<button
 			class="fixed inset-0 top-20 z-10 md:top-0"
 			onclick={close}
-			tabindex="0"
+			tabindex="-1"
 			aria-label="Close menu"
 		></button>
 	{/if}
