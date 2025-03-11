@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const signUpSchema = z.object({
-	first: z.string().nonempty("First name can't be empty."),
-	last: z.string().nonempty("Last name can't be empty."),
+	firstName: z.string().nonempty("First name can't be empty."),
+	lastName: z.string().nonempty("Last name can't be empty."),
 	email: z.string().email(),
 	password: z.string().min(10, 'Password must be at least 10 characters.')
 });

@@ -34,33 +34,33 @@
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-row gap-2">
 				<div class="flex flex-col gap-2">
-					<label for="first" class="flex flex-col">
+					<label for="firstName" class="flex flex-col">
 						First Name
 						<input
-							name="first"
+							name="firstName"
 							type="text"
 							placeholder="John"
 							class="w-full"
-							bind:value={$form.first}
+							bind:value={$form.firstName}
 						/>
 					</label>
-					{#if $errors.first}
-						<small>{$errors.first}</small>
+					{#if $errors.firstName}
+						<small>{$errors.firstName}</small>
 					{/if}
 				</div>
 				<div class="flex flex-col gap-2">
-					<label for="last" class="flex flex-col">
+					<label for="lastName" class="flex flex-col">
 						Last Name
 						<input
-							name="last"
+							name="lastName"
 							type="text"
 							placeholder="Doe"
 							class="w-full"
-							bind:value={$form.last}
+							bind:value={$form.lastName}
 						/>
 					</label>
-					{#if $errors.last}
-						<small>{$errors.last}</small>
+					{#if $errors.lastName}
+						<small>{$errors.lastName}</small>
 					{/if}
 				</div>
 			</div>
