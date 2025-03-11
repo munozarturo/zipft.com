@@ -15,7 +15,7 @@ export const actions = {
 		const form = await superValidate(event, zod(signUpSchema));
 		if (!form.valid) return fail(400, { form });
 
-		const { first, last, email, password } = form.data;
+		const { firstName, lastName, email, password } = form.data;
 		const { error: checkEmailError, data: checkEmailData } = await emailInUse(email);
 		if (checkEmailError) {
 			setError(form, 'Error checking email.');
@@ -28,8 +28,8 @@ export const actions = {
 
 		const { error: createUserError, data: createUserData } = await createUser(
 			email,
-			first,
-			last,
+			firstName,
+			lastName,
 			password
 		);
 		if (createUserError) {

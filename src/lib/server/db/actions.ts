@@ -1,5 +1,4 @@
 import * as argon2 from 'argon2';
-import csprng from 'csprng';
 
 import crypto from 'crypto';
 
@@ -18,7 +17,7 @@ import {
 	verificationChallengeTable
 } from './schema';
 import { db } from '.';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 type SuccessResult<T> = {
 	error: false;
@@ -29,7 +28,7 @@ type SuccessResult<T> = {
 type ErrorResult = {
 	error: true;
 	message: string;
-	data?: null;
+	data: null;
 };
 
 type DatabaseResult<T> = SuccessResult<T> | ErrorResult;
@@ -40,14 +39,29 @@ function sha256Hash(data: any) {
 	return sha256.digest('hex');
 }
 
-export function generateToken(): string {
-	const token = csprng(256, 32);
-	return token;
+export async function emailInUse(email: string): Promise<DatabaseResult<{ used: boolean }>> {
+	const res = await db
+		.select({ count: sql<number>`count(*)` })
+		.from(userTable)
+		.where(eq(userTable.email, email));
+	const count = res[0]?.count || 0;
+
+	return { error: false, data: { used: count > 0 } };
 }
 
-export async function createUser(user: User): Promise<DatabaseResult<{ user: User }>> {
-	const res = await db.insert(userTable).values(user).returning();
-	if (res.length < 1) return { error: true, message: 'Error creating user.' };
+export async function createUser(
+	email: string,
+	first: string,
+	last: string,
+	password: string
+): Promise<DatabaseResult<{ user: User }>> {
+	const passwordHash = await argon2.hash(password);
+
+	const res = await db
+		.insert(userTable)
+		.values({ email, firstName: first, lastName: last, passwordHash })
+		.returning();
+	if (res.length < 1) return { error: true, data: null, message: 'Error creating user.' };
 
 	const inserted = res[0];
 	return { error: false, data: { user: inserted } };
@@ -55,7 +69,7 @@ export async function createUser(user: User): Promise<DatabaseResult<{ user: Use
 
 export async function updateUser(user: User): Promise<DatabaseResult<{ user: User }>> {
 	const res = await db.update(userTable).set(user).returning();
-	if (res.length < 1) return { error: true, message: 'Error updating user.' };
+	if (res.length < 1) return { error: true, data: null, message: 'Error updating user.' };
 
 	const inserted = res[0];
 	return { error: false, data: { user: inserted } };
@@ -74,7 +88,7 @@ export async function createSession(
 		.insert(sessionTable)
 		.values({ tokenHash, userId, ipAddr, userAgent, fingerprint })
 		.returning();
-	if (res.length < 1) return { error: true, message: 'Error creating session.' };
+	if (res.length < 1) return { error: true, data: null, message: 'Error creating session.' };
 
 	const inserted = res[0];
 	return { error: false, data: { session: inserted } };
@@ -93,7 +107,7 @@ export async function validateSessionToken(
 		.from(sessionTable)
 		.innerJoin(userTable, eq(sessionTable.userId, userTable.id))
 		.where(eq(sessionTable.tokenHash, tokenHash));
-	if (res.length < 1) return { error: true, message: 'Invalid session token' };
+	if (res.length < 1) return { error: true, data: null, message: 'Invalid session token' };
 
 	const { user, session } = res[0];
 	if (Date.now() >= session.expiresAt.getTime()) {
@@ -130,7 +144,7 @@ export async function createCommunication(
 	purpose: CommunicationPurpose
 ): Promise<DatabaseResult<{ communication: Communication }>> {
 	const res = await db.insert(communicationTable).values({ userId, type, purpose }).returning();
-	if (res.length < 1) return { error: true, message: 'Error creating communication' };
+	if (res.length < 1) return { error: true, data: null, message: 'Error creating communication' };
 
 	const inserted = res[0];
 	return { error: false, data: { communication: inserted } };
@@ -143,7 +157,7 @@ export async function createVerificationChallenge(
 	const tokenHash = sha256Hash(token);
 
 	const res = await db.insert(verificationChallengeTable).values({ tokenHash, userId }).returning();
-	if (res.length < 1) return { error: true, message: 'Error creating communication' };
+	if (res.length < 1) return { error: true, data: null, message: 'Error creating communication' };
 
 	const inserted = res[0];
 	return { error: false, data: { challenge: inserted } };
@@ -155,13 +169,13 @@ export async function validateVerficiationChallenge(token: string): Promise<Data
 		.select()
 		.from(verificationChallengeTable)
 		.where(eq(verificationChallengeTable.tokenHash, tokenHash));
-	if (res.length < 1) return { error: true, message: 'Invalid verification token .' };
+	if (res.length < 1) return { error: true, data: null, message: 'Invalid verification token .' };
 
 	const challenge = res[0];
 	if (challenge.defeated)
-		return { error: true, message: 'Verification token  has already been used.' };
+		return { error: true, data: null, message: 'Verification token  has already been used.' };
 	if (Date.now() >= challenge.expiresAt.getTime())
-		return { error: true, message: 'Verification token expired.' };
+		return { error: true, data: null, message: 'Verification token expired.' };
 
 	await db
 		.update(verificationChallengeTable)
@@ -181,7 +195,7 @@ export async function createPasswordReset(
 	const tokenHash = sha256Hash(token);
 
 	const res = await db.insert(passwordResetTable).values({ tokenHash, userId }).returning();
-	if (res.length < 1) return { error: true, message: 'Error creating password reset.' };
+	if (res.length < 1) return { error: true, data: null, message: 'Error creating password reset.' };
 
 	const inserted = res[0];
 	return { error: false, data: { reset: inserted } };
@@ -194,12 +208,12 @@ export async function resetPassword(token: string, password: string): Promise<Da
 		.select()
 		.from(passwordResetTable)
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
-	if (res.length < 1) return { error: true, message: 'Invalid reset token.' };
+	if (res.length < 1) return { error: true, data: null, message: 'Invalid reset token.' };
 
 	const passwordReset = res[0];
-	if (passwordReset.used) return { error: true, message: 'Reset token already used.' };
+	if (passwordReset.used) return { error: true, data: null, message: 'Reset token already used.' };
 	if (Date.now() >= passwordReset.expiresAt.getTime())
-		return { error: true, message: 'Reset token expired.' };
+		return { error: true, data: null, message: 'Reset token expired.' };
 
 	await db
 		.update(passwordResetTable)

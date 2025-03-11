@@ -7,7 +7,7 @@ export const schema = new PgSchema('zipft');
 export const userTable = schema.table('user', {
 	id: serial('id').primaryKey(),
 
-	email: text().notNull(),
+	email: text().unique().notNull(),
 	// argon2 hash
 	passwordHash: text('password_hash').notNull(),
 
