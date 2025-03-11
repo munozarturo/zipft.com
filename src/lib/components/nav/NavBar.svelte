@@ -3,7 +3,6 @@
 	import { twMerge } from 'tailwind-merge';
 
 	import LogoCore from '$lib/assets/brand/LogoCore.ts.svelte';
-	import Account from '$lib/assets/icons/Account.svelte';
 	import ActionsMenu from './mobile/ActionsMenu.svelte';
 	import AccountMenu from './AccountMenu.svelte';
 
@@ -12,8 +11,8 @@
 		last: 'Doe',
 		email: 'john@example.com'
 	};
-	// let session = { user };
-	let session = null;
+	let session = { user };
+	// let session = null;
 
 	let {} = $props();
 
@@ -30,9 +29,18 @@
 	}
 
 	let actionsMenuOpen = $state(false);
-	let accountMenuOpen = $state(false);
+	function toggleActionsMenu() {
+		accountMenuOpen = false;
+		actionsMenuOpen = !actionsMenuOpen;
+	}
 
-	function closeMenus() {
+	let accountMenuOpen = $state(false);
+	function toggleAccountMenu() {
+		actionsMenuOpen = false;
+		accountMenuOpen = !accountMenuOpen;
+	}
+
+	function close() {
 		accountMenuOpen = actionsMenuOpen = false;
 	}
 </script>
@@ -43,7 +51,13 @@
 	aria-label="Main navigation"
 >
 	<!-- Mobile Actions -->
-	<ActionsMenu isOpen={actionsMenuOpen} {isActive} />
+	<ActionsMenu
+		isOpen={actionsMenuOpen}
+		toggleOpen={toggleActionsMenu}
+		{isActive}
+		{session}
+		{close}
+	/>
 	<!-- Logo -->
 	<a href="/" aria-label="Home page"><LogoCore className="h-auto w-30 md:w-40" /></a>
 	<!-- Actions -->
@@ -78,15 +92,6 @@
 			</ul>
 		</div>
 		<!-- Account -->
-		<AccountMenu isOpen={accountMenuOpen} {session} />
+		<AccountMenu isOpen={accountMenuOpen} toggleOpen={toggleAccountMenu} {session} {close} />
 	</div>
-	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
-	{#if accountMenuOpen || actionsMenuOpen}
-		<button
-			class="fixed inset-0 top-20 z-10 md:top-0"
-			onclick={closeMenus}
-			tabindex="0"
-			aria-label="Close mobile menu"
-		></button>
-	{/if}
 </nav>

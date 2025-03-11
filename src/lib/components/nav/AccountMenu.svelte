@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { MouseEventHandler } from 'svelte/elements';
+
 	import Account from '$lib/assets/icons/Account.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
 	import Cog from '$lib/assets/icons/Cog.svelte';
@@ -9,19 +11,15 @@
 
 	let {
 		isOpen,
+		toggleOpen,
+		close,
 		session
 	}: {
 		isOpen: boolean;
+		toggleOpen: MouseEventHandler<HTMLButtonElement>;
+		close: MouseEventHandler<HTMLButtonElement>;
 		session: { user: { first: string; last: string; email: string } } | null;
 	} = $props();
-
-	function toggleOpen() {
-		isOpen = !isOpen;
-	}
-
-	function close() {
-		isOpen = false;
-	}
 </script>
 
 <div class="flex flex-row items-center justify-center">
@@ -60,7 +58,7 @@
 	<!-- Account Menu -->
 	{#if isOpen}
 		<div
-			class="fixed left-0 top-20 z-20 flex w-full flex-row items-center justify-center sm:right-5 sm:w-[300px]"
+			class="fixed right-0 top-20 z-20 flex w-full flex-row items-center justify-center sm:right-5 sm:w-[300px]"
 		>
 			<div
 				class="bg-secondary border-primary-50 w-11/12 overflow-hidden rounded-md border shadow-lg"
@@ -137,5 +135,15 @@
 				{/if}
 			</div>
 		</div>
+	{/if}
+
+	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
+	{#if isOpen}
+		<button
+			class="fixed inset-0 top-20 z-10 md:top-0"
+			onclick={close}
+			tabindex="0"
+			aria-label="Close menu"
+		></button>
 	{/if}
 </div>

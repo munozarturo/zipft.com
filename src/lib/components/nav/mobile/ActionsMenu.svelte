@@ -1,14 +1,24 @@
 <script lang="ts">
+	import type { MouseEventHandler } from 'svelte/elements';
+	import { twMerge } from 'tailwind-merge';
+
 	import Cross from '$lib/assets/icons/Cross.svelte';
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Menu from '$lib/assets/icons/Menu.svelte';
-	import { twMerge } from 'tailwind-merge';
 
-	let { isOpen, isActive }: { isOpen: boolean; isActive: Function } = $props();
-
-	function toggleOpen() {
-		isOpen = !isOpen;
-	}
+	let {
+		isOpen,
+		toggleOpen,
+		close,
+		isActive,
+		session
+	}: {
+		isOpen: boolean;
+		isActive: Function;
+		toggleOpen: MouseEventHandler<HTMLButtonElement>;
+		close: MouseEventHandler<HTMLButtonElement>;
+		session: { user: { first: string; last: string; email: string } } | null;
+	} = $props();
 </script>
 
 <!-- Actions Menu (Mobile) -->
@@ -59,17 +69,29 @@
 					>
 						receive
 					</a>
-					<a
-						href="/signin"
-						class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2"
-						role="menuitem"
-					>
-						<span class="flex flex-row items-center justify-between"
-							>sign in <Enter className="w-6 h-6" /></span
+					{#if !session}
+						<a
+							href="/signin"
+							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2"
+							role="menuitem"
 						>
-					</a>
+							<span class="flex flex-row items-center justify-between"
+								>sign in <Enter className="w-6 h-6" /></span
+							>
+						</a>
+					{/if}
 				</div>
 			</div>
 		</div>
+	{/if}
+
+	<!-- Close Menu when click out of menu excluding navbar interaction (on mobile) -->
+	{#if isOpen}
+		<button
+			class="fixed inset-0 top-20 z-10 md:top-0"
+			onclick={close}
+			tabindex="0"
+			aria-label="Close menu"
+		></button>
 	{/if}
 </div>
