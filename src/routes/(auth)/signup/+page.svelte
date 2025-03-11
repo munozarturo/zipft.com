@@ -32,6 +32,38 @@
 			</span>
 		</div>
 		<div class="flex flex-col gap-2">
+			<div class="flex flex-row gap-2">
+				<div class="flex flex-col gap-2">
+					<label for="first" class="flex flex-col">
+						First Name
+						<input
+							name="first"
+							type="text"
+							placeholder="John"
+							class="w-full"
+							bind:value={$form.first}
+						/>
+					</label>
+					{#if $errors.first}
+						<small>{$errors.first}</small>
+					{/if}
+				</div>
+				<div class="flex flex-col gap-2">
+					<label for="last" class="flex flex-col">
+						Last Name
+						<input
+							name="last"
+							type="text"
+							placeholder="Doe"
+							class="w-full"
+							bind:value={$form.last}
+						/>
+					</label>
+					{#if $errors.last}
+						<small>{$errors.last}</small>
+					{/if}
+				</div>
+			</div>
 			<label for="email" class="flex flex-col">
 				Email
 				<input
