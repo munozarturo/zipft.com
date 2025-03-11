@@ -13,6 +13,6 @@ export const actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(signUpSchema));
 
-		throw redirect(303, '/auth/verify');
+		throw redirect(303, '/verify');
 	}
 };
