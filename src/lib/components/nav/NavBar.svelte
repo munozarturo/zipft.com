@@ -88,7 +88,7 @@
 	<!-- Account Menu -->
 	{#if accountMenuOpen}
 		<div
-			class="absolute w-full md:w-[300px] md:right-5 top-20 flex flex-row items-center justify-center z-20"
+			class="absolute w-full sm:w-[300px] sm:right-5 top-20 flex flex-row items-center justify-center z-20"
 		>
 			<div
 				class="w-11/12 bg-secondary shadow-lg rounded-md border border-primary-50 overflow-hidden"
@@ -100,27 +100,25 @@
 					<div class="flex flex-col">
 						<div class="flex flex-col">
 							<div
-								class="flex flex-row items-center justify-between border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
+								class="flex flex-row items-stretch border-b border-primary-50 text-md underline-offset-2 decoration-1.5"
 							>
 								<!-- Account Information -->
 								<div
-									class="flex flex-row h-full w-full items-center gap-2 p-4 justify-start bg-gray-100 border-primary-50 border-r"
+									class="flex flex-row w-full items-center gap-2 px-4 py-3 justify-start bg-gray-100 border-primary-50 border-r"
 								>
 									<Account className="w-10 h-10" />
 									<div class="flex flex-col">
 										<p class="text-lg">{user.firstName}&nbsp;{user.lastName}</p>
-										<p class="text-sm text-primary-500">{user.email}</p>
+										<p class="text-sm text-primary-500 -mt-1">{user.email}</p>
 									</div>
 								</div>
-								<!-- Close Button -->
-								<div class="flex h-full">
-									<button
-										onclick={closeMenus}
-										class="flex items-center justify-center px-4 bg-red-500 hover:bg-gray-50 h-full"
-									>
-										<Cross className="w-6 h-6" />
-									</button>
-								</div>
+								<!-- Close Button - Make it stretch to fill the entire height -->
+								<button
+									onclick={closeMenus}
+									class="flex items-center justify-center px-4 hover:bg-gray-50"
+								>
+									<Cross className="w-5 h-5" />
+								</button>
 							</div>
 						</div>
 						<a
