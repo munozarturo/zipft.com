@@ -1,9 +1,9 @@
 import * as argon2 from 'argon2';
 
 import { createSession, getUserByEmail } from '$lib/server/db/actions.js';
-import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { generateToken, setSessionTokenCookie } from '$lib/server/auth.js';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { signInSchema } from '$lib/schemas/auth';
 import { zod } from 'sveltekit-superforms/adapters';
