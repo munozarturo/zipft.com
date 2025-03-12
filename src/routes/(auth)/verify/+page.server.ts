@@ -54,7 +54,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			destination: { to: email },
 			subject: 'Account Verification Token',
 			body: {
-				text: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}${communication.id}`,
+				text: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}::${communication.id}`,
 				html: `<p>https://${ROOT_DOMAIN}/verify/challenge?t=${token}</p><br><p>${communication.id}</p>`
 			}
 		});

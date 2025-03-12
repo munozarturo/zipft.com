@@ -1,9 +1,16 @@
 import type { PageServerLoad } from './$types';
-import { redirect } from '@sveltejs/kit';
+import { validateVerficiationChallenge } from '$lib/server/db/actions';
 
 export const load: PageServerLoad = async ({ url }) => {
-	const token = url.searchParams.get('e');
+	const token = url.searchParams.get('t');
+
 	if (!token) {
-		return {};
+		return { message: 'Missing verification token.' };
+	}
+
+	try {
+		await validateVerficiationChallenge(token);
+	} catch (e: any) {
+		return { message: e.message || 'Unknown error.' };
 	}
 };

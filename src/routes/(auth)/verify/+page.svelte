@@ -2,7 +2,6 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	// Using runes-style reactive declarations
 	let { verified, message } = $props();
 
 	// Countdown state
@@ -73,10 +72,6 @@
 			{:else}
 				<!-- Show verification instructions if not verified -->
 				<h1 class="text-4xl font-bold">Verify Account</h1>
-
-				{#if message}
-					<span class="text-red-600">{message}</span>
-				{/if}
 
 				<span class="text-primary-700 flex flex-row">
 					<p>
