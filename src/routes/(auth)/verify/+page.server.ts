@@ -13,64 +13,60 @@ import { sendEmail } from '$lib/server/aws/ses';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const email = url.searchParams.get('e');
-	if (!email) throw redirect(302, '/');
+	if (!email) return redirect(302, '/');
 
-	const { error: userError, data: userData } = await getUserByEmail(email);
-	if (userError) throw redirect(302, '/signup');
-
-	const { user } = userData;
-	if (user.verified) return { verified: true, message: 'Account already verified' };
-
-	const {
-		error: commCheckError,
-		data: commCheckData,
-		message: commCheckMessage
-	} = await getLastCommunication(user.id);
-
-	if (commCheckError) return { verified: false, message: commCheckMessage };
-
-	const { communication: mostRecentCommunication } = commCheckData;
-	if (mostRecentCommunication) {
-		const oneMinuteAgo = Date.now() - 60 * 1000;
-		if (mostRecentCommunication.createdAt.getTime() > oneMinuteAgo) {
-			return {
-				verified: false,
-				message: 'Please wait one minute before requesting another verification email',
-				rateLimited: true,
-				nextRequestTime: new Date(mostRecentCommunication.createdAt.getTime() + 60 * 1000)
-			};
+	let user;
+	try {
+		user = await getUserByEmail(email);
+	} catch (error) {
+		if (error instanceof Error && error.message === 'Invalid email address.') {
+			return redirect(302, '/signup');
 		}
+		return {
+			verified: false,
+			message: error instanceof Error ? error.message : 'An unknown error occurred'
+		};
 	}
 
-	const token = generateToken();
-	const { error: verifError, message: verifMessage } = await createVerificationChallenge(
-		token,
-		user.id
-	);
-	if (verifError) return { verified: false, message: verifMessage };
+	if (user.verified) return { verified: true, message: 'Account already verified' };
 
-	const {
-		error: commError,
-		data: commData,
-		message: commMessage
-	} = await createCommunication(user.id, 'email', 'verification');
+	try {
+		const mostRecentCommunication = await getLastCommunication(user.id);
 
-	if (commError) return { verified: false, message: commMessage };
-
-	const { communication } = commData;
-
-	await sendEmail({
-		source: `zipft Security <security@auth.${ROOT_DOMAIN}>`,
-		destination: { to: email },
-		subject: 'Account Verification Token',
-		body: {
-			text: `Please verify your zipft account by clicking this link: https://${ROOT_DOMAIN}/verify/challenge?t=${token}${communication.id}`,
-			html: `<p>Please verify your zipft account by clicking this link: https://${ROOT_DOMAIN}/verify/challenge?t=${token}${communication.id}</p>`
+		if (mostRecentCommunication) {
+			const oneMinuteAgo = Date.now() - 60 * 1000;
+			if (mostRecentCommunication.createdAt.getTime() > oneMinuteAgo) {
+				return {
+					verified: false,
+					message: 'Please wait one minute before requesting another verification email',
+					rateLimited: true,
+					nextRequestTime: new Date(mostRecentCommunication.createdAt.getTime() + 60 * 1000)
+				};
+			}
 		}
-	});
 
-	return {
-		verified: false,
-		message: 'Verification email sent! Please check your inbox.'
-	};
+		const token = generateToken();
+		await createVerificationChallenge(token, user.id);
+		const communication = await createCommunication(user.id, 'email', 'verification');
+
+		await sendEmail({
+			source: `zipft Security <security@auth.${ROOT_DOMAIN}>`,
+			destination: { to: email },
+			subject: 'Account Verification Token',
+			body: {
+				text: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}${communication.id}`,
+				html: `<p>https://${ROOT_DOMAIN}/verify/challenge?t=${token}</p><br><p>${communication.id}</p>`
+			}
+		});
+
+		return {
+			verified: false,
+			message: 'Verification email sent! Please check your inbox.'
+		};
+	} catch (error) {
+		return {
+			verified: false,
+			message: error instanceof Error ? error.message : 'An unknown error occurred'
+		};
+	}
 };

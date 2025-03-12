@@ -9,7 +9,7 @@
 
 	export let data: PageData;
 
-	const { form, errors, enhance, delayed, message } = superForm(data.form, {
+	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: zod(signInSchema)
 	});
 </script>
@@ -58,6 +58,9 @@
 			{#if $errors.password}
 				<small>{$errors.password}</small>
 			{/if}
+			{#if $errors._errors}
+				<small>{$errors._errors}</small>
+			{/if}
 		</div>
 		<button
 			class="bg-primary-800 text-secondary enabled:hover:bg-accent focus-visible:bg-accent group flex flex-row items-center justify-between p-2.5 transition-all focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-black disabled:opacity-50 md:text-lg"
@@ -72,9 +75,6 @@
 				/>
 			{/if}
 		</button>
-		{#if $message}
-			<small>{$message}</small>
-		{/if}
 		<span class="text-primary-700 flex flex-row">
 			<a
 				href="/reset/request"

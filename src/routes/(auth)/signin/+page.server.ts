@@ -13,6 +13,6 @@ export const actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(signInSchema));
 
-		throw redirect(303, '/dashboard');
+		return redirect(303, '/');
 	}
 };

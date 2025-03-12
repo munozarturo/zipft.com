@@ -1,42 +1,51 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	// Using runes-style reactive declarations
-	let { verified, message, rateLimited, nextRequestTime } = $props();
+	let { verified, message } = $props();
 
-	// Format time until next allowed request
-	$effect(() => {
-		if (rateLimited && nextRequestTime) {
-			// Start a counter to update remaining time
-			const interval = setInterval(() => {
-				const timeRemaining = Math.max(0, nextRequestTime - Date.now());
+	// Countdown state
+	let countdown = $state(60);
+	let buttonDisabled = $state(true);
 
-				if (timeRemaining <= 0) {
-					clearInterval(interval);
-					rateLimited = false;
-				}
-			}, 1000);
+	// Start countdown on mount
+	onMount(() => {
+		const interval = setInterval(() => {
+			countdown--;
 
-			return () => clearInterval(interval);
-		}
+			if (countdown <= 0) {
+				clearInterval(interval);
+				buttonDisabled = false;
+				countdown = 0;
+			}
+		}, 1000);
+
+		return () => clearInterval(interval);
 	});
 
 	// Function to handle resend
 	function resendVerification() {
-		const email = $page.url.searchParams.get('e');
+		const email = page.url.searchParams.get('e');
 		if (email) {
+			// Restart the countdown and disable button
+			countdown = 60;
+			buttonDisabled = true;
+
+			// Start a new countdown
+			const interval = setInterval(() => {
+				countdown--;
+
+				if (countdown <= 0) {
+					clearInterval(interval);
+					buttonDisabled = false;
+					countdown = 0;
+				}
+			}, 1000);
+
+			// Navigate to reload the page and trigger server load
 			window.location.href = `/verify?e=${email}`;
 		}
-	}
-
-	// Function to calculate remaining time in readable format
-	function getTimeRemaining() {
-		if (!nextRequestTime) return '';
-
-		const timeRemaining = Math.max(0, nextRequestTime - Date.now());
-		const seconds = Math.ceil(timeRemaining / 1000);
-
-		return `(${seconds}s)`;
 	}
 </script>
 
@@ -83,10 +92,10 @@
 							e.preventDefault();
 							resendVerification();
 						}}
-						disabled={rateLimited}
-						class="w-fit underline underline-offset-2 enabled:hover:no-underline enabled:focus-visible:no-underline disabled:cursor-not-allowed disabled:opacity-50"
+						disabled={buttonDisabled}
+						class="w-fit underline underline-offset-2 enabled:hover:no-underline enabled:focus-visible:no-underline disabled:cursor-not-allowed"
 					>
-						Resend {#if rateLimited}{getTimeRemaining()}{/if}
+						Resend {countdown > 0 ? `in ${countdown}s` : ''}
 					</button>
 				</span>
 			{/if}
