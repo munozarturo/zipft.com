@@ -16,28 +16,20 @@ export const actions = {
 		if (!form.valid) return fail(400, { form });
 
 		const { firstName, lastName, email, password } = form.data;
-		const { error: checkEmailError, data: checkEmailData } = await emailInUse(email);
-		if (checkEmailError) {
-			setError(form, 'Error checking email.');
-			return fail(500, { form });
-		}
-		if (checkEmailData.used) {
-			setError(form, 'email', 'Email already in use.');
+
+		try {
+			const emailCheck = await emailInUse(email);
+			if (emailCheck.used) {
+				setError(form, 'email', 'Email already in use.');
+				return fail(400, { form });
+			}
+
+			const user = await createUser(email, firstName, lastName, password);
+			return redirect(303, `/verify?e=${user.email}`);
+		} catch (e: any) {
+			console.log(e);
+			setError(form, '', e.message);
 			return fail(400, { form });
 		}
-
-		const { error: createUserError, data: createUserData } = await createUser(
-			email,
-			firstName,
-			lastName,
-			password
-		);
-		if (createUserError) {
-			setError(form, 'Error creating user.');
-			return fail(500, { form });
-		}
-		const { user } = createUserData;
-
-		throw redirect(303, `/verify?e=${user.email}`);
 	}
 };
