@@ -68,9 +68,9 @@ export async function updateUser(user: User): Promise<User> {
 export async function createSession(
 	token: string,
 	userId: number,
-	ipAddr?: string,
-	userAgent?: string,
-	fingerprint?: string
+	ipAddr?: string | null,
+	userAgent?: string | null,
+	fingerprint?: string | null
 ): Promise<Session> {
 	const tokenHash = sha256Hash(token);
 

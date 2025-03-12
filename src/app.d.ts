@@ -9,6 +9,8 @@ declare global {
 		interface Locals {
 			user: User | null;
 			session: Session | null;
+			ipAddr: string | null;
+			userAgent: string | null;
 		}
 		// interface PageData {}
 		// interface PageState {}
