@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.css';
+	import NavBar from '$lib/components/nav/NavBar.svelte';
 
 	let { children } = $props();
 </script>
@@ -8,6 +8,7 @@
 	<title>zipft</title>
 </svelte:head>
 
-<div class="text-primary-800 bg-secondary min-h-screen transition-all duration-200">
+<div>
+	<NavBar />
 	{@render children()}
 </div>
