@@ -17,6 +17,7 @@ export const actions = {
 
 		const { firstName, lastName, email, password } = form.data;
 
+		let user;
 		try {
 			const emailCheck = await emailInUse(email);
 			if (emailCheck.used) {
@@ -24,12 +25,12 @@ export const actions = {
 				return fail(400, { form });
 			}
 
-			const user = await createUser(email, firstName, lastName, password);
-			return redirect(303, `/verify?e=${user.email}`);
+			user = await createUser(email, firstName, lastName, password);
 		} catch (e: any) {
-			console.log(e);
-			setError(form, '', e.message);
+			setError(form, '', e.message || 'Unknown error.');
 			return fail(400, { form });
 		}
+
+		return redirect(303, `/verify?e=${user.email}`);
 	}
 };

@@ -14,7 +14,7 @@ import {
 	sessionTable,
 	userTable,
 	verificationChallengeTable
-} from './schema';
+} from '$lib/server/db/schema';
 import { db } from '.';
 import { eq, sql } from 'drizzle-orm';
 
