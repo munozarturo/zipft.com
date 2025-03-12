@@ -6,15 +6,8 @@
 	import ActionsMenu from './mobile/ActionsMenu.svelte';
 	import AccountMenu from './AccountMenu.svelte';
 
-	let user = {
-		first: 'John',
-		last: 'Doe',
-		email: 'john@example.com'
-	};
-	let session: { user: { first: string; last: string; email: string } } | null = $state({ user });
-	session = null;
-
 	let {} = $props();
+	let { user, session } = page.data.auth;
 
 	function isActive(path: string | string[], children: boolean = false): boolean {
 		const checkActive = (path: string): boolean => {
@@ -101,6 +94,6 @@
 		</div>
 
 		<!-- Account Menu -->
-		<AccountMenu isOpen={accountMenuOpen} toggleOpen={toggleAccountMenu} {session} {close} />
+		<AccountMenu isOpen={accountMenuOpen} toggleOpen={toggleAccountMenu} {session} {user} {close} />
 	</div>
 </nav>

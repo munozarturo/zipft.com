@@ -5,6 +5,7 @@
 	import Cross from '$lib/assets/icons/Cross.svelte';
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Menu from '$lib/assets/icons/Menu.svelte';
+	import type { Session } from '$lib/server/db/schema';
 
 	let {
 		isOpen,
@@ -17,7 +18,7 @@
 		isActive: Function;
 		toggleOpen: MouseEventHandler<HTMLButtonElement>;
 		close: MouseEventHandler<HTMLButtonElement>;
-		session: { user: { first: string; last: string; email: string } } | null;
+		session: Session | null;
 	} = $props();
 </script>
 

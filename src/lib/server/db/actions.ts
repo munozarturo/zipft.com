@@ -121,8 +121,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 	return { user, session };
 }
 
-export async function invalidateSession(token: string): Promise<void> {
-	const tokenHash = sha256Hash(token);
+export async function invalidateSession(tokenHash: string): Promise<void> {
 	await db.delete(sessionTable).where(eq(sessionTable.tokenHash, tokenHash)).returning();
 }
 

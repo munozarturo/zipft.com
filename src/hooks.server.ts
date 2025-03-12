@@ -11,8 +11,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// auth
 	const token = event.cookies.get('session') ?? null;
 	if (token === null) {
-		event.locals.user = null;
-		event.locals.session = null;
+		event.locals.auth = { user: null, session: null };
 		return resolve(event);
 	}
 
@@ -21,11 +20,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (session !== null) setSessionTokenCookie(event, token, session.expiresAt);
 		else deleteSessionTokenCookie(event);
 
-		event.locals.session = session;
-		event.locals.user = user;
+		if (user !== null) event.locals.auth = { user, session };
+		else event.locals.auth = { user: null, session: null };
 	} catch (e: any) {
-		event.locals.user = null;
-		event.locals.session = null;
+		event.locals.auth = { user: null, session: null };
 	}
 
 	return resolve(event);

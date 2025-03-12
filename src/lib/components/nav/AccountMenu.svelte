@@ -8,17 +8,20 @@
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Exit from '$lib/assets/icons/Exit.svelte';
 	import Person from '$lib/assets/icons/Person.svelte';
+	import type { Session, User } from '$lib/server/db/schema';
 
 	let {
 		isOpen,
 		toggleOpen,
 		close,
-		session
+		session,
+		user
 	}: {
 		isOpen: boolean;
 		toggleOpen: MouseEventHandler<HTMLButtonElement>;
 		close: MouseEventHandler<HTMLButtonElement>;
-		session: { user: { first: string; last: string; email: string } } | null;
+		session: Session | null;
+		user: User | null;
 	} = $props();
 </script>
 
@@ -36,7 +39,7 @@
 				<p
 					class="group-hover:text-primary-600 group-focus-visible:text-primary-600 hidden text-lg md:flex"
 				>
-					{session.user.first}
+					{user?.firstName}
 				</p>
 			</span>
 		</button>
@@ -88,8 +91,8 @@
 							>
 								<Account class="h-10 w-10" aria-hidden="true" />
 								<div class="flex flex-col">
-									<p class="text-lg">{session.user.first}&nbsp;{session.user.last}</p>
-									<p class="text-primary-500 -mt-1 text-sm">{session.user.email}</p>
+									<p class="text-lg">{user?.firstName}&nbsp;{user?.lastName}</p>
+									<p class="text-primary-500 -mt-1 text-sm">{user?.email}</p>
 								</div>
 							</div>
 							<!-- Close Button -->
@@ -112,16 +115,17 @@
 								Account <Cog class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
-						<a
-							href="/signout"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
-							role="menuitem"
-							tabindex="0"
-						>
-							<span class="flex flex-row items-center justify-between">
-								Sign Out <Exit class="h-6 w-6" aria-hidden="true" />
-							</span>
-						</a>
+						<form action="/signout" method="POST">
+							<button
+								type="submit"
+								class="border-primary-50 text-md decoration-1.5 w-full p-4 text-left underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								role="menuitem"
+							>
+								<span class="flex flex-row items-center justify-between">
+									Sign Out <Exit class="h-6 w-6" aria-hidden="true" />
+								</span>
+							</button>
+						</form>
 					</div>
 				{:else}
 					<!-- Account Options -->
