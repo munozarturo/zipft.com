@@ -1,5 +1,7 @@
 <script lang="ts">
-	let { message } = $props();
+	import type { VerifyChallengePageData } from './+page.server';
+
+	let { data }: { data: VerifyChallengePageData } = $props();
 </script>
 
 <svelte:head>
@@ -10,18 +12,27 @@
 	<form method="POST" class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		<div class="flex flex-col gap-2">
 			<!-- Show verified message if account is verified -->
-			<h1 class="text-4xl font-bold">Account Verified</h1>
+			<h1 class="text-4xl font-bold">{data.title}</h1>
 			<span class="text-primary-700 flex flex-row">
-				<p>Your account has been verified.</p>
+				<p>{data.message}</p>
 			</span>
-			<span class="text-primary-700 flex flex-row">
-				Proceed to&nbsp;
+			{#if data.error}
+				You can restart the verification process by proceeding to&nbsp;
 				<a
 					href="/signin"
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Sign in</a
 				>
-			</span>
+			{:else}
+				<span class="text-primary-700 flex flex-row">
+					Proceed to&nbsp;
+					<a
+						href="/signin"
+						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
+						>Sign in</a
+					>
+				</span>
+			{/if}
 		</div>
 	</form>
 </div>

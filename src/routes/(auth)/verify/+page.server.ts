@@ -11,7 +11,25 @@ import { generateToken } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
 import { sendEmail } from '$lib/server/aws/ses';
 
-export const load: PageServerLoad = async ({ url }) => {
+export type VerifyPageData =
+	| {
+			error: false;
+			verified: true;
+			message: string;
+	  }
+	| {
+			error: false;
+			verified: false;
+			message: string;
+	  }
+	| {
+			error: true;
+			verified: false;
+			message: string;
+			wait: number;
+	  };
+
+export const load: PageServerLoad = async ({ url }): Promise<VerifyPageData> => {
 	// if no email provided signin
 	const email = url.searchParams.get('e');
 	if (!email) return redirect(302, '/signin');
@@ -23,6 +41,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	// if account already verified
 	if (user.verified)
 		return {
+			error: false,
 			verified: true,
 			message: 'Account has already been verified.'
 		};
@@ -37,6 +56,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			const waitTime = lastCommunicationTime - oneMinuteAgo;
 			return {
 				error: true,
+				verified: false,
 				message: 'Please wait before requesting another verification email.',
 				wait: Math.ceil(waitTime / 1000)
 			};
@@ -59,6 +79,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	});
 
 	return {
+		error: false,
 		verified: false,
 		message:
 			'We sent a verification link to your email. Please check your inbox and click the link to complete your account setup.'
