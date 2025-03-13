@@ -20,11 +20,19 @@ export const actions = {
 
 		const { email, password } = form.data;
 		const user = await getUserByEmail(email);
+		if (!user) {
+			setError(form, '', 'Invalid email or password.');
+			return fail(400, { form });
+		}
 
 		const valid = await argon2.verify(user.passwordHash, password);
 		if (!valid) {
 			setError(form, '', 'Invalid email or password.');
 			return fail(400, { form });
+		}
+
+		if (!user.verified) {
+			return redirect(303, `/verify?e=${user.email}`);
 		}
 
 		const token = generateToken();

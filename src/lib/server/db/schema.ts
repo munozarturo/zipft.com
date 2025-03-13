@@ -52,7 +52,7 @@ export const communicationTable = schema.table('communication', {
 	type: communicationType().notNull(),
 	purpose: communicationPurpose().notNull(),
 
-	createdAt: timestamp('created_at').notNull().defaultNow()
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 export type Communication = InferSelectModel<typeof communicationTable>;
 export type CommunicationType = typeof communicationTable.$inferSelect.type;

@@ -16,7 +16,7 @@ import {
 	verificationChallengeTable
 } from '$lib/server/db/schema';
 import { db } from '.';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, desc } from 'drizzle-orm';
 
 function sha256Hash(data: any) {
 	const sha256 = crypto.createHash('sha256');
@@ -34,9 +34,9 @@ export async function emailInUse(email: string): Promise<{ used: boolean }> {
 	return { used: count > 0 };
 }
 
-export async function getUserByEmail(email: string): Promise<User> {
+export async function getUserByEmail(email: string): Promise<User | null> {
 	const res = await db.select().from(userTable).where(eq(userTable.email, email));
-	if (res.length < 1) throw new Error('Invalid email address.');
+	if (res.length < 1) return null;
 
 	return res[0];
 }
@@ -144,7 +144,10 @@ export async function getLastCommunication(userId: number): Promise<Communicatio
 	const res = await db
 		.select()
 		.from(communicationTable)
-		.where(eq(communicationTable.userId, userId));
+		.where(eq(communicationTable.userId, userId))
+		.orderBy(desc(communicationTable.createdAt))
+		.limit(1);
+
 	if (res.length < 1) return null;
 
 	return res[0];

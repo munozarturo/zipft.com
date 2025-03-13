@@ -26,6 +26,7 @@ export const actions = {
 		const { email } = form.data;
 		try {
 			const user = await getUserByEmail(email);
+			if (!user) return { form };
 
 			const mostRecentCommunication = await getLastCommunication(user.id);
 
