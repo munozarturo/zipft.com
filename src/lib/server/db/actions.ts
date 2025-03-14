@@ -206,23 +206,19 @@ export async function createPasswordReset(token: string, userId: number): Promis
 }
 
 export async function resetPassword(token: string, password: string): Promise<void> {
-	console.log('password', password);
 	const tokenHash = sha256Hash(token);
 	const passwordHash = await argon2.hash(password);
-	console.log('passwordHash', passwordHash);
 
 	const res = await db
 		.select()
 		.from(passwordResetTable)
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
 	if (res.length < 1) throw new Error('Invalid password reset link.');
-	console.log('password reset link exists');
 
 	const passwordReset = res[0];
 	if (passwordReset.used) throw new Error('Password has already been reset.');
 	if (Date.now() >= passwordReset.expiresAt.getTime())
 		throw new Error('Password reset request expired.');
-	console.log('password reset link valid');
 
 	await db
 		.update(passwordResetTable)
@@ -231,10 +227,8 @@ export async function resetPassword(token: string, password: string): Promise<vo
 			usedAt: new Date(Date.now())
 		})
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
-	console.log('updated as used');
 	await db
 		.update(userTable)
 		.set({ passwordHash, verified: true })
 		.where(eq(userTable.id, passwordReset.userId));
-	console.log('updated user');
 }
