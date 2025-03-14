@@ -59,7 +59,6 @@ export async function sendVerificationEmail(
 	</head>
 	<body
 		style="
-			background-color: #fefefe;
 			font-family:
 				-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
 				'Helvetica Neue', sans-serif;
@@ -250,7 +249,6 @@ export async function sendPasswordResetEmail(
 	</head>
 	<body
 		style="
-			background-color: #fefefe;
 			font-family:
 				-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
 				'Helvetica Neue', sans-serif;
