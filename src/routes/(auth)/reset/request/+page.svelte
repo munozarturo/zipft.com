@@ -57,10 +57,10 @@
 					/>
 				</label>
 				{#if $errors.email}
-					<div class="error">{$errors.email}</div>
+					<div class="text-error-500">{$errors.email}</div>
 				{/if}
 				{#if $errors._errors}
-					<div class="error">{$errors._errors}</div>
+					<div class="text-error-500">{$errors._errors}</div>
 				{/if}
 			</div>
 			<button
