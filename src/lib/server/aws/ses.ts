@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { SESClient } from '@aws-sdk/client-ses';
+import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
@@ -30,7 +30,18 @@ type Email = {
 	body: EmailBody;
 	attachments?: Attachment[];
 	inlineImages?: InlineImage[];
+	sesOptions?: Record<string, any>;
 };
+
+interface CustomTransportOptions {
+	SES: {
+		ses: SESClient;
+		aws: {
+			SendRawEmailCommand: typeof SendRawEmailCommand;
+		};
+	};
+	sendingRate?: number;
+}
 
 function getSESClient(): SESClient {
 	const AWS_REGION = env.AWS_REGION;
@@ -52,14 +63,14 @@ function getSESClient(): SESClient {
 }
 
 async function sendEmail(email: Email): Promise<nodemailer.SentMessageInfo> {
-	const sesClient = getSESClient();
+	const ses = getSESClient();
 
 	const transporter = nodemailer.createTransport({
 		SES: {
-			ses: sesClient,
-			aws: { SendRawEmail: true }
+			ses,
+			aws: { SendRawEmailCommand }
 		}
-	});
+	} as CustomTransportOptions);
 
 	const mailOptions: Mail.Options = {
 		from: email.source,
@@ -118,6 +129,10 @@ async function sendEmail(email: Email): Promise<nodemailer.SentMessageInfo> {
 
 	if (attachments.length > 0) {
 		mailOptions.attachments = attachments;
+	}
+
+	if (email.sesOptions) {
+		(mailOptions as any).ses = email.sesOptions;
 	}
 
 	return transporter.sendMail(mailOptions);

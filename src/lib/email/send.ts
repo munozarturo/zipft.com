@@ -216,7 +216,7 @@ The zipft team
 
 {%communication.id%}`;
 
-	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo.svg`);
+	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo-light.png`);
 
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
@@ -226,9 +226,9 @@ The zipft team
 		body,
 		inlineImages: [
 			{
-				filename: 'logo.svg',
+				filename: 'logo.png',
 				content: logoBuffer,
-				contentType: 'image/svg',
+				contentType: 'image/png',
 				contentId: 'logo'
 			}
 		]
@@ -423,7 +423,7 @@ The zipft team
 
 {%communication.id%}`;
 
-	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo.svg`);
+	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo-light.png`);
 
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
@@ -433,9 +433,9 @@ The zipft team
 		body,
 		inlineImages: [
 			{
-				filename: 'logo.svg',
+				filename: 'logo.png',
 				content: logoBuffer,
-				contentType: 'image/svg',
+				contentType: 'image/png',
 				contentId: 'logo'
 			}
 		]
