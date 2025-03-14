@@ -16,7 +16,7 @@ import {
 	verificationChallengeTable
 } from '$lib/server/db/schema';
 import { db } from '.';
-import { eq, sql, desc } from 'drizzle-orm';
+import { eq, sql, desc, and } from 'drizzle-orm';
 
 function sha256Hash(data: any) {
 	const sha256 = crypto.createHash('sha256');
@@ -140,11 +140,20 @@ export async function createCommunication(
 	return res[0];
 }
 
-export async function getLastCommunication(userId: number): Promise<Communication | null> {
+export async function getLastCommunication(
+	userId: number,
+	type: CommunicationType,
+	purpose: CommunicationPurpose
+): Promise<Communication | null> {
 	const res = await db
 		.select()
 		.from(communicationTable)
-		.where(eq(communicationTable.userId, userId))
+		.where(
+			and(
+				eq(communicationTable.type, type),
+				and(eq(communicationTable.purpose, purpose), eq(communicationTable.userId, userId))
+			)
+		)
 		.orderBy(desc(communicationTable.createdAt))
 		.limit(1);
 

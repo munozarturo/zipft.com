@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		};
 
 	// check most recent email sent
-	const mostRecentCommunication = await getLastCommunication(user.id);
+	const mostRecentCommunication = await getLastCommunication(user.id, 'email', 'verification');
 	if (mostRecentCommunication) {
 		const lastCommunicationTime = new Date(mostRecentCommunication.createdAt).getTime();
 		const oneMinuteAgo = Date.now() - 60 * 1000;
