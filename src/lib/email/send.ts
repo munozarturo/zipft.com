@@ -1,11 +1,31 @@
-const replacePlaceholders = (obj: any, html: string, text: string, prefix = ''): void => {
+import { ROOT_DOMAIN } from '$env/static/private';
+import { sendEmail } from '$lib/server/aws/ses';
+
+async function loadImageBuffer(url: string): Promise<Buffer> {
+	const response = await fetch(url);
+
+	if (!response.ok) {
+		throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+	}
+
+	return Buffer.from(await response.arrayBuffer());
+}
+
+const replacePlaceholders = (
+	obj: any,
+	html: string,
+	text: string,
+	prefix = ''
+): { html: string; text: string } => {
 	for (const key in obj) {
 		if (obj.hasOwnProperty(key)) {
 			const fullKey = prefix ? `${prefix}.${key}` : key;
 			const value = obj[key];
 
 			if (typeof value === 'object' && value !== null) {
-				replacePlaceholders(value, html, text, fullKey);
+				const result = replacePlaceholders(value, html, text, fullKey);
+				html = result.html;
+				text = result.text;
 			} else {
 				const placeholder = `{%${fullKey}%}`;
 				html = html.replace(new RegExp(placeholder, 'g'), value);
@@ -13,6 +33,8 @@ const replacePlaceholders = (obj: any, html: string, text: string, prefix = ''):
 			}
 		}
 	}
+
+	return { html, text };
 };
 
 type VerificationEmail = {
@@ -24,11 +46,13 @@ type VerificationEmail = {
 		id: string;
 	};
 };
-export async function sendVerificationEmail(props: VerificationEmail): Promise<void> {
-	let html = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+export async function sendVerificationEmail(
+	email: string,
+	props: VerificationEmail
+): Promise<void> {
+	let htmlTemplate = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" lang="en">
 	<head>
-		<link rel="preload" as="image" href="{%baseUrl%}/logo.svg" />
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<meta name="x-apple-disable-message-reformatting" />
 		<!--$-->
@@ -77,7 +101,7 @@ export async function sendVerificationEmail(props: VerificationEmail): Promise<v
 								outline: none;
 								border: none;
 								text-decoration: none;
-								margin: 0 auto;
+								marg{%in: 0 auto;
 							"
 							width="170"
 						/>
@@ -104,7 +128,7 @@ export async function sendVerificationEmail(props: VerificationEmail): Promise<v
 								<tr>
 									<td>
 										<a
-											href="{%verifyUrl%}"
+											href="{%verificationUrl%}"
 											style="
 												line-height: 100%;
 												text-decoration: none;
@@ -167,7 +191,7 @@ export async function sendVerificationEmail(props: VerificationEmail): Promise<v
 	</body>
 </html>
 `;
-	let text = `Verify your zipft account.
+	let textTemplate = `Verify your zipft account.
  ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
 ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
 ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
@@ -183,7 +207,7 @@ Someone recently requested a password change for your zipft account. If this was
 
 To finish setting up your account verify your identity by clicking on the link below:
 
-Verify account {%verifyUrl%}
+Verify account {%verificationUrl%}
 
 Best,
 The zipft team
@@ -192,7 +216,25 @@ The zipft team
 
 {%communication.id%}`;
 
-	replacePlaceholders(props, html, text);
+	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo.svg`);
+
+	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
+	const emailBody = {
+		source: `"zipft" <account@${ROOT_DOMAIN}>`,
+		destination: { to: email },
+		subject: 'Reset your password',
+		body,
+		inlineImages: [
+			{
+				filename: 'logo.svg',
+				content: logoBuffer,
+				contentType: 'image/svg',
+				contentId: 'logo'
+			}
+		]
+	};
+
+	await sendEmail(emailBody);
 }
 
 type PasswordResetEmail = {
@@ -204,11 +246,13 @@ type PasswordResetEmail = {
 		id: string;
 	};
 };
-export async function sendPasswordResetEmail(props: PasswordResetEmail): Promise<void> {
-	let html = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+export async function sendPasswordResetEmail(
+	email: string,
+	props: PasswordResetEmail
+): Promise<void> {
+	let htmlTemplate = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" lang="en">
 	<head>
-		<link rel="preload" as="image" href="{%baseUrl%}/logo.svg" />
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<meta name="x-apple-disable-message-reformatting" />
 		<!--$-->
@@ -282,7 +326,7 @@ export async function sendPasswordResetEmail(props: PasswordResetEmail): Promise
 								<tr>
 									<td>
 										<a
-											href="{%resetUrl%}"
+											href="{%passwordResetUrl%}"
 											style="
 												line-height: 100%;
 												text-decoration: none;
@@ -352,8 +396,7 @@ export async function sendPasswordResetEmail(props: PasswordResetEmail): Promise
 	</body>
 </html>
 `;
-
-	let text = `Reset your zipft password.
+	let textTemplate = `Reset your zipft password.
  ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
 ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
 ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌ ‍‎‏﻿ ‌
@@ -367,7 +410,7 @@ Hi {%user.firstName%},
 
 Welcome to zipft, the fast file sharing service.
 
-Reset password {%resetUrl%}
+Reset password {%passwordResetUrl%}
 
 If you don't want to change your password or didn't request this, just ignore and delete this message.
 
@@ -380,5 +423,23 @@ The zipft team
 
 {%communication.id%}`;
 
-	replacePlaceholders(props, html, text);
+	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo.svg`);
+
+	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
+	const emailBody = {
+		source: `"zipft" <account@${ROOT_DOMAIN}>`,
+		destination: { to: email },
+		subject: 'Reset your password',
+		body,
+		inlineImages: [
+			{
+				filename: 'logo.svg',
+				content: logoBuffer,
+				contentType: 'image/svg',
+				contentId: 'logo'
+			}
+		]
+	};
+
+	await sendEmail(emailBody);
 }
