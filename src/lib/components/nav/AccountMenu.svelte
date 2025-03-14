@@ -45,7 +45,9 @@
 		</button>
 	{:else}
 		<div class="flex flex-row items-center justify-center">
-			<a href="/signin" aria-label="Sign in to your account" class="btn"> Sign in </a>
+			<a href="/signin" aria-label="Sign in to your account" class="btn hidden md:flex">
+				Sign in
+			</a>
 			<a
 				href="/signup"
 				aria-label="Sign up for a new account"

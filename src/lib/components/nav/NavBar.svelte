@@ -61,11 +61,11 @@
 	<div class="flex flex-row items-center gap-12">
 		<!-- Nav Links (Desktop) -->
 		<div class="hidden flex-row items-center md:flex">
-			<ul class="flex flex-row items-center space-x-1" role="menu" aria-label="Main navigation">
+			<ul class="flex flex-row items-center" role="menu" aria-label="Main navigation">
 				<li role="none">
 					<a
 						href="/"
-						class={twMerge('anchor text-lg', isActive('/') && 'underline')}
+						class={twMerge('anchor text-lg p-2', isActive('/') && 'underline')}
 						role="menuitem"
 						aria-current={isActive('/') ? 'page' : undefined}
 					>
@@ -75,7 +75,10 @@
 				<li role="none">
 					<a
 						href="/receive"
-						class={twMerge('anchor text-lg', isActive(['/receive', '/r/'], true) && 'underline')}
+						class={twMerge(
+							'anchor text-lg p-2',
+							isActive(['/receive', '/r/'], true) && 'underline'
+						)}
 						role="menuitem"
 						aria-current={isActive(['/receive', '/r/'], true) ? 'page' : undefined}
 					>
