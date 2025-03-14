@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import type { VerifyPageData } from './+page.server';
+	import { type PageData } from './$types';
 
-	let { data }: { data: VerifyPageData } = $props();
+	let { data }: { data: PageData } = $props();
 
 	// Countdown state
-	let countdown = $state(data.error ? data.wait : 60);
+	let countdown = $state(data.error && data.wait ? data.wait : 60);
 	let buttonDisabled = $state(true);
 
 	// Start countdown on mount

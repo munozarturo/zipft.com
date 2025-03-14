@@ -1,13 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { validateVerficiationChallenge } from '$lib/server/db/actions';
 
-export type VerifyChallengePageData = {
-	error: boolean;
-	title: string;
-	message: string;
-};
-
-export const load: PageServerLoad = async ({ url }): Promise<VerifyChallengePageData> => {
+export const load: PageServerLoad = async ({ url }) => {
 	const token = url.searchParams.get('t');
 
 	if (!token) {

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { VerifyChallengePageData } from './+page.server';
+	import { type PageData } from './$types';
 
-	let { data }: { data: VerifyChallengePageData } = $props();
+	let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>

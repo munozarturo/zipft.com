@@ -61,7 +61,5 @@ export const actions = {
 			// user doesn't exist or any other errors
 			return { form };
 		}
-
-		return { form };
 	}
 };

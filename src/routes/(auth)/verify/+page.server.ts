@@ -11,25 +11,7 @@ import { generateToken } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
 import { sendEmail } from '$lib/server/aws/ses';
 
-export type VerifyPageData =
-	| {
-			error: false;
-			verified: true;
-			message: string;
-	  }
-	| {
-			error: false;
-			verified: false;
-			message: string;
-	  }
-	| {
-			error: true;
-			verified: false;
-			message: string;
-			wait: number;
-	  };
-
-export const load: PageServerLoad = async ({ url }): Promise<VerifyPageData> => {
+export const load: PageServerLoad = async ({ url }) => {
 	// if no email provided signin
 	const email = url.searchParams.get('e');
 	if (!email) return redirect(302, '/signin');

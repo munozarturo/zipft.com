@@ -216,5 +216,8 @@ export async function resetPassword(token: string, password: string): Promise<vo
 			usedAt: new Date(Date.now())
 		})
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
-	await db.update(userTable).set({ passwordHash }).where(eq(userTable.id, passwordReset.userId));
+	await db
+		.update(userTable)
+		.set({ passwordHash, verified: true })
+		.where(eq(userTable.id, passwordReset.userId));
 }
