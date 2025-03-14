@@ -19,7 +19,7 @@
 </svelte:head>
 
 <div class="container mx-auto pt-20">
-	<form method="POST" use:enhance class="card p-4 max-w-[420px] mx-auto space-y-4">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<div class="space-y-1">
 			<h1 class="h1">Welcome back</h1>
 			<span class="textba-base flex flex-row">
@@ -58,7 +58,7 @@
 				<small class="text-error-500">{$errors._errors}</small>
 			{/if}
 		</div>
-		<div class="flex flex-col w-full gap-2">
+		<div class="flex w-full flex-col gap-2">
 			<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
 				<p>Sign in</p>
 				{#if $delayed}

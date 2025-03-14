@@ -23,8 +23,8 @@
 	<title>Reset password :: zipft</title>
 </svelte:head>
 
-<div class="container h-full flex justify-center items-start">
-	<form method="POST" use:enhance class="card p-4 max-w-sm space-y-4 w-full">
+<div class="container mx-auto pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		{#if submitted}
 			<div class="space-y-2">
 				<h1 class="h1">Password reset</h1>
@@ -63,14 +63,14 @@
 				{/if}
 			</div>
 			<button
-				class="btn preset-filled-primary-500 w-full flex justify-between items-center"
+				class="btn preset-filled-primary-500 flex w-full items-center justify-between"
 				disabled={$delayed}
 			>
 				<span>Reset password</span>
 				{#if $delayed}
 					<Spinner className="w-5 h-5 animate-spin" />
 				{:else}
-					<ChevronRight class="w-3 h-3 btn-icon-right" />
+					<ChevronRight class="btn-icon-right h-3 w-3" />
 				{/if}
 			</button>
 			<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Back to Sign in</a>

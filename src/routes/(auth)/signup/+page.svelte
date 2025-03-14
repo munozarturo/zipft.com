@@ -18,8 +18,8 @@
 	<title>Sign up :: zipft</title>
 </svelte:head>
 
-<div class="container h-full pt-20">
-	<form method="POST" use:enhance class="card w-full max-w-[360px] mx-auto p-4 space-y-4">
+<div class="container mx-auto pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<header class="space-y-1">
 			<h1 class="h2">Welcome</h1>
 			<span>
@@ -89,9 +89,9 @@
 		<button class="btn preset-filled-primary-500 w-full justify-between" disabled={$delayed}>
 			<span>Sign up</span>
 			{#if $delayed}
-				<Spinner class="w-5 h-5 animate-spin" />
+				<Spinner class="h-5 w-5 animate-spin" />
 			{:else}
-				<ChevronRight class="w-3 h-3" />
+				<ChevronRight class="h-3 w-3" />
 			{/if}
 		</button>
 		<footer class="text-sm">

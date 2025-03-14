@@ -53,8 +53,8 @@
 	<title>Verify account :: zipft</title>
 </svelte:head>
 
-<div class="container h-full flex justify-center items-start pt-20">
-	<form method="POST" class="card p-4 w-full max-w-sm space-y-4">
+<div class="container mx-auto pt-20">
+	<form method="POST" class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<div class="space-y-2">
 			{#if data.verified}
 				<!-- Show verified message if account is verified -->
