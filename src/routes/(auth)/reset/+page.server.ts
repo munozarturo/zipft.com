@@ -1,5 +1,3 @@
-import * as argon2 from 'argon2';
-
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { fail } from '@sveltejs/kit';
@@ -10,7 +8,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 export const load = async (event) => {
 	const form = await superValidate(event, zod(passwordResetSchema));
 
-	return { form };
+	return { form, resetPassword: false };
 };
 
 export const actions = {
@@ -26,8 +24,11 @@ export const actions = {
 
 		try {
 			await resetPassword(token, password);
-		} catch (e: any) {}
+		} catch (e: any) {
+			setError(form, '', e.message || 'Unknown error.');
+			return fail(400, { form });
+		}
 
-		return { form };
+		return { form, resetPassword: true };
 	}
 };

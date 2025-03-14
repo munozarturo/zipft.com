@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import { type PageData } from './$types';
 
-	let { verified, message } = $props();
+	let { data }: { data: PageData } = $props();
 
 	// Countdown state
-	let countdown = $state(60);
+	let countdown = $state(data.error && data.wait ? data.wait : 60);
 	let buttonDisabled = $state(true);
 
 	// Start countdown on mount
@@ -55,11 +56,11 @@
 <div class="mt-20">
 	<form method="POST" class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		<div class="flex flex-col gap-2">
-			{#if verified}
+			{#if data.verified}
 				<!-- Show verified message if account is verified -->
 				<h1 class="text-4xl font-bold">Account Verified</h1>
 				<span class="text-primary-700 flex flex-row">
-					<p>Your account has been verified.</p>
+					<p>{data.message}</p>
 				</span>
 				<span class="text-primary-700 flex flex-row">
 					Proceed to&nbsp;
@@ -75,8 +76,7 @@
 
 				<span class="text-primary-700 flex flex-row">
 					<p>
-						We sent a verification link to your email. Please check your inbox and click the link to
-						complete your account setup.
+						{data.message}
 					</p>
 				</span>
 

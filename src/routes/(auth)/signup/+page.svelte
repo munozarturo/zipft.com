@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { signUpSchema } from '$lib/schemas/auth';
 	import { zod } from 'sveltekit-superforms/adapters';
@@ -7,7 +7,7 @@
 	import Spinner from '$lib/assets/icons/Spinner.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
 
-	export let data: PageData;
+	let { data }: PageProps = $props();
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		validators: zod(signUpSchema)

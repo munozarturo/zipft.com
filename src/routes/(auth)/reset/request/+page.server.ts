@@ -4,13 +4,13 @@ import {
 	getLastCommunication,
 	getUserByEmail
 } from '$lib/server/db/actions.js';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { ROOT_DOMAIN } from '$env/static/private';
 import { fail } from '@sveltejs/kit';
 import { generateToken } from '$lib/server/auth';
 import { passwordResetRequestSchema } from '$lib/schemas/auth';
 import { sendEmail } from '$lib/server/aws/ses';
-import { superValidate } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
@@ -23,21 +23,32 @@ export const actions = {
 		const form = await superValidate(event, zod(passwordResetRequestSchema));
 		if (!form.valid) return fail(400, { form });
 
-		const { email } = form.data;
 		try {
+			const { email } = form.data;
 			const user = await getUserByEmail(email);
+			if (!user) {
+				return { form };
+			}
 
-			const mostRecentCommunication = await getLastCommunication(user.id);
-
+			const mostRecentCommunication = await getLastCommunication(
+				user.id,
+				'email',
+				'password_reset'
+			);
 			if (mostRecentCommunication) {
+				const lastCommunicationTime = new Date(mostRecentCommunication.createdAt).getTime();
 				const oneMinuteAgo = Date.now() - 60 * 1000;
-				if (mostRecentCommunication.createdAt.getTime() > oneMinuteAgo) {
-					return {
-						verified: false,
-						message: 'Please wait one minute before requesting another verification email',
-						rateLimited: true,
-						nextRequestTime: new Date(mostRecentCommunication.createdAt.getTime() + 60 * 1000)
-					};
+
+				if (lastCommunicationTime > oneMinuteAgo) {
+					const waitTime = lastCommunicationTime - oneMinuteAgo;
+					setError(
+						form,
+						'',
+						`Please wait ${Math.ceil(waitTime)} seconds before requesting a password reset.`
+					);
+					return fail(400, {
+						form
+					});
 				}
 			}
 
@@ -57,10 +68,8 @@ export const actions = {
 
 			return { form };
 		} catch (e: any) {
-			// user doesn't exist or any other errors
-			return { form };
+			setError(form, '', e.message || 'Unknown error.');
+			return fail(400, { form });
 		}
-
-		return { form };
 	}
 };
