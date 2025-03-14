@@ -53,34 +53,28 @@
 	<title>Verify account :: zipft</title>
 </svelte:head>
 
-<div class="mt-20">
-	<form method="POST" class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
-		<div class="flex flex-col gap-2">
+<div class="container h-full flex justify-center items-start pt-20">
+	<form method="POST" class="card p-4 w-full max-w-sm space-y-4">
+		<div class="space-y-2">
 			{#if data.verified}
 				<!-- Show verified message if account is verified -->
-				<h1 class="text-4xl font-bold">Account verified</h1>
-				<span class="text-primary-700 flex flex-row">
-					<p>{data.message}</p>
-				</span>
-				<span class="text-primary-700 flex flex-row">
+				<h1 class="h1">Account verified</h1>
+				<p class="text-base">
+					{data.message}
+				</p>
+				<p class="text-base">
 					Proceed to&nbsp;
-					<a
-						href={`/signin?r=${data.redirectUrl}`}
-						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-						>Sign in</a
-					>
-				</span>
+					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
+				</p>
 			{:else}
 				<!-- Show verification instructions if not verified -->
-				<h1 class="text-4xl font-bold">Verify account</h1>
+				<h1 class="h1">Verify account</h1>
 
-				<span class="text-primary-700 flex flex-row">
-					<p>
-						{data.message}
-					</p>
-				</span>
+				<p class="text-base">
+					{data.message}
+				</p>
 
-				<span class="text-primary-700 flex flex-row">
+				<p class="text-base">
 					Don't see it?&nbsp;
 					<button
 						onclick={(e) => {
@@ -88,11 +82,11 @@
 							resendVerification();
 						}}
 						disabled={buttonDisabled}
-						class="w-fit underline underline-offset-2 enabled:hover:no-underline enabled:focus-visible:no-underline disabled:cursor-not-allowed"
+						class="anchor {buttonDisabled ? 'opacity-50 cursor-not-allowed' : ''}"
 					>
 						Resend {countdown > 0 ? `in ${countdown}s` : ''}
 					</button>
-				</span>
+				</p>
 			{/if}
 		</div>
 	</form>

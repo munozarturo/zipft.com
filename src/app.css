@@ -2,24 +2,10 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-@theme {
-	--font-inter: Inter, sans-serif;
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+@import '@skeletonlabs/skeleton/themes/cerberus';
 
-	--color-primary-900: #1e1e1e;
-	--color-primary-800: #333333;
-	--color-primary-700: #484848;
-	--color-primary-600: #5d5d5d;
-	--color-primary-500: #717171;
-	--color-primary-400: #868686;
-	--color-primary-300: #9b9b9b;
-	--color-primary-200: #b0b0b0;
-	--color-primary-100: #c4c4c4;
-	--color-primary-50: #dadada;
-
-	--color-secondary: #fefefe;
-	--color-accent: #155dfc;
-
-	--breakpoint-xs: 22rem;
-}
+@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */
