@@ -7,4 +7,5 @@
 
 <div class="flex flex-col">
 	<h2 class="h2">Transfers</h2>
+	<div>active transfers list</div>
 </div>
