@@ -18,69 +18,58 @@
 	<title>Sign in :: zipft</title>
 </svelte:head>
 
-<div class="mt-20">
-	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
-		<div class="flex flex-col gap-1">
-			<h1 class="text-4xl font-bold">Welcome back</h1>
-			<span class="text-primary-700 flex flex-row">
+<div class="container mx-auto pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
+		<div class="space-y-1">
+			<h1 class="h1">Welcome back</h1>
+			<span class="textba-base flex flex-row">
 				<p>Need an account?&nbsp;</p>
-				<a
-					href={`/signup?r=${data.redirectUrl}`}
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Sign up</a
-				>
+				<a href={`/signup?r=${data.redirectUrl}`} class="anchor">Sign up</a>
 			</span>
 		</div>
-		<div class="flex w-full flex-col gap-2">
-			<label for="email" class="flex w-full flex-col">
-				Email
+		<div class="space-y-2">
+			<label class="label">
+				<span>Email</span>
 				<input
 					name="email"
 					type="email"
 					placeholder="email@example.com"
-					class="w-full"
+					class="input"
 					bind:value={$form.email}
 				/>
 			</label>
 			{#if $errors.email}
-				<small>{$errors.email}</small>
+				<small class="text-error-500">{$errors.email}</small>
 			{/if}
-			<label for="password" class="flex w-full flex-col">
-				Password
+			<label class="label" for="password">
+				<span>Password</span>
 				<input
 					name="password"
 					type="password"
 					placeholder="Password"
-					class="w-full"
+					class="input"
 					bind:value={$form.password}
 				/>
 			</label>
 			{#if $errors.password}
-				<small>{$errors.password}</small>
+				<small class="text-error-500">{$errors.password}</small>
 			{/if}
 			{#if $errors._errors}
-				<small>{$errors._errors}</small>
+				<small class="text-error-500">{$errors._errors}</small>
 			{/if}
 		</div>
-		<button
-			class="bg-primary-800 text-secondary enabled:hover:bg-accent focus-visible:bg-accent group flex flex-row items-center justify-between p-2.5 transition-all focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-black disabled:opacity-50 md:text-lg"
-			disabled={$delayed}
-		>
-			<p>Sign in</p>
-			{#if $delayed}
-				<Spinner class="h-5 w-5 animate-spin" />
-			{:else}
-				<ChevronRight
-					class="h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0"
-				/>
-			{/if}
-		</button>
-		<span class="text-primary-700 flex flex-row">
-			<a
-				href={`/reset/request?r=${data.redirectUrl}`}
-				class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-				>Forgot password</a
-			>
-		</span>
+		<div class="flex w-full flex-col gap-2">
+			<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
+				<p>Sign in</p>
+				{#if $delayed}
+					<Spinner class="h-4 w-4 animate-spin" />
+				{:else}
+					<ChevronRight class="h-4 w-4" />
+				{/if}
+			</button>
+			<span class="w-full">
+				<a href={`/reset/request?r=${data.redirectUrl}`} class="anchor">Forgot password</a>
+			</span>
+		</div>
 	</form>
 </div>

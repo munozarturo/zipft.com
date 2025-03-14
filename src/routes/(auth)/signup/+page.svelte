@@ -18,109 +18,94 @@
 	<title>Sign up :: zipft</title>
 </svelte:head>
 
-<div class="mt-20">
-	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
-		<div class="flex flex-col gap-1">
-			<h1 class="text-4xl font-bold">Welcome</h1>
-			<span class="text-primary-700 flex flex-row">
-				<p>Have an account?&nbsp;</p>
-				<a
-					href={`/signin?r=${data.redirectUrl}`}
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Sign in</a
-				>
+<div class="container mx-auto pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
+		<header class="space-y-1">
+			<h1 class="h2">Welcome</h1>
+			<span>
+				<p class="text-sm">Have an account?&nbsp;</p>
+				<a href={`/signin?r=${data.redirectUrl}`} class="anchor text-sm">Sign in</a>
 			</span>
-		</div>
-		<div class="flex flex-col gap-2">
-			<div class="flex flex-row gap-2">
-				<div class="flex flex-col gap-2">
-					<label for="firstName" class="flex flex-col">
-						First Name
-						<input
-							name="firstName"
-							type="text"
-							placeholder="John"
-							class="w-full"
-							bind:value={$form.firstName}
-						/>
-					</label>
+		</header>
+		<div class="space-y-2">
+			<div class="grid grid-cols-2 gap-2">
+				<label class="label">
+					<span>First Name</span>
+					<input
+						name="firstName"
+						type="text"
+						placeholder="John"
+						class="input"
+						bind:value={$form.firstName}
+					/>
 					{#if $errors.firstName}
-						<small>{$errors.firstName}</small>
+						<small class="text-error-500">{$errors.firstName}</small>
 					{/if}
-				</div>
-				<div class="flex flex-col gap-2">
-					<label for="lastName" class="flex flex-col">
-						Last Name
-						<input
-							name="lastName"
-							type="text"
-							placeholder="Doe"
-							class="w-full"
-							bind:value={$form.lastName}
-						/>
-					</label>
+				</label>
+				<label class="label">
+					<span>Last Name</span>
+					<input
+						name="lastName"
+						type="text"
+						placeholder="Doe"
+						class="input"
+						bind:value={$form.lastName}
+					/>
 					{#if $errors.lastName}
-						<small>{$errors.lastName}</small>
+						<small class="text-error-500">{$errors.lastName}</small>
 					{/if}
-				</div>
+				</label>
 			</div>
-			<label for="email" class="flex flex-col">
-				Email
+			<label class="label">
+				<span>Email</span>
 				<input
 					name="email"
 					type="email"
 					placeholder="email@example.com"
-					class="w-full"
+					class="input"
 					bind:value={$form.email}
 				/>
+				{#if $errors.email}
+					<small class="text-error-500">{$errors.email}</small>
+				{/if}
 			</label>
-			{#if $errors.email}
-				<small>{$errors.email}</small>
-			{/if}
-			<label for="password" class="flex flex-col">
-				Password
+			<label class="label">
+				<span>Password</span>
 				<input
 					name="password"
 					type="password"
 					placeholder="Password"
-					class="w-full"
+					class="input"
 					bind:value={$form.password}
 				/>
+				{#if $errors.password}
+					<small class="text-error-500">{$errors.password}</small>
+				{/if}
 			</label>
-			{#if $errors.password}
-				<small>{$errors.password}</small>
-			{/if}
 			{#if $errors._errors}
-				<small>{$errors._errors}</small>
+				<small class="text-error-500">{$errors._errors}</small>
 			{/if}
 		</div>
-		<button
-			class="bg-primary-800 text-secondary enabled:hover:bg-accent focus-visible:bg-accent group flex flex-row items-center justify-between p-2.5 transition-all focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-black disabled:opacity-50 md:text-lg"
-			disabled={$delayed}
-		>
-			<p>Sign up</p>
+		<button class="btn preset-filled-primary-500 w-full justify-between" disabled={$delayed}>
+			<span>Sign up</span>
 			{#if $delayed}
 				<Spinner class="h-5 w-5 animate-spin" />
 			{:else}
-				<ChevronRight
-					class="h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0"
-				/>
+				<ChevronRight class="h-3 w-3" />
 			{/if}
 		</button>
-		<span class="text-primary-700">
-			<p class="text-sm">
+		<footer class="text-sm">
+			<p>
 				By creating an account, you agree to zipft's&nbsp;<a
 					href="/legal/terms-of-service"
 					target="_blank"
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Terms of Service</a
+					class="anchor">Terms of Service</a
 				>&nbsp;and consent to zipft's&nbsp;<a
 					href="/legal/privacy-policy"
 					target="_blank"
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Privacy Policy</a
+					class="anchor">Privacy Policy</a
 				>.
 			</p>
-		</span>
+		</footer>
 	</form>
 </div>

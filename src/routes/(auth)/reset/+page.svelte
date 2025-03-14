@@ -21,66 +21,53 @@
 	<title>Reset password :: zipft</title>
 </svelte:head>
 
-<div class="mt-20">
-	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
+<div class="container mx-auto pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		{#if passwordReset}
-			<h1 class="text-4xl font-bold">Password reset</h1>
-			<span class="text-primary-700 flex flex-row">
+			<div class="space-y-2">
+				<h1 class="h1">Password reset</h1>
 				<p>Your password has been reset.</p>
-			</span>
-			<span class="text-primary-700 flex flex-row">
-				Proceed to&nbsp;
-				<a
-					href={`/signin?r=${data.redirectUrl}`}
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Sign in</a
-				>
-			</span>
-		{:else}
-			<div class="flex flex-col gap-1">
-				<h1 class="text-4xl font-bold">Reset your password</h1>
-				<span class="text-primary-700">
-					<p>Enter a new password</p>
-				</span>
+				<div>
+					Proceed to&nbsp;
+					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
+				</div>
 			</div>
-			<div class="flex flex-col gap-2">
-				<label for="password" class="flex flex-col">
-					Password
+		{:else}
+			<div class="space-y-1">
+				<h1 class="h1">Reset your password</h1>
+				<p>Enter a new password</p>
+			</div>
+			<div class="space-y-2">
+				<label class="label">
+					<span>Password</span>
 					<input
 						name="password"
 						type="password"
 						placeholder="Password"
-						class="w-full"
+						class="input"
 						bind:value={$form.password}
 					/>
 				</label>
 				{#if $errors.password}
-					<small>{$errors.password}</small>
+					<small class="text-error-500">{$errors.password}</small>
 				{/if}
 				{#if $errors._errors}
-					<small>{$errors._errors}</small>
+					<small class="text-error-500">{$errors._errors}</small>
 				{/if}
 			</div>
-			<button
-				class="bg-primary-800 text-secondary enabled:hover:bg-accent focus-visible:bg-accent group flex flex-row items-center justify-between p-2.5 transition-all focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-black disabled:opacity-50 md:text-lg"
-				disabled={$delayed}
-			>
-				<p>Reset password</p>
-				{#if $delayed}
-					<Spinner className="w-5 h-5 animate-spin" />
-				{:else}
-					<ChevronRight
-						class="h-3 w-3 -translate-x-1 group-hover:translate-x-0 group-focus-visible:translate-x-0"
-					/>
-				{/if}
-			</button>
-			<span class="text-primary-700 flex flex-row">
-				<a
-					href={`/signin?r=${data.redirectUrl}`}
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Back to Sign in</a
-				>
-			</span>
+			<div class="flex w-full flex-col gap-2">
+				<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
+					<span>Reset password</span>
+					{#if $delayed}
+						<Spinner class="h-4 w-4 animate-spin" />
+					{:else}
+						<ChevronRight class="h-4 w-4" />
+					{/if}
+				</button>
+				<span class="w-full">
+					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Back to Sign in</a>
+				</span>
+			</div>
 		{/if}
 	</form>
 </div>
