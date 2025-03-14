@@ -10,6 +10,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
 	const form = await superValidate(event, zod(signInSchema));
+
 	return { form };
 };
 

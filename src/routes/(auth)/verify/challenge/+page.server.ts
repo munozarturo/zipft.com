@@ -7,18 +7,18 @@ export const load: PageServerLoad = async ({ url }) => {
 	if (!token) {
 		return {
 			error: true,
-			title: 'Error Verifying Account',
+			title: 'Error verifying account',
 			message: 'Missing verification token.'
 		};
 	}
 
 	try {
 		await validateVerficiationChallenge(token);
-		return { error: false, title: 'Account Verified', message: 'Your account has been verified.' };
+		return { error: false, title: 'Account verified', message: 'Your account has been verified.' };
 	} catch (e: any) {
 		return {
 			error: true,
-			title: 'Error Verifying Account',
+			title: 'Error verifying account',
 			message: e.message || 'Unknown error while attempting to verify account.'
 		};
 	}

@@ -27,7 +27,7 @@
 	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		{#if submitted}
 			<div class="flex flex-col gap-1">
-				<h1 class="text-4xl font-bold">Password Reset</h1>
+				<h1 class="text-4xl font-bold">Password reset</h1>
 				<span class="text-primary-700">
 					<p>
 						If an account with the provided email exists, we will send an email with a link to reset

@@ -20,7 +20,7 @@
 <div class="mt-20">
 	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		{#if data.resetPassword}
-			<h1 class="text-4xl font-bold">Password Reset</h1>
+			<h1 class="text-4xl font-bold">Password reset</h1>
 			<span class="text-primary-700 flex flex-row">
 				<p>Your password has been reset.</p>
 			</span>
