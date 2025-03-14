@@ -48,7 +48,7 @@
 					name="password"
 					type="password"
 					placeholder="Password"
-					class="w-full"
+					class="input"
 					spellcheck="false"
 					bind:value={$form.password}
 				/>
