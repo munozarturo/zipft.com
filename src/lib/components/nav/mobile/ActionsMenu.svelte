@@ -51,14 +51,14 @@
 			aria-label="Mobile navigation options"
 		>
 			<nav
-				class="bg-secondary border-primary-50 w-11/12 overflow-hidden rounded-md border shadow-lg"
+				class="card preset-filled-surface-100-900 border-surface-300-700 w-11/12 overflow-hidden rounded-md border shadow-lg"
 			>
 				<!-- Options -->
 				<div class="flex flex-col">
 					<a
 						href="/"
 						class={twMerge(
-							'border-b p-4 border-primary-50 text-md underline-offset-2 decoration-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
+							'border-b p-4 border-surface-300-700 text-md underline-offset-2 decoration-2 hover:bg-surface-200-800 focus:outline-none focus-visible:bg-surface-200-800 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive('/') && 'underline'
 						)}
 						role="menuitem"
@@ -70,7 +70,7 @@
 					<a
 						href="/receive"
 						class={twMerge(
-							'p-4 border-b border-primary-50 text-md underline-offset-2 decoration-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
+							'p-4 border-b border-surface-300-700 text-md underline-offset-2 decoration-2 hover:bg-surface-200-800 focus:outline-none focus-visible:bg-surface-200-800 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2',
 							isActive(['/receive', '/r/'], true) && 'underline'
 						)}
 						role="menuitem"
@@ -82,7 +82,7 @@
 					{#if !session}
 						<a
 							href="/signin"
-							class="border-primary-50 text-md p-4 decoration-2 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="border-surface-300-700 text-md hover:bg-surface-200-800 focus-visible:bg-surface-200-800 p-4 decoration-2 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>

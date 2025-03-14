@@ -3,7 +3,6 @@
 
 	import Account from '$lib/assets/icons/Account.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
-	import Cog from '$lib/assets/icons/Cog.svelte';
 	import Cross from '$lib/assets/icons/Cross.svelte';
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Exit from '$lib/assets/icons/Exit.svelte';
@@ -36,9 +35,7 @@
 		>
 			<span class="flex flex-row items-center justify-center gap-2">
 				<Account class="h-8 w-8" />
-				<p
-					class="group-hover:text-primary-600 group-focus-visible:text-primary-600 hidden text-lg md:flex"
-				>
+				<p class="hidden text-lg md:flex">
 					{user?.firstName}
 				</p>
 			</span>
@@ -69,18 +66,18 @@
 			aria-label="Account options"
 		>
 			<div
-				class="bg-secondary border-primary-50 w-11/12 overflow-hidden rounded-md border shadow-lg"
+				class="card preset-filled-surface-100-900 border-surface-300-700 w-11/12 overflow-hidden rounded-md border shadow-lg"
 				role="menu"
 			>
 				{#if session}
 					<!-- Session Data -->
 					<div class="flex flex-col">
 						<div
-							class="border-primary-50 text-md decoration-1.5 flex flex-row items-stretch border-b underline-offset-2"
+							class="border-surface-300-700 text-md decoration-1.5 flex flex-row items-stretch border-b underline-offset-2"
 						>
 							<!-- Account Information -->
 							<div
-								class="border-primary-50 flex w-full flex-row items-center justify-start gap-2 border-r bg-gray-100 px-4 py-3"
+								class="border-surface-300-700 bg-surface-100-900 flex w-full flex-row items-center justify-start gap-2 border-r px-4 py-3"
 							>
 								<Account class="h-10 w-10" aria-hidden="true" />
 								<div class="flex flex-col">
@@ -91,7 +88,7 @@
 							<!-- Close Button -->
 							<button
 								onclick={close}
-								class="flex items-center justify-center px-4 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								class="focus-visible:bg-surface-200-800 hover:bg-surface-200-800 flex items-center justify-center px-4 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 								aria-label="Close menu"
 							>
 								<Cross class="h-5 w-5" aria-hidden="true" />
@@ -100,18 +97,18 @@
 
 						<a
 							href="/account"
-							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Account <Cog class="h-6 w-6" aria-hidden="true" />
+								Account <Person class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<form action="/signout" method="POST">
 							<button
 								type="submit"
-								class="border-primary-50 text-md decoration-1.5 w-full p-4 text-left underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 w-full p-4 text-left underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 								role="menuitem"
 							>
 								<span class="flex flex-row items-center justify-between">
@@ -125,7 +122,7 @@
 					<div class="flex flex-col">
 						<a
 							href="/signup"
-							class="border-primary-50 text-md decoration-1.5 border-b p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -135,7 +132,7 @@
 						</a>
 						<a
 							href="/signin"
-							class="border-primary-50 text-md decoration-1.5 p-4 underline-offset-2 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-100 focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
