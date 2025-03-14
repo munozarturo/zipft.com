@@ -93,17 +93,18 @@ export async function sendVerificationEmail(
 				<tr style="width: 100%">
 					<td>
 						<img
-							alt="zipft"
-							height="100"
-							src="https://www.zipft.com/logo-light.svg"
+							alt="zipft Logo"
+							title="zipft Logo"
+							width="170"
+							height="80"
+							src="https://www.zipft.com/logo-light.png"
 							style="
 								display: block;
 								outline: none;
 								border: none;
 								text-decoration: none;
-								marg{%in: 0 auto;
+								margin: 0 auto;
 							"
-							width="170"
 						/>
 						<p style="font-size: 16px; line-height: 26px; margin: 16px 0">
 							Hi
@@ -283,9 +284,11 @@ export async function sendPasswordResetEmail(
 				<tr style="width: 100%">
 					<td>
 						<img
-							alt="zipft"
-							height="100"
-							src="https://www.zipft.com/logo-light.svg"
+							alt="zipft Logo"
+							title="zipft Logo"
+							width="170"
+							height="80"
+							src="https://www.zipft.com/logo-light.png"
 							style="
 								display: block;
 								outline: none;
@@ -293,7 +296,6 @@ export async function sendPasswordResetEmail(
 								text-decoration: none;
 								margin: 0 auto;
 							"
-							width="170"
 						/>
 						<p style="font-size: 16px; line-height: 26px; margin: 16px 0">
 							Hi
