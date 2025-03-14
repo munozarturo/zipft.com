@@ -62,7 +62,7 @@
 		</div>
 		<div class="flex w-full flex-col gap-2">
 			<button
-				class="btn preset-filled-primary-500 group w-full justify-between"
+				class="btn preset-filled-primary-900-100 group w-full justify-between"
 				disabled={$delayed}
 			>
 				<span>Sign in</span>

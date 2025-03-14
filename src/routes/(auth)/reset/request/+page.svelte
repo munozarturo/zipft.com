@@ -64,7 +64,7 @@
 				{/if}
 			</div>
 			<button
-				class="btn preset-filled-primary-500 group w-full justify-between"
+				class="btn preset-filled-primary-900-100 group w-full justify-between"
 				disabled={$delayed}
 			>
 				<span>Reset password</span>

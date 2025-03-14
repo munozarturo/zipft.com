@@ -90,7 +90,10 @@
 				<small class="text-error-500">{$errors._errors}</small>
 			{/if}
 		</div>
-		<button class="btn preset-filled-primary-500 group w-full justify-between" disabled={$delayed}>
+		<button
+			class="btn preset-filled-primary-900-100 group w-full justify-between"
+			disabled={$delayed}
+		>
 			<span>Sign up</span>
 			{#if $delayed}
 				<Spinner class="h-5 w-5 animate-spin" />
