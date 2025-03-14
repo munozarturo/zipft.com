@@ -5,6 +5,7 @@
 	import { passwordResetSchema } from '$lib/schemas/auth';
 	import Spinner from '$lib/assets/icons/Spinner.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
+	import { redirect } from '@sveltejs/kit';
 
 	let { data }: { data: PageData } = $props();
 
@@ -20,14 +21,14 @@
 <div class="mt-20">
 	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
 		{#if data.resetPassword}
-			<h1 class="text-4xl font-bold">Password Reset</h1>
+			<h1 class="text-4xl font-bold">Password reset</h1>
 			<span class="text-primary-700 flex flex-row">
 				<p>Your password has been reset.</p>
 			</span>
 			<span class="text-primary-700 flex flex-row">
 				Proceed to&nbsp;
 				<a
-					href="/signin"
+					href={`/signin?r=${data.redirectUrl}`}
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Sign in</a
 				>
@@ -72,7 +73,7 @@
 			</button>
 			<span class="text-primary-700 flex flex-row">
 				<a
-					href="/signin"
+					href={`/signin?r=${data.redirectUrl}`}
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Back to Sign in</a
 				>

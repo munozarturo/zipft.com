@@ -10,6 +10,7 @@ declare global {
 			auth: { user: User; session: Session } | { user: null; session: null };
 			ipAddr: string | null;
 			userAgent: string | null;
+			redirect: string | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

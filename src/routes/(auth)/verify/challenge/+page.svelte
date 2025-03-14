@@ -19,7 +19,7 @@
 			{#if data.error}
 				You can restart the verification process by proceeding to&nbsp;
 				<a
-					href="/signin"
+					href={`/signin?r=${data.redirectUrl}`}
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Sign in</a
 				>
@@ -27,7 +27,7 @@
 				<span class="text-primary-700 flex flex-row">
 					Proceed to&nbsp;
 					<a
-						href="/signin"
+						href={`/signin?r=${data.redirectUrl}`}
 						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 						>Sign in</a
 					>

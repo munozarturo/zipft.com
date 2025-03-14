@@ -44,13 +44,13 @@
 			}, 1000);
 
 			// Navigate to reload the page and trigger server load
-			window.location.href = `/verify?e=${email}`;
+			window.location.href = `/verify?e=${email}&r=${data.redirectUrl}`;
 		}
 	}
 </script>
 
 <svelte:head>
-	<title>Verify identity :: zipft</title>
+	<title>Verify account :: zipft</title>
 </svelte:head>
 
 <div class="mt-20">
@@ -58,21 +58,21 @@
 		<div class="flex flex-col gap-2">
 			{#if data.verified}
 				<!-- Show verified message if account is verified -->
-				<h1 class="text-4xl font-bold">Account Verified</h1>
+				<h1 class="text-4xl font-bold">Account verified</h1>
 				<span class="text-primary-700 flex flex-row">
 					<p>{data.message}</p>
 				</span>
 				<span class="text-primary-700 flex flex-row">
 					Proceed to&nbsp;
 					<a
-						href="/signin"
+						href={`/signin?r=${data.redirectUrl}`}
 						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 						>Sign in</a
 					>
 				</span>
 			{:else}
 				<!-- Show verification instructions if not verified -->
-				<h1 class="text-4xl font-bold">Verify Account</h1>
+				<h1 class="text-4xl font-bold">Verify account</h1>
 
 				<span class="text-primary-700 flex flex-row">
 					<p>

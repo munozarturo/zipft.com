@@ -1,5 +1,5 @@
-export const load = async ({ locals }) => {
-	const { auth } = locals;
+export const load = async (event) => {
+	const { auth } = event.locals;
 
 	return {
 		auth

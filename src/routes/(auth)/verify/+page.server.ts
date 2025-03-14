@@ -11,18 +11,21 @@ import { generateToken } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
 import { sendEmail } from '$lib/server/aws/ses';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async (event) => {
+	const redirectUrl = event.url.searchParams.get('r') || '/';
+
 	// if no email provided signin
-	const email = url.searchParams.get('e');
-	if (!email) return redirect(302, '/signin');
+	const email = event.url.searchParams.get('e');
+	if (!email) return redirect(302, `/signin?r=${redirectUrl}`);
 
 	// if user doesn't exist signup
 	const user = await getUserByEmail(email);
-	if (!user) return redirect(302, '/signup');
+	if (!user) return redirect(302, `/signup?r=${redirectUrl}`);
 
 	// if account already verified
 	if (user.verified)
 		return {
+			redirectUrl,
 			error: false,
 			verified: true,
 			message: 'Account has already been verified.'
@@ -37,6 +40,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		if (lastCommunicationTime > oneMinuteAgo) {
 			const waitTime = lastCommunicationTime - oneMinuteAgo;
 			return {
+				redirectUrl,
 				error: true,
 				verified: false,
 				message: 'Please wait before requesting another verification email.',
@@ -55,12 +59,13 @@ export const load: PageServerLoad = async ({ url }) => {
 		destination: { to: email },
 		subject: 'Account Verification Token',
 		body: {
-			text: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}::${communication.id}`,
-			html: `<p>https://${ROOT_DOMAIN}/verify/challenge?t=${token}</p><br><p>${communication.id}</p>`
+			text: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}&r=${redirectUrl}::${communication.id}`,
+			html: `<p>https://${ROOT_DOMAIN}/verify/challenge?t=${token}&r=${redirectUrl}</p><br><p>${communication.id}</p>`
 		}
 	});
 
 	return {
+		redirectUrl,
 		error: false,
 		verified: false,
 		message:
