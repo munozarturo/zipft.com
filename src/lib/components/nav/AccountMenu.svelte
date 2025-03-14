@@ -8,6 +8,7 @@
 	import Exit from '$lib/assets/icons/Exit.svelte';
 	import Person from '$lib/assets/icons/Person.svelte';
 	import type { Session, User } from '$lib/server/db/schema';
+	import Cog from '$lib/assets/icons/Cog.svelte';
 
 	let {
 		isOpen,
@@ -17,8 +18,8 @@
 		user
 	}: {
 		isOpen: boolean;
-		toggleOpen: MouseEventHandler<HTMLButtonElement>;
-		close: MouseEventHandler<HTMLButtonElement>;
+		toggleOpen: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+		close: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
 		session: Session | null;
 		user: User | null;
 	} = $props();
@@ -96,13 +97,25 @@
 						</div>
 
 						<a
-							href="/account"
+							onclick={close}
+							href="/account/profile"
 							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Account <Person class="h-6 w-6" aria-hidden="true" />
+								Profile <Person class="h-6 w-6" aria-hidden="true" />
+							</span>
+						</a>
+						<a
+							onclick={close}
+							href="/settings"
+							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							role="menuitem"
+							tabindex="0"
+						>
+							<span class="flex flex-row items-center justify-between">
+								Settings <Cog class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<form action="/signout" method="POST">
@@ -121,6 +134,7 @@
 					<!-- Account Options -->
 					<div class="flex flex-col">
 						<a
+							onclick={close}
 							href="/signup"
 							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
@@ -131,6 +145,7 @@
 							</span>
 						</a>
 						<a
+							onclick={close}
 							href="/signin"
 							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
