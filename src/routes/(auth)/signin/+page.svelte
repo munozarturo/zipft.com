@@ -35,6 +35,7 @@
 					type="email"
 					placeholder="email@example.com"
 					class="input"
+					spellcheck="false"
 					bind:value={$form.email}
 				/>
 			</label>
@@ -47,7 +48,8 @@
 					name="password"
 					type="password"
 					placeholder="Password"
-					class="input"
+					class="w-full"
+					spellcheck="false"
 					bind:value={$form.password}
 				/>
 			</label>

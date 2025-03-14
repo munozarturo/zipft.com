@@ -45,6 +45,7 @@
 						type="password"
 						placeholder="Password"
 						class="input"
+						spellcheck="false"
 						bind:value={$form.password}
 					/>
 				</label>

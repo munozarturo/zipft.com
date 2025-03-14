@@ -52,6 +52,7 @@
 						type="email"
 						placeholder="email@example.com"
 						class="input"
+						spellcheck="false"
 						bind:value={$form.email}
 					/>
 				</label>

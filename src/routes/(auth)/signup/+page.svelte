@@ -36,6 +36,7 @@
 						type="text"
 						placeholder="John"
 						class="input"
+						spellcheck="false"
 						bind:value={$form.firstName}
 					/>
 					{#if $errors.firstName}
@@ -49,6 +50,7 @@
 						type="text"
 						placeholder="Doe"
 						class="input"
+						spellcheck="false"
 						bind:value={$form.lastName}
 					/>
 					{#if $errors.lastName}
@@ -63,6 +65,7 @@
 					type="email"
 					placeholder="email@example.com"
 					class="input"
+					spellcheck="false"
 					bind:value={$form.email}
 				/>
 				{#if $errors.email}
@@ -76,6 +79,7 @@
 					type="password"
 					placeholder="Password"
 					class="input"
+					spellcheck="false"
 					bind:value={$form.password}
 				/>
 				{#if $errors.password}
