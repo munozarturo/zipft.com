@@ -10,7 +10,7 @@ export const load = async (event) => {
 
 	const form = await superValidate(event, zod(passwordResetSchema));
 
-	return { form, redirectUrl, resetPassword: false };
+	return { form, redirectUrl };
 };
 
 export const actions = {
@@ -22,17 +22,18 @@ export const actions = {
 		const { password } = form.data;
 		const token = event.url.searchParams.get('t');
 		if (!token) {
-			setError(form, '', 'Invalid password reset token.');
+			setError(form, '', 'Invalid password reset link.');
 			return fail(400, { form, redirectUrl });
 		}
 
 		try {
 			await resetPassword(token, password);
 		} catch (e: any) {
+			console.log(e);
 			setError(form, '', e.message || 'Unknown error.');
 			return fail(400, { form, redirectUrl });
 		}
 
-		return { form, redirectUrl, resetPassword: true };
+		return { form, redirectUrl };
 	}
 };
