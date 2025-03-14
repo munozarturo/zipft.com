@@ -22,15 +22,15 @@ export const actions = {
 		const { password } = form.data;
 		const token = event.url.searchParams.get('t');
 		if (!token) {
-			setError(form, '', 'Invalid password reset token.');
-			return fail(400, { form, redirectUrl });
+			setError(form, '', 'Invalid password reset link.');
+			return fail(400, { form, resetPassword: false, redirectUrl });
 		}
 
 		try {
 			await resetPassword(token, password);
 		} catch (e: any) {
 			setError(form, '', e.message || 'Unknown error.');
-			return fail(400, { form, redirectUrl });
+			return fail(400, { form, resetPassword: false, redirectUrl });
 		}
 
 		return { form, redirectUrl, resetPassword: true };

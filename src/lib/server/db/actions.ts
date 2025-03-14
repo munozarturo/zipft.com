@@ -212,11 +212,12 @@ export async function resetPassword(token: string, password: string): Promise<vo
 		.select()
 		.from(passwordResetTable)
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
-	if (res.length < 1) throw new Error('Invalid reset token.');
+	if (res.length < 1) throw new Error('Invalid password reset link.');
 
 	const passwordReset = res[0];
-	if (passwordReset.used) throw new Error('Reset token already used.');
-	if (Date.now() >= passwordReset.expiresAt.getTime()) throw new Error('Reset token expired.');
+	if (passwordReset.used) throw new Error('Password has already been reset.');
+	if (Date.now() >= passwordReset.expiresAt.getTime())
+		throw new Error('Password reset request expired.');
 
 	await db
 		.update(passwordResetTable)

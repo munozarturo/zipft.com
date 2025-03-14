@@ -5,7 +5,6 @@
 	import { passwordResetSchema } from '$lib/schemas/auth';
 	import Spinner from '$lib/assets/icons/Spinner.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
-	import { redirect } from '@sveltejs/kit';
 
 	let { data }: { data: PageData } = $props();
 
