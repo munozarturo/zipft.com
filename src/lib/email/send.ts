@@ -95,7 +95,7 @@ export async function sendVerificationEmail(
 						<img
 							alt="zipft"
 							height="100"
-							src="cid:logo"
+							src="https://www.zipft.com/logo-light.svg"
 							style="
 								display: block;
 								outline: none;
@@ -216,22 +216,12 @@ The zipft team
 
 {%communication.id%}`;
 
-	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo-light.svg`);
-
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
-		source: `"zipft" <account@${ROOT_DOMAIN}>`,
+		source: `"zipft" <zipft@${ROOT_DOMAIN}>`,
 		destination: { to: email },
 		subject: 'Verify your zipft account',
-		body,
-		inlineImages: [
-			{
-				filename: 'logo.svg',
-				content: logoBuffer,
-				contentType: 'image/svg',
-				contentId: 'logo'
-			}
-		]
+		body
 	};
 
 	await sendEmail(emailBody);
@@ -295,7 +285,7 @@ export async function sendPasswordResetEmail(
 						<img
 							alt="zipft"
 							height="100"
-							src="cid:logo"
+							src="https://www.zipft.com/logo-light.svg"
 							style="
 								display: block;
 								outline: none;
@@ -423,22 +413,12 @@ The zipft team
 
 {%communication.id%}`;
 
-	const logoBuffer = await loadImageBuffer(`https://www.${ROOT_DOMAIN}/logo-light.svg`);
-
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
-		source: `"zipft" <account@${ROOT_DOMAIN}>`,
+		source: `"zipft" <zipft@${ROOT_DOMAIN}>`,
 		destination: { to: email },
 		subject: 'Reset your zipft password',
-		body,
-		inlineImages: [
-			{
-				filename: 'logo.svg',
-				content: logoBuffer,
-				contentType: 'image/svg',
-				contentId: 'logo'
-			}
-		]
+		body
 	};
 
 	await sendEmail(emailBody);
