@@ -64,7 +64,7 @@ export const load: PageServerLoad = async (event) => {
 		});
 
 		await sendEmail({
-			source: `zipft <account@${ROOT_DOMAIN}>`,
+			source: `"zipft" <account@${ROOT_DOMAIN}>`,
 			destination: { to: email },
 			subject: 'Verify your account',
 			body: emailBody
