@@ -8,7 +8,7 @@ import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { ROOT_DOMAIN } from '$env/static/private';
 import { fail } from '@sveltejs/kit';
-import { generateEmail } from '$lib/emails/load.js';
+import { generateEmail } from '$lib/emails/send.js';
 import { generateToken } from '$lib/server/auth';
 import { passwordResetRequestSchema } from '$lib/schemas/auth';
 import { sendEmail } from '$lib/server/aws/ses';

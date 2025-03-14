@@ -7,10 +7,9 @@ import {
 
 import type { PageServerLoad } from './$types';
 import { ROOT_DOMAIN } from '$env/static/private';
-import { generateEmail } from '$lib/emails/load';
 import { generateToken } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
-import { sendEmail } from '$lib/server/aws/ses';
+import { sendEmailTemplate } from '$lib/email/send';
 
 export const load: PageServerLoad = async (event) => {
 	const redirectUrl = event.url.searchParams.get('r') || '/';
@@ -56,12 +55,14 @@ export const load: PageServerLoad = async (event) => {
 		await createVerificationChallenge(token, user.id);
 		const communication = await createCommunication(user.id, 'email', 'verification');
 
-		const emailBody = generateEmail('verify-email', {
+		const emailBody = sendEmailTemplate('verify-email', {
 			baseUrl: `https://${ROOT_DOMAIN}`,
 			'user.firstName': user.firstName,
 			verifyUrl: `https://${ROOT_DOMAIN}/verify/challenge?t=${token}&r=${redirectUrl}`,
 			'communication.id': communication.id
 		});
+
+		await sendEmailTemplate('verifyEmail');
 
 		await sendEmail({
 			source: `"zipft" <account@${ROOT_DOMAIN}>`,
