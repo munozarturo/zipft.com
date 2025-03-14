@@ -8,10 +8,9 @@ import { setError, superValidate } from 'sveltekit-superforms/server';
 
 import { ROOT_DOMAIN } from '$env/static/private';
 import { fail } from '@sveltejs/kit';
-import { generateEmail } from '$lib/emails/load.js';
 import { generateToken } from '$lib/server/auth';
 import { passwordResetRequestSchema } from '$lib/schemas/auth';
-import { sendEmail } from '$lib/server/aws/ses';
+import { sendPasswordResetEmail } from '$lib/email/send.js';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
@@ -63,18 +62,10 @@ export const actions = {
 			await createPasswordReset(token, user.id);
 			const communication = await createCommunication(user.id, 'email', 'verification');
 
-			const emailBody = generateEmail('reset-password', {
-				baseUrl: `https://${ROOT_DOMAIN}`,
-				'user.firstName': user.firstName,
-				resetUrl: `https://${ROOT_DOMAIN}/reset?t=${token}::${communication.id}&r=${redirectUrl}`,
-				'communication.id': communication.id
-			});
-
-			await sendEmail({
-				source: `"zipft" <account@${ROOT_DOMAIN}>`,
-				destination: { to: email },
-				subject: 'Reset your password',
-				body: emailBody
+			await sendPasswordResetEmail(user.email, {
+				user,
+				communication,
+				passwordResetUrl: `https://www.${ROOT_DOMAIN}/reset?t=${token}&r=${redirectUrl}`
 			});
 
 			return { form };
