@@ -22,7 +22,7 @@
 	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<div class="space-y-1">
 			<h1 class="h1">Welcome back</h1>
-			<span class="textba-base flex flex-row">
+			<span class="flex flex-row text-base">
 				<p>Need an account?&nbsp;</p>
 				<a href={`/signup?r=${data.redirectUrl}`} class="anchor">Sign up</a>
 			</span>

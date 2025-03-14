@@ -21,10 +21,10 @@
 <div class="container mx-auto pt-20">
 	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<header class="space-y-1">
-			<h1 class="h2">Welcome</h1>
-			<span>
-				<p class="text-sm">Have an account?&nbsp;</p>
-				<a href={`/signin?r=${data.redirectUrl}`} class="anchor text-sm">Sign in</a>
+			<h1 class="h1">Welcome</h1>
+			<span class="flex flex-row text-base">
+				<p>Have an account?&nbsp;</p>
+				<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
 			</span>
 		</header>
 		<div class="space-y-2">
@@ -98,7 +98,7 @@
 				<ChevronRight class="h-3 w-3" />
 			{/if}
 		</button>
-		<footer class="text-sm">
+		<footer class="text-base">
 			<p>
 				By creating an account, you agree to zipft's&nbsp;<a
 					href="/legal/terms-of-service"

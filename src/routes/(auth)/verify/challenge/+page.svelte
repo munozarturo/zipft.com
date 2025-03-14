@@ -13,24 +13,14 @@
 		<div class="flex flex-col gap-2">
 			<!-- Show verified message if account is verified -->
 			<h1 class="text-4xl font-bold">{data.title}</h1>
-			<span class="text-primary-700 flex flex-row">
-				<p>{data.message}</p>
-			</span>
+			<p>{data.message}</p>
 			{#if data.error}
 				You can restart the verification process by proceeding to&nbsp;
-				<a
-					href={`/signin?r=${data.redirectUrl}`}
-					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-					>Sign in</a
-				>
+				<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
 			{:else}
-				<span class="text-primary-700 flex flex-row">
+				<span class="flex flex-row">
 					Proceed to&nbsp;
-					<a
-						href={`/signin?r=${data.redirectUrl}`}
-						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
-						>Sign in</a
-					>
+					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
 				</span>
 			{/if}
 		</div>

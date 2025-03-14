@@ -15,11 +15,7 @@
 				<h2 class="text-xl md:text-3xl">We couldn't find the page you are looking for.</h2>
 			</div>
 			<div class="flex flex-row items-center justify-center">
-				<a
-					href="/"
-					class="hover:text-secondary hover:bg-primary-800 focus-visible:text-secondary focus-visible:bg-primary-800 w-fit p-2 text-lg outline focus-visible:decoration-2 focus-visible:underline-offset-2 md:text-xl"
-					>Go home</a
-				>
+				<a href="/" class="btn btn-lg preset-filled">Go home</a>
 			</div>
 		</div>
 	</div>
