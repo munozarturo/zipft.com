@@ -6,14 +6,18 @@ import { signUpSchema } from '$lib/schemas/auth';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
+	const redirectUrl = event.url.searchParams.get('r') || '/';
+
 	const form = await superValidate(event, zod(signUpSchema));
-	return { form };
+	return { form, redirectUrl };
 };
 
 export const actions = {
 	default: async (event) => {
+		const redirectUrl = event.url.searchParams.get('r') || '/';
+
 		const form = await superValidate(event, zod(signUpSchema));
-		if (!form.valid) return fail(400, { form });
+		if (!form.valid) return fail(400, { form, redirectUrl });
 
 		const { firstName, lastName, email, password } = form.data;
 
@@ -22,15 +26,15 @@ export const actions = {
 			const emailCheck = await emailInUse(email);
 			if (emailCheck.used) {
 				setError(form, 'email', 'Email already in use.');
-				return fail(400, { form });
+				return fail(400, { form, redirectUrl });
 			}
 
 			user = await createUser(email, firstName, lastName, password);
 		} catch (e: any) {
 			setError(form, '', e.message || 'Unknown error.');
-			return fail(400, { form });
+			return fail(400, { form, redirectUrl });
 		}
 
-		return redirect(303, `/verify?e=${user.email}`);
+		return redirect(303, `/verify?e=${user.email}&r=${redirectUrl}`);
 	}
 };

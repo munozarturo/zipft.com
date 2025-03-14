@@ -9,13 +9,18 @@ import { signInSchema } from '$lib/schemas/auth';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
+	// redirect url
+	const redirectUrl = event.url.searchParams.get('r') || '/';
+
 	const form = await superValidate(event, zod(signInSchema));
 
-	return { form };
+	return { form, redirectUrl };
 };
 
 export const actions = {
 	default: async (event) => {
+		const redirectUrl = event.url.searchParams.get('r') || '/';
+
 		const form = await superValidate(event, zod(signInSchema));
 		if (!form.valid) return fail(400, { form });
 
@@ -23,17 +28,17 @@ export const actions = {
 		const user = await getUserByEmail(email);
 		if (!user) {
 			setError(form, '', 'Invalid email or password.');
-			return fail(400, { form });
+			return fail(400, { form, redirectUrl });
 		}
 
 		const valid = await argon2.verify(user.passwordHash, password);
 		if (!valid) {
 			setError(form, '', 'Invalid email or password.');
-			return fail(400, { form });
+			return fail(400, { form, redirectUrl });
 		}
 
 		if (!user.verified) {
-			return redirect(303, `/verify?e=${user.email}`);
+			return redirect(303, `/verify?e=${user.email}&r=${redirectUrl}`);
 		}
 
 		const token = generateToken();
@@ -47,9 +52,9 @@ export const actions = {
 			setSessionTokenCookie(event, token, session.expiresAt);
 		} catch (e: any) {
 			setError(form, '', e.message || 'Unknown error.');
-			return fail(400, { form });
+			return fail(400, { form, redirectUrl });
 		}
 
-		return redirect(303, '/');
+		return redirect(303, redirectUrl);
 	}
 };

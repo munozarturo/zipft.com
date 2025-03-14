@@ -25,7 +25,7 @@
 			<span class="text-primary-700 flex flex-row">
 				<p>Need an account?&nbsp;</p>
 				<a
-					href="/signup"
+					href={`/signup?r=${data.redirectUrl}`}
 					class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 					>Sign up</a
 				>
@@ -77,7 +77,7 @@
 		</button>
 		<span class="text-primary-700 flex flex-row">
 			<a
-				href="/reset/request"
+				href={`/reset/request?r=${data.redirectUrl}`}
 				class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 				>Forgot password</a
 			>

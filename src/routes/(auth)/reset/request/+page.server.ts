@@ -14,20 +14,25 @@ import { sendEmail } from '$lib/server/aws/ses';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
+	const redirectUrl = event.url.searchParams.get('r') || '/';
+
 	const form = await superValidate(event, zod(passwordResetRequestSchema));
-	return { form };
+
+	return { form, redirectUrl };
 };
 
 export const actions = {
 	default: async (event) => {
+		const redirectUrl = event.url.searchParams.get('r') || '/';
+
 		const form = await superValidate(event, zod(passwordResetRequestSchema));
-		if (!form.valid) return fail(400, { form });
+		if (!form.valid) return fail(400, { form, redirectUrl });
 
 		try {
 			const { email } = form.data;
 			const user = await getUserByEmail(email);
 			if (!user) {
-				return { form };
+				return { form, redirectUrl };
 			}
 
 			const mostRecentCommunication = await getLastCommunication(
@@ -47,7 +52,8 @@ export const actions = {
 						`Please wait ${Math.ceil(waitTime)} seconds before requesting a password reset.`
 					);
 					return fail(400, {
-						form
+						form,
+						redirectUrl
 					});
 				}
 			}
@@ -61,15 +67,15 @@ export const actions = {
 				destination: { to: email },
 				subject: 'Password Reset Token',
 				body: {
-					text: `https://${ROOT_DOMAIN}/reset?t=${token}::${communication.id}`,
-					html: `<p>https://${ROOT_DOMAIN}/reset?t=${token}</p><br><p>${communication.id}</p>`
+					text: `https://${ROOT_DOMAIN}/reset?t=${token}::${communication.id}&r=${redirectUrl}`,
+					html: `<p>https://${ROOT_DOMAIN}/reset?t=${token}&r=${redirectUrl}</p><br><p>${communication.id}</p>`
 				}
 			});
 
 			return { form };
 		} catch (e: any) {
 			setError(form, '', e.message || 'Unknown error.');
-			return fail(400, { form });
+			return fail(400, { form, redirectUrl });
 		}
 	}
 };

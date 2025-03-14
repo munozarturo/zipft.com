@@ -44,7 +44,7 @@
 			}, 1000);
 
 			// Navigate to reload the page and trigger server load
-			window.location.href = `/verify?e=${email}`;
+			window.location.href = `/verify?e=${email}&r=${data.redirectUrl}`;
 		}
 	}
 </script>
@@ -65,7 +65,7 @@
 				<span class="text-primary-700 flex flex-row">
 					Proceed to&nbsp;
 					<a
-						href="/signin"
+						href={`/signin?r=${data.redirectUrl}`}
 						class="w-fit underline underline-offset-2 hover:no-underline focus-visible:no-underline"
 						>Sign in</a
 					>
