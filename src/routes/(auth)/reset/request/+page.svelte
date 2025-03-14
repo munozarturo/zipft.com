@@ -74,7 +74,9 @@
 					<ChevronRight class="btn-icon-right h-3 w-3" />
 				{/if}
 			</button>
-			<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Back to Sign in</a>
+			<span>
+				Back to&nbsp;<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
+			</span>
 		{/if}
 	</form>
 </div>

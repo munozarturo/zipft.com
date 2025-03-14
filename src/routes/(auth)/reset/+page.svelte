@@ -56,19 +56,17 @@
 					<small class="text-error-500">{$errors._errors}</small>
 				{/if}
 			</div>
-			<div class="flex w-full flex-col gap-2">
-				<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
-					<span>Reset password</span>
-					{#if $delayed}
-						<Spinner class="h-4 w-4 animate-spin" />
-					{:else}
-						<ChevronRight class="h-4 w-4" />
-					{/if}
-				</button>
-				<span class="w-full">
-					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Back to Sign in</a>
-				</span>
-			</div>
+			<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
+				<span>Reset password</span>
+				{#if $delayed}
+					<Spinner class="h-4 w-4 animate-spin" />
+				{:else}
+					<ChevronRight class="h-4 w-4" />
+				{/if}
+			</button>
+			<span>
+				Back to&nbsp;<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
+			</span>
 		{/if}
 	</form>
 </div>
