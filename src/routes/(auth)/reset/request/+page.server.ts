@@ -63,9 +63,9 @@ export const actions = {
 			const communication = await createCommunication(user.id, 'email', 'verification');
 
 			await sendEmail({
-				source: `zipft Security <security@auth.${ROOT_DOMAIN}>`,
+				source: `zipft <auth@account.${ROOT_DOMAIN}>`,
 				destination: { to: email },
-				subject: 'Password Reset Token',
+				subject: 'Reset your password',
 				body: {
 					text: `https://${ROOT_DOMAIN}/reset?t=${token}::${communication.id}&r=${redirectUrl}`,
 					html: `<p>https://${ROOT_DOMAIN}/reset?t=${token}&r=${redirectUrl}</p><br><p>${communication.id}</p>`
