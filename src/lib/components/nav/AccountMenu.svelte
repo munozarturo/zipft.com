@@ -51,10 +51,10 @@
 			<a
 				href="/signup"
 				aria-label="Sign up for a new account"
-				class="btn preset-filled-primary-500"
+				class="btn preset-filled-primary-500 group"
 			>
 				<span>Sign up</span>
-				<ChevronRight class="h-4 w-4" />
+				<ChevronRight class="h-3 w-3 group-hover:translate-x-1" />
 			</a>
 		</div>
 	{/if}

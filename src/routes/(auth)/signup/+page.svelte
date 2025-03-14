@@ -90,12 +90,14 @@
 				<small class="text-error-500">{$errors._errors}</small>
 			{/if}
 		</div>
-		<button class="btn preset-filled-primary-500 w-full justify-between" disabled={$delayed}>
+		<button class="btn preset-filled-primary-500 group w-full justify-between" disabled={$delayed}>
 			<span>Sign up</span>
 			{#if $delayed}
 				<Spinner class="h-5 w-5 animate-spin" />
 			{:else}
-				<ChevronRight class="h-3 w-3" />
+				<ChevronRight
+					class="btn-icon h-3 w-3 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+				/>
 			{/if}
 		</button>
 		<footer class="text-base">

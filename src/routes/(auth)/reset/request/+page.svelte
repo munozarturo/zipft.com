@@ -64,14 +64,16 @@
 				{/if}
 			</div>
 			<button
-				class="btn preset-filled-primary-500 flex w-full items-center justify-between"
+				class="btn preset-filled-primary-500 group w-full justify-between"
 				disabled={$delayed}
 			>
 				<span>Reset password</span>
 				{#if $delayed}
-					<Spinner className="w-5 h-5 animate-spin" />
+					<Spinner class="h-5 w-5 animate-spin" />
 				{:else}
-					<ChevronRight class="btn-icon-right h-3 w-3" />
+					<ChevronRight
+						class="btn-icon h-3 w-3 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+					/>
 				{/if}
 			</button>
 			<span>

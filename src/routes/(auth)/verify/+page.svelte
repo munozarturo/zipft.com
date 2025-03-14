@@ -67,13 +67,10 @@
 					<a href={`/signin?r=${data.redirectUrl}`} class="anchor">Sign in</a>
 				</p>
 			{:else}
-				<!-- Show verification instructions if not verified -->
 				<h1 class="h1">Verify account</h1>
-
 				<p class="text-base">
 					{data.message}
 				</p>
-
 				<p class="text-base">
 					Don't see it?&nbsp;
 					<button

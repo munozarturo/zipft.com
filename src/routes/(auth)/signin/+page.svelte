@@ -61,12 +61,17 @@
 			{/if}
 		</div>
 		<div class="flex w-full flex-col gap-2">
-			<button type="submit" class="btn preset-filled-primary-500 w-full" disabled={$delayed}>
-				<p>Sign in</p>
+			<button
+				class="btn preset-filled-primary-500 group w-full justify-between"
+				disabled={$delayed}
+			>
+				<span>Sign in</span>
 				{#if $delayed}
-					<Spinner class="h-4 w-4 animate-spin" />
+					<Spinner class="h-5 w-5 animate-spin" />
 				{:else}
-					<ChevronRight class="h-4 w-4" />
+					<ChevronRight
+						class="btn-icon h-3 w-3 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+					/>
 				{/if}
 			</button>
 			<span class="w-full">
