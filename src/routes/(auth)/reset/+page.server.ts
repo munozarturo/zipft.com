@@ -29,7 +29,6 @@ export const actions = {
 		try {
 			await resetPassword(token, password);
 		} catch (e: any) {
-			console.log(e);
 			setError(form, '', e.message || 'Unknown error.');
 			return fail(400, { form, redirectUrl });
 		}

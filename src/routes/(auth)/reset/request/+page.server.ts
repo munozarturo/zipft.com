@@ -71,7 +71,7 @@ export const actions = {
 			});
 
 			await sendEmail({
-				source: `zipft <auth@account.${ROOT_DOMAIN}>`,
+				source: `zipft <account@${ROOT_DOMAIN}>`,
 				destination: { to: email },
 				subject: 'Reset your password',
 				body: emailBody

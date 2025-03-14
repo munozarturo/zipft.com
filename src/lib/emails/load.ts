@@ -7,8 +7,9 @@ interface Email {
 }
 
 export function generateEmail(template: string, props: { [key: string]: string }): Email {
-	const templatePath = path.resolve(`./${template}.html`);
-	const plainTextPath = path.resolve(`./${template}.txt`);
+	const emailsDir = path.resolve(process.cwd(), 'src/lib/emails');
+	const templatePath = path.join(emailsDir, `${template}.html`);
+	const plainTextPath = path.join(emailsDir, `${template}.txt`);
 
 	let html = fs.readFileSync(templatePath, 'utf8');
 	let text = fs.readFileSync(plainTextPath, 'utf8');
