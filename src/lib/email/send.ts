@@ -218,7 +218,7 @@ The zipft team
 
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
-		source: `"zipft" <zipft@${ROOT_DOMAIN}>`,
+		source: `"zipft" <auth@account.${ROOT_DOMAIN}>`,
 		destination: { to: email },
 		subject: 'Verify your zipft account',
 		body
@@ -415,7 +415,7 @@ The zipft team
 
 	const body = replacePlaceholders(props, htmlTemplate, textTemplate);
 	const emailBody = {
-		source: `"zipft" <zipft@${ROOT_DOMAIN}>`,
+		source: `"zipft" <auth@account.${ROOT_DOMAIN}>`,
 		destination: { to: email },
 		subject: 'Reset your zipft password',
 		body
