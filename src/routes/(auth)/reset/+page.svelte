@@ -7,9 +7,13 @@
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
 
 	let { data }: { data: PageData } = $props();
+	let passwordReset = $state(false);
 
 	const { form, errors, enhance, delayed } = superForm(data.form, {
-		validators: zod(passwordResetSchema)
+		validators: zod(passwordResetSchema),
+		onResult: ({ result }) => {
+			if (result && result.type === 'success') passwordReset = true;
+		}
 	});
 </script>
 
@@ -19,7 +23,7 @@
 
 <div class="mt-20">
 	<form method="POST" use:enhance class="xs:w-[360px] flex w-full flex-col gap-4 px-4 md:px-0">
-		{#if data.resetPassword}
+		{#if passwordReset}
 			<h1 class="text-4xl font-bold">Password reset</h1>
 			<span class="text-primary-700 flex flex-row">
 				<p>Your password has been reset.</p>
