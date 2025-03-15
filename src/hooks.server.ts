@@ -5,8 +5,17 @@ import { validateSessionToken } from '$lib/server/db/actions';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	// request info
-	event.locals.ipAddr = event.getClientAddress();
-	event.locals.userAgent = event.request.headers.get('user-agent');
+	try {
+		event.locals.ipAddr = event.getClientAddress();
+	} catch (e: any) {
+		event.locals.ipAddr = null;
+	}
+
+	try {
+		event.locals.userAgent = event.request.headers.get('user-agent');
+	} catch (e: any) {
+		event.locals.userAgent = null;
+	}
 
 	// auth
 	const token = event.cookies.get('session') ?? null;
