@@ -95,3 +95,22 @@ export const passwordResetTable = schema.table('password_resets', {
 	used: boolean().notNull().default(false)
 });
 export type PasswordReset = InferSelectModel<typeof passwordResetTable>;
+
+export const accountTransferTable = schema.table('account_transfers', {
+	tokenHash: text('token_hash').notNull().primaryKey(),
+
+	userId: integer('user_id')
+		.notNull()
+		.references(() => userTable.id, { onDelete: 'cascade' }),
+
+	transferTo: text('transfer_to').notNull(),
+
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	expiresAt: timestamp('expires_at')
+		.notNull()
+		.default(sql`CURRENT_TIMESTAMP + INTERVAL '30 minutes'`),
+
+	usedAt: timestamp('used_at'), // enforce: createdAt <= usedAt <= expiresAt
+	used: boolean().notNull().default(false)
+});
+export type AccountTransfer = InferSelectModel<typeof accountTransferTable>;

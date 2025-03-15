@@ -10,3 +10,7 @@ export const updatePfpSchema = z.object({
 	fileSha256Hash: z.string().length(64),
 	fileType: z.string()
 });
+
+export const transferAccountSchema = z.object({
+	email: z.string().email()
+});

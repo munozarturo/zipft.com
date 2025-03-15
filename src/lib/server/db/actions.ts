@@ -2,6 +2,7 @@ import * as argon2 from 'argon2';
 import crypto from 'crypto';
 
 import {
+	type AccountTransfer,
 	type Communication,
 	type CommunicationPurpose,
 	type CommunicationType,
@@ -9,6 +10,7 @@ import {
 	type Session,
 	type User,
 	type VerificationChallenge,
+	accountTransferTable,
 	communicationTable,
 	passwordResetTable,
 	sessionTable,
@@ -186,14 +188,16 @@ export async function validateVerficiationChallenge(token: string): Promise<void
 	if (challenge.defeated) throw new Error('Verification token has already been used.');
 	if (Date.now() >= challenge.expiresAt.getTime()) throw new Error('Verification token expired.');
 
-	await db
-		.update(verificationChallengeTable)
-		.set({
-			defeated: true,
-			defeatedAt: new Date(Date.now())
-		})
-		.where(eq(verificationChallengeTable.tokenHash, tokenHash));
-	await db.update(userTable).set({ verified: true }).where(eq(userTable.id, challenge.userId));
+	await db.transaction(async (tx) => {
+		await tx
+			.update(verificationChallengeTable)
+			.set({
+				defeated: true,
+				defeatedAt: new Date(Date.now())
+			})
+			.where(eq(verificationChallengeTable.tokenHash, tokenHash));
+		await tx.update(userTable).set({ verified: true }).where(eq(userTable.id, challenge.userId));
+	});
 }
 
 export async function createPasswordReset(token: string, userId: number): Promise<PasswordReset> {
@@ -214,21 +218,77 @@ export async function resetPassword(token: string, password: string): Promise<vo
 		.from(passwordResetTable)
 		.where(eq(passwordResetTable.tokenHash, tokenHash));
 	if (res.length < 1) throw new Error('Invalid password reset link.');
-
 	const passwordReset = res[0];
+
 	if (passwordReset.used) throw new Error('Password has already been reset.');
 	if (Date.now() >= passwordReset.expiresAt.getTime())
 		throw new Error('Password reset request expired.');
 
-	await db
-		.update(passwordResetTable)
-		.set({
-			used: true,
-			usedAt: new Date(Date.now())
-		})
-		.where(eq(passwordResetTable.tokenHash, tokenHash));
-	await db
-		.update(userTable)
-		.set({ passwordHash, verified: true })
-		.where(eq(userTable.id, passwordReset.userId));
+	await db.transaction(async (tx) => {
+		await tx
+			.update(passwordResetTable)
+			.set({
+				used: true,
+				usedAt: new Date(Date.now())
+			})
+			.where(eq(passwordResetTable.tokenHash, tokenHash));
+		await tx
+			.update(userTable)
+			.set({ passwordHash, verified: true })
+			.where(eq(userTable.id, passwordReset.userId));
+	});
+}
+
+export async function createAccountTransferRequest(
+	token: string,
+	userId: number,
+	transferTo: string
+): Promise<AccountTransfer | null> {
+	const tokenHash = sha256Hash(token);
+
+	// get user
+	const userFetchRes = await db.select().from(userTable).where(eq(userTable.id, userId));
+	if (userFetchRes.length < 1) throw Error('Invalid user account.');
+	const user = userFetchRes[0];
+
+	/*
+	make sure no user exists with the transfer email
+	- return null so server can handle appropriately
+	- doesn't throw an error to avoid the requesting user to know whether or not
+	  the transferTo address is a registered user.
+	*/
+	if (getUserByEmail(transferTo) !== null) return null;
+
+	// create request
+	const createRes = await db
+		.insert(accountTransferTable)
+		.values({ tokenHash, userId: user.id, transferTo })
+		.returning();
+	if (createRes.length < 1) throw Error('Error creating account transfer request.');
+	const accountTransfer = createRes[0];
+
+	return accountTransfer;
+}
+
+export async function transferAccount(token: string): Promise<void> {
+	const tokenHash = sha256Hash(token);
+
+	const accountTransferRes = await db
+		.select()
+		.from(accountTransferTable)
+		.where(eq(accountTransferTable.tokenHash, tokenHash));
+	if (accountTransferRes.length < 1) throw Error('Invalid account transfer token.');
+	const accountTransfer = accountTransferRes[0];
+
+	await db.transaction(async (tx) => {
+		await tx
+			.update(accountTransferTable)
+			.set({ used: true, usedAt: new Date(Date.now()) })
+			.where(eq(accountTransferTable.tokenHash, accountTransfer.tokenHash));
+
+		await tx
+			.update(userTable)
+			.set({ email: accountTransfer.transferTo })
+			.where(eq(userTable.id, accountTransfer.userId));
+	});
 }
