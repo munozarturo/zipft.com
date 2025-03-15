@@ -97,7 +97,7 @@
 
 		<!-- Backdrop to close menu -->
 		<button
-			class="fixed inset-0 top-20 z-10 md:top-0"
+			class="fixed inset-0 top-0 z-10"
 			onclick={close}
 			tabindex="-1"
 			aria-label="Close mobile menu"

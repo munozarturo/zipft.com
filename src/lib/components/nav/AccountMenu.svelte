@@ -64,13 +64,13 @@
 	{#if isOpen}
 		<div
 			id="account-menu"
-			class="fixed right-0 top-0 z-20 flex h-full w-full flex-row items-center justify-end sm:w-[320px]"
+			class="fixed right-0 top-0 z-20 flex h-full w-fit flex-row items-center justify-end sm:w-[320px]"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Account options"
 		>
 			<div
-				class="card preset-filled-surface-100-900 border-surface-300-700 h-full overflow-hidden rounded-l-md border-l p-3 shadow-lg sm:w-full"
+				class="card preset-filled-surface-100-900 border-surface-300-700 h-full overflow-hidden rounded-l-md border-l p-3 shadow-lg"
 				role="menu"
 			>
 				{#if session}
