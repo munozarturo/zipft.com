@@ -13,6 +13,7 @@
 	import Cog from '$lib/assets/icons/Cog.svelte';
 	import AccountSecurity from '$lib/assets/icons/AccountSecurity.svelte';
 	import CloudUpload from '$lib/assets/icons/CloudUpload.svelte';
+	import Avatar from '$lib/components/core/Avatar.svelte';
 
 	let {
 		isOpen,
@@ -30,17 +31,20 @@
 </script>
 
 <div class="flex flex-row items-center justify-center">
-	{#if session}
+	{#if session && user}
 		<button
 			onclick={toggleOpen}
-			class="group flex flex-row items-center gap-2 p-2 decoration-2 underline-offset-2 hover:underline"
+			class="group flex flex-row items-center gap-2 p-2 decoration-2"
 			aria-expanded={isOpen}
 			aria-controls="account-menu"
 			aria-label="Account menu"
 		>
 			<span class="flex flex-row items-center justify-center gap-2">
-				<Account class="h-8 w-8" />
-				<p class="hidden text-lg md:flex">
+				<Avatar
+					name={`${user.firstName} ${user.lastName}`}
+					className="w-10 h-10 text-md font-bold"
+				/>
+				<p class="hidden text-lg underline-offset-2 group-hover:underline md:flex">
 					{user?.firstName}
 				</p>
 			</span>
@@ -69,7 +73,7 @@
 	{#if isOpen}
 		<div
 			id="account-menu"
-			class="fixed right-0 top-0 z-20 flex h-full w-fit flex-row items-center justify-end sm:w-[320px]"
+			class="fixed right-0 top-0 z-20 flex h-full w-fit min-w-[240px] flex-row items-center justify-end sm:w-[320px]"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Account options"
@@ -78,13 +82,16 @@
 				class="card preset-filled-surface-100-900 border-surface-300-700 h-full w-full overflow-hidden rounded-l-md border-l p-3 shadow-lg"
 				role="menu"
 			>
-				{#if session}
+				{#if session && user}
 					<!-- Session Data -->
 					<div class="flex flex-col">
 						<div class="flex flex-row items-center">
 							<!-- Account Information -->
-							<div class="bg-surface-100-900 flex w-full flex-row items-center gap-4 p-3">
-								<Account class="h-10 w-10" aria-hidden="true" />
+							<div class="bg-surface-100-900 flex w-full flex-row items-center gap-3 p-3">
+								<Avatar
+									name={`${user.firstName} ${user.lastName}`}
+									className="w-11 h-11 text-md font-bold"
+								/>
 								<div class="flex flex-col">
 									<p class="text-lg">{user?.firstName}&nbsp;{user?.lastName}</p>
 									<p class="text-primary-500 -mt-1 text-sm">{user?.email}</p>
