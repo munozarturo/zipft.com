@@ -1,0 +1,24 @@
+meta {
+  name: Generate S3 Presigned URL
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5173/api/presigned
+  body: json
+  auth: none
+}
+
+headers {
+  name: Content-Type
+  value: application/json
+}
+
+body:json {
+  {
+    "filename": "test-archive.zip",
+    "contentType": "application/zip",
+    "directory": "test-uploads"
+  }
+}

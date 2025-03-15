@@ -1,42 +1,48 @@
 import { json } from '@sveltejs/kit';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { env } from '$env/dynamic/private';
+import { AWS_REGION, AWS_KEY, AWS_SECRET, AWS_S3_BUCKET } from '$env/static/private';
 
 const s3Client = new S3Client({
-	region: env.AWS_REGION,
+	region: AWS_REGION,
 	credentials: {
-		accessKeyId: env.AWS_KEY,
-		secretAccessKey: env.AWS_SECRET
+		accessKeyId: AWS_KEY,
+		secretAccessKey: AWS_SECRET
 	}
 });
 
-export async function GET({ url }) {
+export async function POST({ request }) {
 	try {
-		// Get query parameters
-		const filename = url.searchParams.get('filename');
-		const contentType = url.searchParams.get('contentType');
+		const { filename, contentType, directory = '' } = await request.json();
 
-		if (!filename) {
-			return json({ error: 'Filename is required' }, { status: 400 });
+		if (!filename || !contentType) {
+			return json(
+				{
+					error: 'Filename and content type are required'
+				},
+				{ status: 400 }
+			);
 		}
 
-		// Set up the parameters for the presigned URL
-		const bucketParams = {
-			Bucket: process.env.S3_BUCKET_NAME,
-			Key: `uploads/${filename}`,
-			ContentType: contentType || 'application/octet-stream'
-		};
+		// Generate a unique key for the file
+		const key = directory ? `${directory}/${Date.now()}-${filename}` : `${Date.now()}-${filename}`;
 
-		const command = new PutObjectCommand(bucketParams);
+		const command = new PutObjectCommand({
+			Bucket: AWS_S3_BUCKET,
+			Key: key,
+			ContentType: contentType
+		});
 
+		// Generate the presigned URL (expires in 5 minutes by default)
 		const presignedUrl = await getSignedUrl(s3Client, command, {
-			expiresIn: 3600 // URL expires in 1 hour
+			expiresIn: 60 * 5
 		});
 
 		return json({
-			url: presignedUrl,
-			key: bucketParams.Key
+			presignedUrl,
+			key,
+			bucket: AWS_S3_BUCKET,
+			url: `https://${AWS_S3_BUCKET}.s3.amazonaws.com/${key}`
 		});
 	} catch (error) {
 		console.error('Error generating presigned URL:', error);
