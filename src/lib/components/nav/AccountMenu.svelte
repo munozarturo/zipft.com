@@ -69,7 +69,7 @@
 	{#if isOpen}
 		<div
 			id="account-menu"
-			class="fixed right-0 top-0 z-20 flex h-full w-fit flex-row items-center justify-end sm:w-[320px]"
+			class="fixed right-0 top-0 z-20 flex h-full w-fit min-w-[240px] flex-row items-center justify-end sm:w-[320px]"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Account options"
