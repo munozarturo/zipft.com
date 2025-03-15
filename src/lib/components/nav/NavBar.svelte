@@ -5,6 +5,7 @@
 	import LogoCore from '$lib/assets/brand/LogoCore.ts.svelte';
 	import ActionsMenu from './mobile/ActionsMenu.svelte';
 	import AccountMenu from './AccountMenu.svelte';
+	import LogoCoreSquare from '$lib/assets/brand/LogoCoreSquare.svelte';
 
 	let {} = $props();
 	let { user, session } = page.data.auth;
@@ -44,17 +45,12 @@
 	aria-label="Main navigation"
 >
 	<!-- Mobile Actions -->
-	<ActionsMenu
-		isOpen={actionsMenuOpen}
-		toggleOpen={toggleActionsMenu}
-		{isActive}
-		{session}
-		{close}
-	/>
+	<ActionsMenu isOpen={actionsMenuOpen} toggleOpen={toggleActionsMenu} {isActive} {close} />
 
 	<!-- Logo -->
 	<a href="/" aria-label="Home page" class="flex items-center">
-		<LogoCore class="w-30 h-auto" aria-hidden="true" />
+		<LogoCore class="w-30 hidden h-auto sm:flex" aria-hidden="true" />
+		<LogoCoreSquare class="flex h-auto w-12 sm:hidden" aria-hidden="true" />
 	</a>
 
 	<!-- Actions -->

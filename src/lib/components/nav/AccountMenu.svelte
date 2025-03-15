@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
 
+	import type { Session, User } from '$lib/server/db/schema';
+
 	import History from '$lib/assets/icons/History.svelte';
 	import Account from '$lib/assets/icons/Account.svelte';
 	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
@@ -8,10 +10,9 @@
 	import Enter from '$lib/assets/icons/Enter.svelte';
 	import Exit from '$lib/assets/icons/Exit.svelte';
 	import Person from '$lib/assets/icons/Person.svelte';
-	import type { Session, User } from '$lib/server/db/schema';
 	import Cog from '$lib/assets/icons/Cog.svelte';
 	import AccountSecurity from '$lib/assets/icons/AccountSecurity.svelte';
-	import Send from '$lib/assets/icons/Send.svelte';
+	import CloudUpload from '$lib/assets/icons/CloudUpload.svelte';
 
 	let {
 		isOpen,
@@ -45,17 +46,21 @@
 			</span>
 		</button>
 	{:else}
-		<div class="flex flex-row items-center justify-center">
-			<a href="/signin" aria-label="Sign in to your account" class="btn hidden md:flex">
+		<div class="item-center flex flex-row justify-center gap-2">
+			<a
+				href="/signin"
+				aria-label="Sign in to your account"
+				class="btn preset-outlined-primary-900-100"
+			>
 				Sign in
 			</a>
 			<a
 				href="/signup"
 				aria-label="Sign up for a new account"
-				class="btn preset-filled-primary-900-100 group"
+				class="btn preset-filled-primary-900-100 group hidden sm:flex"
 			>
 				<span>Sign up</span>
-				<ChevronRight class="h-3 w-3 group-hover:translate-x-1" />
+				<ChevronRight class="hidden h-3 w-3 group-hover:translate-x-1 sm:flex" />
 			</a>
 		</div>
 	{/if}
@@ -70,7 +75,7 @@
 			aria-label="Account options"
 		>
 			<div
-				class="card preset-filled-surface-100-900 border-surface-300-700 h-full overflow-hidden rounded-l-md border-l p-3 shadow-lg"
+				class="card preset-filled-surface-100-900 border-surface-300-700 h-full w-full overflow-hidden rounded-l-md border-l p-3 shadow-lg"
 				role="menu"
 			>
 				{#if session}
@@ -120,7 +125,7 @@
 							role="menuitem"
 						>
 							<span class="flex w-full flex-row gap-4"
-								><Send aria-hidden="true" class="h-6 w-6" />Transfers</span
+								><CloudUpload aria-hidden="true" class="h-6 w-6" />Transfers</span
 							>
 						</a>
 						<a
