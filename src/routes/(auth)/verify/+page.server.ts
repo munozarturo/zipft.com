@@ -16,12 +16,12 @@ export const load: PageServerLoad = async (event) => {
 
 	// if no email provided signin
 	const email = event.url.searchParams.get('e');
-	if (!email) return redirect(302, `/signin?r=${redirectUrl}`);
+	if (!email) return redirect(303, `/signin?r=${redirectUrl}`);
 
 	try {
 		// if user doesn't exist signup
 		const user = await getUserByEmail(email);
-		if (!user) return redirect(302, `/signup?r=${redirectUrl}`);
+		if (!user) return redirect(303, `/signup?r=${redirectUrl}`);
 
 		// if account already verified
 		if (user.verified)

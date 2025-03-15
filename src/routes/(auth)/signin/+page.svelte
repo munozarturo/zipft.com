@@ -18,8 +18,8 @@
 	<title>Sign in :: zipft</title>
 </svelte:head>
 
-<div class="container mx-auto pt-20">
-	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
+<div class="container mx-auto pt-14 sm:pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 px-8 sm:px-4">
 		<div class="space-y-1">
 			<h1 class="h1">Welcome back</h1>
 			<span class="flex flex-row text-base">
@@ -62,7 +62,7 @@
 		</div>
 		<div class="flex w-full flex-col gap-2">
 			<button
-				class="btn preset-filled-primary-500 group w-full justify-between"
+				class="btn preset-filled-primary-900-100 group w-full justify-between"
 				disabled={$delayed}
 			>
 				<span>Sign in</span>

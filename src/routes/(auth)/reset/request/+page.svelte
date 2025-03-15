@@ -23,8 +23,8 @@
 	<title>Reset password :: zipft</title>
 </svelte:head>
 
-<div class="container mx-auto pt-20">
-	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
+<div class="container pt-14 sm:pt-20">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 px-8 sm:px-4">
 		{#if submitted}
 			<div class="space-y-2">
 				<h1 class="h1">Password reset</h1>
@@ -57,14 +57,14 @@
 					/>
 				</label>
 				{#if $errors.email}
-					<div class="error">{$errors.email}</div>
+					<div class="text-error-500">{$errors.email}</div>
 				{/if}
 				{#if $errors._errors}
-					<div class="error">{$errors._errors}</div>
+					<div class="text-error-500">{$errors._errors}</div>
 				{/if}
 			</div>
 			<button
-				class="btn preset-filled-primary-500 group w-full justify-between"
+				class="btn preset-filled-primary-900-100 group w-full justify-between"
 				disabled={$delayed}
 			>
 				<span>Reset password</span>
