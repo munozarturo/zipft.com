@@ -6,7 +6,6 @@
 	import ActionsMenu from './mobile/ActionsMenu.svelte';
 	import AccountMenu from './AccountMenu.svelte';
 
-	let {} = $props();
 	let { user, session } = page.data.auth;
 
 	function isActive(path: string | string[], children: boolean = false): boolean {

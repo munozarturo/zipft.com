@@ -6,7 +6,7 @@ export const updateNameSchema = z.object({
 });
 
 export const updatePfpSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8),
-	confirmPassword: z.string().min(8)
+	fileSize: z.number().positive(),
+	fileSha256Hash: z.string().length(64),
+	fileType: z.string()
 });

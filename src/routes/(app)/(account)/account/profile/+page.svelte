@@ -4,7 +4,12 @@
 	import { zod } from 'sveltekit-superforms/adapters';
 	import Spinner from '$lib/assets/icons/Spinner.svelte';
 
+	import { FileUpload } from '@skeletonlabs/skeleton-svelte';
+	import CloudUpload from '$lib/assets/icons/CloudUpload.svelte';
+	import Avatar from '$lib/components/core/Avatar.svelte';
+
 	let { data } = $props();
+	const { user } = data.auth;
 
 	const {
 		form: updateNameForm,
@@ -27,60 +32,86 @@
 	});
 </script>
 
-<form
-	method="POST"
-	action="?/updateName"
-	class="card max-w-[420px] space-y-4"
-	use:updateNameEnhance
->
-	<div class="grid grid-cols-2 gap-2">
-		<label class="label">
-			<span>First Name</span>
-			<input
-				name="firstName"
-				type="text"
-				placeholder="John"
-				class="input"
-				spellcheck="false"
-				bind:value={$updateNameForm.firstName}
-			/>
-			{#if $updateNameErrors.firstName}
-				<small class="text-error-500">{$updateNameErrors.firstName}</small>
-			{/if}
-		</label>
-		<label class="label">
-			<span>Last Name</span>
-			<input
-				name="lastName"
-				type="text"
-				placeholder="Doe"
-				class="input"
-				spellcheck="false"
-				bind:value={$updateNameForm.lastName}
-			/>
-			{#if $updateNameErrors.lastName}
-				<small class="text-error-500">{$updateNameErrors.lastName}</small>
-			{/if}
-		</label>
-	</div>
-	<button
-		class="btn preset-outlined-primary-900-100 group w-full justify-between"
-		disabled={$updateNameDelayed}
+<div class="flex flex-col gap-4">
+	<h1 class="h1">Profile</h1>
+
+	<form
+		method="POST"
+		action="?/updatePfp"
+		use:updatePfpEnhance
+		class="card flex max-w-[420px] flex-col gap-4"
 	>
-		<span>Update</span>
-		{#if $updateNameDelayed}
-			<Spinner class="h-5 w-5 animate-spin" />
-		{/if}
-	</button>
-</form>
+		<h2 class="h2">Profile Picture</h2>
 
-<hr class="m-10" />
+		<Avatar name={`${user.firstName} ${user.lastName}`} className="w-20 h-20 text-3xl font-bold" />
+		<FileUpload name="example-button" accept="image/*" onFileChange={console.log} maxFiles={2}>
+			<button class="btn preset-filled">
+				<CloudUpload class="h-6 w-6" />
+				<span>Select Image</span>
+			</button>
+		</FileUpload>
 
-<form method="POST" action="?/updatePfp" use:updatePfpEnhance>
-	E-mail: <input name="email" type="email" bind:value={$updatePfpForm.email} />
-	Password:
-	<input name="password" type="password" bind:value={$updatePfpForm.password} />
-	Confirm password:
-	<input name="confirmPassword" type="password" bind:value={$updatePfpForm.confirmPassword} />
-	<button>Submit</button>
-</form>
+		<input type="hidden" name="fileSize" bind:value={$updatePfpForm.fileSize} />
+		<input type="hidden" name="fileSha256Hash" bind:value={$updatePfpForm.fileSha256Hash} />
+		<input type="hidden" name="fileType" bind:value={$updatePfpForm.fileType} />
+
+		<button
+			class="btn preset-outlined-primary-900-100 group w-full justify-between"
+			disabled={$UpadePfpDelayed}
+		>
+			<span>Update Profile Picture</span>
+			{#if $UpadePfpDelayed}
+				<Spinner class="h-5 w-5 animate-spin" />
+			{/if}
+		</button>
+	</form>
+
+	<form
+		method="POST"
+		action="?/updateName"
+		class="card flex max-w-[420px] flex-col gap-4"
+		use:updateNameEnhance
+	>
+		<h2 class="h2">Name</h2>
+
+		<div class="grid grid-cols-2 gap-2">
+			<label class="label">
+				<span>First Name</span>
+				<input
+					name="firstName"
+					type="text"
+					placeholder="John"
+					class="input"
+					spellcheck="false"
+					bind:value={$updateNameForm.firstName}
+				/>
+				{#if $updateNameErrors.firstName}
+					<small class="text-error-500">{$updateNameErrors.firstName}</small>
+				{/if}
+			</label>
+			<label class="label">
+				<span>Last Name</span>
+				<input
+					name="lastName"
+					type="text"
+					placeholder="Doe"
+					class="input"
+					spellcheck="false"
+					bind:value={$updateNameForm.lastName}
+				/>
+				{#if $updateNameErrors.lastName}
+					<small class="text-error-500">{$updateNameErrors.lastName}</small>
+				{/if}
+			</label>
+		</div>
+		<button
+			class="btn preset-outlined-primary-900-100 group w-full justify-between"
+			disabled={$updateNameDelayed}
+		>
+			<span>Update</span>
+			{#if $updateNameDelayed}
+				<Spinner class="h-5 w-5 animate-spin" />
+			{/if}
+		</button>
+	</form>
+</div>
