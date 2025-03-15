@@ -109,13 +109,13 @@
 						</a>
 						<a
 							onclick={close}
-							href="/settings"
+							href="/account/preferences"
 							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
 							<span class="flex flex-row items-center justify-between">
-								Settings <Cog class="h-6 w-6" aria-hidden="true" />
+								Preferences <Cog class="h-6 w-6" aria-hidden="true" />
 							</span>
 						</a>
 						<form action="/signout" method="POST">

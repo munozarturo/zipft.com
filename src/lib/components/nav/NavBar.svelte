@@ -54,7 +54,7 @@
 
 	<!-- Logo -->
 	<a href="/" aria-label="Home page" class="flex items-center">
-		<LogoCore class="w-30 h-auto md:w-40" aria-hidden="true" />
+		<LogoCore class="w-30 h-auto" aria-hidden="true" />
 	</a>
 
 	<!-- Actions -->

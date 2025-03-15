@@ -6,6 +6,6 @@
 </svelte:head>
 
 <div class="flex flex-col">
-	<h2 class="h2">Settings</h2>
+	<h2 class="h2">Preferences</h2>
 	<div>theme selector, default options for creating transfers</div>
 </div>
