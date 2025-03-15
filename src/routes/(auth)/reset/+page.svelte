@@ -21,7 +21,7 @@
 	<title>Reset password :: zipft</title>
 </svelte:head>
 
-<div class="container mx-auto pt-20">
+<div class="container mx-auto pt-14 sm:pt-20">
 	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
 		{#if passwordReset}
 			<div class="space-y-2">

@@ -8,7 +8,7 @@
 	<title>Verify identity :: zipft</title>
 </svelte:head>
 
-<div class="container mx-auto pt-20">
+<div class="container mx-auto pt-14 sm:pt-20">
 	<form method="POST" class="card mx-auto max-w-[420px] space-y-4 p-4">
 		<div class="flex flex-col gap-2">
 			<!-- Show verified message if account is verified -->

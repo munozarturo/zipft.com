@@ -6,7 +6,7 @@ export const load = async (event) => {
 	const redirectUrl = event.url.searchParams.get('r') || '/';
 
 	const { session } = event.locals.auth;
-	if (!session) return redirect(302, redirectUrl);
+	if (!session) return redirect(303, redirectUrl);
 
 	try {
 		await invalidateSession(session.tokenHash);
@@ -21,7 +21,7 @@ export const actions = {
 		const redirectUrl = event.url.searchParams.get('r') || '/';
 
 		const { session } = event.locals.auth;
-		if (!session) return redirect(302, redirectUrl);
+		if (!session) return redirect(303, redirectUrl);
 
 		try {
 			await invalidateSession(session.tokenHash);

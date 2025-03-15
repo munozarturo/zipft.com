@@ -67,50 +67,39 @@
 			aria-label="Account options"
 		>
 			<div
-				class="card preset-filled-surface-100-900 border-surface-300-700 w-11/12 overflow-hidden rounded-md border shadow-lg"
+				class="card preset-filled-surface-100-900 border-surface-300-700 w-11/12 overflow-hidden rounded-md border p-3 shadow-lg"
 				role="menu"
 			>
 				{#if session}
 					<!-- Session Data -->
 					<div class="flex flex-col">
-						<div
-							class="border-surface-300-700 text-md decoration-1.5 flex flex-row items-stretch border-b underline-offset-2"
-						>
+						<div class="text-md decoration-1.5 flex flex-row items-stretch underline-offset-2">
 							<!-- Account Information -->
-							<div
-								class="border-surface-300-700 bg-surface-100-900 flex w-full flex-row items-center justify-start gap-2 border-r px-4 py-3"
+							<a
+								onclick={close}
+								href="/account/profile"
+								class="bg-surface-100-900 hover:bg-surface-200-800 focus-visible:bg-surface-200-800 rounded-base flex w-full flex-row items-center justify-start gap-2 p-3 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								role="menuitem"
+								tabindex="0"
 							>
 								<Account class="h-10 w-10" aria-hidden="true" />
 								<div class="flex flex-col">
 									<p class="text-lg">{user?.firstName}&nbsp;{user?.lastName}</p>
 									<p class="text-primary-500 -mt-1 text-sm">{user?.email}</p>
 								</div>
-							</div>
-							<!-- Close Button -->
+							</a>
 							<button
 								onclick={close}
-								class="focus-visible:bg-surface-200-800 hover:bg-surface-200-800 flex items-center justify-center px-4 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								class="focus-visible:bg-surface-200-800 hover:bg-surface-200-800 rounded-base flex items-center justify-center p-3 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 								aria-label="Close menu"
 							>
 								<Cross class="h-5 w-5" aria-hidden="true" />
 							</button>
 						</div>
-
-						<a
-							onclick={close}
-							href="/account/profile"
-							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
-							role="menuitem"
-							tabindex="0"
-						>
-							<span class="flex flex-row items-center justify-between">
-								Profile <Person class="h-6 w-6" aria-hidden="true" />
-							</span>
-						</a>
 						<a
 							onclick={close}
 							href="/account/preferences"
-							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 rounded-base p-3 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -121,7 +110,7 @@
 						<form action="/signout" method="POST">
 							<button
 								type="submit"
-								class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 w-full p-4 text-left underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+								class="text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 w-full p-3 text-left underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 								role="menuitem"
 							>
 								<span class="flex flex-row items-center justify-between">
@@ -136,7 +125,7 @@
 						<a
 							onclick={close}
 							href="/signup"
-							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 border-b p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
@@ -147,7 +136,7 @@
 						<a
 							onclick={close}
 							href="/signin"
-							class="border-surface-300-700 text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
+							class="text-md decoration-1.5 focus-visible:bg-surface-200-800 hover:bg-surface-200-800 p-4 underline-offset-2 focus:outline-none focus-visible:underline focus-visible:decoration-2 focus-visible:underline-offset-2"
 							role="menuitem"
 							tabindex="0"
 						>
