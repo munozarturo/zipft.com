@@ -24,7 +24,7 @@
 </svelte:head>
 
 <div class="container pt-14 sm:pt-20">
-	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 p-4">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 px-8">
 		{#if submitted}
 			<div class="space-y-2">
 				<h1 class="h1">Password reset</h1>
