@@ -14,3 +14,4 @@ export const updatePfpSchema = z.object({
 export const transferAccountSchema = z.object({
 	email: z.string().email()
 });
+
