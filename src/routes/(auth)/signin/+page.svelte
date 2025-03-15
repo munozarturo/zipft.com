@@ -19,7 +19,7 @@
 </svelte:head>
 
 <div class="container mx-auto pt-14 sm:pt-20">
-	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 px-8">
+	<form method="POST" use:enhance class="card mx-auto max-w-[420px] space-y-4 px-8 sm:px-4">
 		<div class="space-y-1">
 			<h1 class="h1">Welcome back</h1>
 			<span class="flex flex-row text-base">
