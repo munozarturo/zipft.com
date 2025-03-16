@@ -4,11 +4,12 @@
 	import Badge from '$lib/components/Badge.svelte';
 	import FileDropzone from '$lib/components/FileDropZone.svelte';
 	import Cross from '$lib/assets/icons/Cross.svelte';
+	import Send from '../../lib/assets/icons/Send.svelte';
 
-	const tabs = ['upload', 'name', 'recipients'] as const;
+	const tabs = ['files', 'details'] as const;
 	type TabType = (typeof tabs)[number];
 
-	let currentTab = $state<TabType>('upload');
+	let currentTab = $state<TabType>('files');
 	let files = $state<File[]>([]);
 	let name = $state<string>('');
 	let recipient = $state<string>('');
@@ -46,6 +47,22 @@
 	function removeRecipient(recipient: string) {
 		recipients = recipients.filter((r) => r !== recipient);
 	}
+
+	function handleNameSubmit(event: SubmitEvent) {
+		event.preventDefault();
+		if (name) {
+			goToNextTab();
+		}
+	}
+
+	function handleRecipientSubmit(event: SubmitEvent) {
+		event.preventDefault();
+		addRecipient();
+	}
+
+	function send() {
+		console.log('send');
+	}
 </script>
 
 <div class="container mx-auto p-6 pb-20">
@@ -54,20 +71,20 @@
 			<button
 				onclick={() => (currentTab = tab)}
 				class="relative flex items-center justify-center rounded-full group px-3 {currentTab === tab
-					? 'bg-blue-800 text-white h-7'
-					: 'bg-gray-300 hover:bg-gray-400 h-6'}"
+					? 'bg-black text-white h-7'
+					: 'bg-gray-300 text-black h-6'}"
 			>
 				<span
-					class="overflow-hidden transition-all duration-300 ease-in-out whitespace-nowrap {currentTab ===
-					tab
-						? 'max-w-xs opacity-100'
-						: 'max-w-0 group-hover:max-w-xs group-hover:opacity-100 opacity-0'}">{tab}</span
+					class="overflow-hidden whitespace-nowrap transition-all {currentTab === tab
+						? 'max-w-xs duration-300 ease-in'
+						: 'max-w-0 duration-150 ease-out group-hover:max-w-xs group-hover:duration-300 group-hover:ease-in'}"
+					>{tab}</span
 				>
 			</button>
 		{/each}
 	</div>
 
-	{#if currentTab === 'upload'}
+	{#if currentTab === 'files'}
 		<FileDropzone
 			onFilesDropped={handleFilesDropped}
 			acceptedFileTypes={['image/jpeg', 'image/png', 'application/pdf']}
@@ -93,25 +110,40 @@
 				</ul>
 			</div>
 		{/if}
-	{:else if currentTab === 'name'}
+	{:else if currentTab === 'details'}
 		<div class="mt-8 flex flex-col items-center">
-			<h2 class="text-xl font-semibold mb-4">give it a name</h2>
-			<input type="text" class="p-2 border border-gray-300 rounded" bind:value={name} />
-		</div>
-	{:else if currentTab === 'recipients'}
-		<div class="mt-8 flex flex-col items-center">
-			<h2 class="text-xl font-semibold mb-4">add recipients</h2>
-			<div class="flex items-center gap-2">
-				<input
-					type="text"
-					class="p-2 border border-gray-300 rounded"
-					bind:value={recipient}
-					placeholder="example@email.com"
-				/>
-				<button class="bg-black text-white px-4 py-2 rounded" onclick={() => addRecipient()}>
-					Add
-				</button>
-			</div>
+			<form onsubmit={handleNameSubmit} class="w-full max-w-md">
+				<div class="flex items-center">
+					<label for="name" class="text-sm font-medium w-full">
+						<span class="text-gray-500">Name</span>
+						<input
+							type="text"
+							id="name"
+							class="p-2 border border-gray-300 rounded w-full"
+							bind:value={name}
+							placeholder="Enter a name"
+						/>
+					</label>
+				</div>
+			</form>
+
+			<form onsubmit={handleRecipientSubmit} class="w-full max-w-md mt-4">
+				<div class="flex items-center gap-2">
+					<label for="recipient" class="text-sm font-medium w-full">
+						<span class="text-gray-500">Recipient</span>
+						<div class="flex items-center gap-2">
+							<input
+								type="email"
+								id="recipient"
+								class="p-2 border border-gray-300 rounded w-full"
+								bind:value={recipient}
+								placeholder="example@email.com"
+							/>
+							<button type="submit" class="bg-black text-white px-4 py-2 rounded"> Add </button>
+						</div>
+					</label>
+				</div>
+			</form>
 			<div class="flex flex-wrap gap-2 mt-4">
 				{#each recipients as recipient}
 					<Badge size="lg">
@@ -139,13 +171,23 @@
 			<ChevronLeft class="w-5 h-5" /> Back
 		</button>
 
-		<button
-			onclick={goToNextTab}
-			class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
-			disabled={tabs.indexOf(currentTab) === tabs.length - 1}
-		>
-			Next
-			<ChevronRight class="w-5 h-5" />
-		</button>
+		{#if currentTab !== 'details'}
+			<button
+				onclick={goToNextTab}
+				class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
+				disabled={tabs.indexOf(currentTab) === tabs.length - 1}
+			>
+				Next
+				<ChevronRight class="w-5 h-5" />
+			</button>
+		{:else}
+			<button
+				onclick={send}
+				class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
+			>
+				Submit
+				<Send class="w-5 h-5" />
+			</button>
+		{/if}
 	</div>
 </div>
