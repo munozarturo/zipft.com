@@ -1,7 +1,9 @@
 <script lang="ts">
-	import ChevronLeft from '../../lib/assets/icons/ChevronLeft.svelte';
-	import ChevronRight from '../../lib/assets/icons/ChevronRight.svelte';
-	import FileDropzone from '../../lib/components/FileDropZone.svelte';
+	import ChevronLeft from '$lib/assets/icons/ChevronLeft.svelte';
+	import ChevronRight from '$lib/assets/icons/ChevronRight.svelte';
+	import Badge from '$lib/components/Badge.svelte';
+	import FileDropzone from '$lib/components/FileDropZone.svelte';
+	import Cross from '$lib/assets/icons/Cross.svelte';
 
 	const tabs = ['upload', 'name', 'recipients'] as const;
 	type TabType = (typeof tabs)[number];
@@ -40,9 +42,13 @@
 			recipient = '';
 		}
 	}
+
+	function removeRecipient(recipient: string) {
+		recipients = recipients.filter((r) => r !== recipient);
+	}
 </script>
 
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-6 pb-20">
 	<div class="flex justify-center items-center gap-3 w-full p-8">
 		{#each tabs as tab}
 			<button
@@ -106,10 +112,25 @@
 					Add
 				</button>
 			</div>
+			<div class="flex flex-wrap gap-2 mt-4">
+				{#each recipients as recipient}
+					<Badge size="lg">
+						{recipient}
+						{#snippet trailingContent()}
+							<button
+								class="flex items-center justify-center"
+								onclick={() => removeRecipient(recipient)}
+							>
+								<Cross class="w-3.5 h-3.5 text-white" />
+							</button>
+						{/snippet}
+					</Badge>
+				{/each}
+			</div>
 		</div>
 	{/if}
 
-	<div class="flex justify-between items-center mt-8">
+	<div class="mt-8 flex justify-between items-center">
 		<button
 			onclick={goToPreviousTab}
 			class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
