@@ -30,10 +30,24 @@
 		}
 	}
 
+	function validateFiles() {
+		return files.length > 0;
+	}
+
+	function validateDetails() {
+		return name.trim() !== '' && recipients.length > 0;
+	}
+
 	function goToNextTab() {
-		const currentIndex = tabs.indexOf(currentTab);
-		if (currentIndex < tabs.length - 1) {
-			currentTab = tabs[currentIndex + 1];
+		switch (currentTab) {
+			case 'files':
+				if (validateFiles()) {
+					currentTab = 'details';
+				}
+				break;
+			case 'details':
+				send();
+				break;
 		}
 	}
 
@@ -65,7 +79,7 @@
 	}
 </script>
 
-<div class="container mx-auto p-6 pb-20">
+<div class="container mx-auto p-6 pb-20 max-w-xl">
 	<div class="flex justify-center items-center gap-3 w-full p-8">
 		{#each tabs as tab}
 			<button
@@ -88,28 +102,9 @@
 		<FileDropzone
 			onFilesDropped={handleFilesDropped}
 			acceptedFileTypes={['image/jpeg', 'image/png', 'application/pdf']}
+			{files}
+			onFileRemove={removeFile}
 		/>
-
-		{#if files.length > 0}
-			<div class="mt-8">
-				<h2 class="text-xl font-semibold mb-4">Uploaded Files</h2>
-				<ul class="space-y-2">
-					{#each files as file, index}
-						<li class="flex items-center justify-between p-3 bg-white rounded shadow">
-							<div>
-								<span class="font-medium">{file.name}</span>
-								<span class="ml-2 text-sm text-gray-500">
-									{file.size.toFixed(2)} bytes
-								</span>
-							</div>
-							<button class="text-red-500 hover:text-red-700" onclick={() => removeFile(index)}>
-								Remove
-							</button>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		{/if}
 	{:else if currentTab === 'details'}
 		<div class="mt-8 flex flex-col items-center">
 			<form onsubmit={handleNameSubmit} class="w-full max-w-md">
@@ -162,10 +157,12 @@
 		</div>
 	{/if}
 
-	<div class="mt-8 flex justify-between items-center">
+	<div
+		class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:static md:bg-transparent md:border-0 md:p-0 md:mt-8 flex justify-between items-center"
+	>
 		<button
 			onclick={goToPreviousTab}
-			class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
+			class="flex items-center justify-center gap-2 transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-full px-2 py-1"
 			disabled={tabs.indexOf(currentTab) === 0}
 		>
 			<ChevronLeft class="w-5 h-5" /> Back
@@ -174,8 +171,8 @@
 		{#if currentTab !== 'details'}
 			<button
 				onclick={goToNextTab}
-				class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
-				disabled={tabs.indexOf(currentTab) === tabs.length - 1}
+				class="flex items-center justify-center gap-2 transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-full px-2 py-1"
+				disabled={!validateFiles()}
 			>
 				Next
 				<ChevronRight class="w-5 h-5" />
@@ -183,7 +180,8 @@
 		{:else}
 			<button
 				onclick={send}
-				class="flex items-center justify-center gap-2 hover:bg-gray-200 rounded-full px-2 py-1"
+				class="flex items-center justify-center gap-2 transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-full px-2 py-1"
+				disabled={!validateDetails()}
 			>
 				Submit
 				<Send class="w-5 h-5" />
