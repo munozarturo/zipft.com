@@ -5,6 +5,7 @@
 	import FileDropzone from '$lib/components/FileDropZone.svelte';
 	import Cross from '$lib/assets/icons/Cross.svelte';
 	import Send from '../../lib/assets/icons/Send.svelte';
+	import { compressFiles } from '../../lib/utils/compression';
 
 	const tabs = ['files', 'details'] as const;
 	type TabType = (typeof tabs)[number];
@@ -74,8 +75,46 @@
 		addRecipient();
 	}
 
-	function send() {
-		console.log('send');
+	async function send() {
+		const compressedFile = await compressFiles(files);
+		const { presignedUrl, url } = await getPresignedUrl(name, 'application/zip');
+
+		await uploadToS3(presignedUrl, compressedFile);
+	}
+
+	async function getPresignedUrl(
+		filename: string,
+		contentType: string
+	): Promise<{ presignedUrl: string; url: string }> {
+		const response = await fetch('/api/presigned', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				filename,
+				contentType,
+				directory: 'transfers'
+			})
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to get presigned URL');
+		}
+
+		return response.json();
+	}
+
+	async function uploadToS3(presignedUrl: string, file: Blob): Promise<void> {
+		const response = await fetch(presignedUrl, {
+			method: 'PUT',
+			body: file,
+			headers: {
+				'Content-Type': file.type
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to upload file to S3');
+		}
 	}
 </script>
 
