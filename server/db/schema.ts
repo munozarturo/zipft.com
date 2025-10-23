@@ -44,7 +44,9 @@ export interface SessionWithToken extends Session {
 export const requests = zipft.table("requests", {
     id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
-    sessionId: t.text().references(() => sessions.id, { onDelete: "cascade" }),
+    sessionId: t
+        .text("session_id")
+        .references(() => sessions.id, { onDelete: "cascade" }),
 
     path: t.text().notNull(),
     method: t.text().notNull(),
@@ -114,7 +116,7 @@ export type CommunicationType = typeof communications.$inferSelect.type;
 export type CommunicationPurpose = typeof communications.$inferSelect.purpose;
 
 export const verificationChallenges = zipft.table("verification_challenges", {
-    tokenHash: t.text().primaryKey(),
+    tokenHash: t.text("token_hash").primaryKey(),
     userId: t
         .uuid("user_id")
         .notNull()
@@ -134,7 +136,7 @@ export type VerificationChallenge = InferSelectModel<
 >;
 
 export const recoveryChallenges = zipft.table("recovery_challenges", {
-    tokenHash: t.text().primaryKey(),
+    tokenHash: t.text("token_hash").primaryKey(),
     userId: t
         .uuid("user_id")
         .notNull()
@@ -152,7 +154,7 @@ export const recoveryChallenges = zipft.table("recovery_challenges", {
 export type RecoveryChallenge = InferSelectModel<typeof recoveryChallenges>;
 
 export const transferChallenges = zipft.table("transfer_challenges", {
-    tokenHash: t.text().primaryKey().notNull(),
+    tokenHash: t.text("token_hash").primaryKey().notNull(),
 
     email: t.text().notNull(),
 
@@ -173,7 +175,7 @@ export const transferChallenges = zipft.table("transfer_challenges", {
 export type TransferChallenge = InferSelectModel<typeof transferChallenges>;
 
 export const deletionChallenges = zipft.table("deletion_challenges", {
-    tokenHash: t.text().primaryKey().notNull(),
+    tokenHash: t.text("token_hash").primaryKey().notNull(),
 
     userId: t
         .uuid("user_id")

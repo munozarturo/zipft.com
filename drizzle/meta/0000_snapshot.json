@@ -1,689 +1,736 @@
 {
-    "id": "7dbf111b-7649-4246-9d99-d0ef21c0b4f5",
-    "prevId": "00000000-0000-0000-0000-000000000000",
-    "version": "7",
-    "dialect": "postgresql",
-    "tables": {
-        "zipft.communications": {
-            "name": "communications",
-            "schema": "zipft",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "uuid",
-                    "primaryKey": true,
-                    "notNull": true,
-                    "default": "gen_random_uuid()"
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "type": {
-                    "name": "type",
-                    "type": "communication_type",
-                    "typeSchema": "zipft",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "purpose": {
-                    "name": "purpose",
-                    "type": "communication_purpose",
-                    "typeSchema": "zipft",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp with time zone",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "communications_user_id_users_id_fk": {
-                    "name": "communications_user_id_users_id_fk",
-                    "tableFrom": "communications",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
+  "id": "df50fe33-eccb-4906-9894-736be50af2e6",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "zipft.communications": {
+      "name": "communications",
+      "schema": "zipft",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
-        "zipft.deletion_challenges": {
-            "name": "deletion_challenges",
-            "schema": "zipft",
-            "columns": {
-                "tokenHash": {
-                    "name": "tokenHash",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "expires_at": {
-                    "name": "expires_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "CURRENT_TIMESTAMP + INTERVAL '30 minutes'"
-                },
-                "used": {
-                    "name": "used",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "used_at": {
-                    "name": "used_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "deletion_challenges_user_id_users_id_fk": {
-                    "name": "deletion_challenges_user_id_users_id_fk",
-                    "tableFrom": "deletion_challenges",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "set null",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         },
-        "zipft.objects": {
-            "name": "objects",
-            "schema": "zipft",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "file_name": {
-                    "name": "file_name",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "content_type": {
-                    "name": "content_type",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "size": {
-                    "name": "size",
-                    "type": "integer",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "md5": {
-                    "name": "md5",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "s3_bucket": {
-                    "name": "s3_bucket",
-                    "type": "object_buckets",
-                    "typeSchema": "zipft",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "s3_key": {
-                    "name": "s3_key",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "verified": {
-                    "name": "verified",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "verified_at": {
-                    "name": "verified_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "expires_at": {
-                    "name": "expires_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "CURRENT_TIMESTAMP + INTERVAL '1 hour'"
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {},
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
+        "type": {
+          "name": "type",
+          "type": "communication_type",
+          "typeSchema": "zipft",
+          "primaryKey": false,
+          "notNull": true
         },
-        "zipft.recovery_challenges": {
-            "name": "recovery_challenges",
-            "schema": "zipft",
-            "columns": {
-                "tokenHash": {
-                    "name": "tokenHash",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "expires_at": {
-                    "name": "expires_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "CURRENT_TIMESTAMP + INTERVAL '10 minutes'"
-                },
-                "used": {
-                    "name": "used",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "used_at": {
-                    "name": "used_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "recovery_challenges_user_id_users_id_fk": {
-                    "name": "recovery_challenges_user_id_users_id_fk",
-                    "tableFrom": "recovery_challenges",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
+        "purpose": {
+          "name": "purpose",
+          "type": "communication_purpose",
+          "typeSchema": "zipft",
+          "primaryKey": false,
+          "notNull": true
         },
-        "zipft.requests": {
-            "name": "requests",
-            "schema": "zipft",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "integer",
-                    "primaryKey": true,
-                    "notNull": true,
-                    "identity": {
-                        "type": "always",
-                        "name": "requests_id_seq",
-                        "schema": "zipft",
-                        "increment": "1",
-                        "startWith": "1",
-                        "minValue": "1",
-                        "maxValue": "2147483647",
-                        "cache": "1",
-                        "cycle": false
-                    }
-                },
-                "sessionId": {
-                    "name": "sessionId",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "path": {
-                    "name": "path",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "method": {
-                    "name": "method",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "ip_address": {
-                    "name": "ip_address",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "user_agent": {
-                    "name": "user_agent",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "is_mobile": {
-                    "name": "is_mobile",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "browser": {
-                    "name": "browser",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "platform": {
-                    "name": "platform",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "made_at": {
-                    "name": "made_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "requests_sessionId_sessions_id_fk": {
-                    "name": "requests_sessionId_sessions_id_fk",
-                    "tableFrom": "requests",
-                    "tableTo": "sessions",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["sessionId"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
-        },
-        "zipft.sessions": {
-            "name": "sessions",
-            "schema": "zipft",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "token_hash": {
-                    "name": "token_hash",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "last_verified_at": {
-                    "name": "last_verified_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "sessions_user_id_users_id_fk": {
-                    "name": "sessions_user_id_users_id_fk",
-                    "tableFrom": "sessions",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
-        },
-        "zipft.transfer_challenges": {
-            "name": "transfer_challenges",
-            "schema": "zipft",
-            "columns": {
-                "tokenHash": {
-                    "name": "tokenHash",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "email": {
-                    "name": "email",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "expires_at": {
-                    "name": "expires_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "CURRENT_TIMESTAMP + INTERVAL '10 minutes'"
-                },
-                "used": {
-                    "name": "used",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "used_at": {
-                    "name": "used_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "transfer_challenges_user_id_users_id_fk": {
-                    "name": "transfer_challenges_user_id_users_id_fk",
-                    "tableFrom": "transfer_challenges",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
-        },
-        "zipft.users": {
-            "name": "users",
-            "schema": "zipft",
-            "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "uuid",
-                    "primaryKey": true,
-                    "notNull": true,
-                    "default": "gen_random_uuid()"
-                },
-                "email": {
-                    "name": "email",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "password_hash": {
-                    "name": "password_hash",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "name": {
-                    "name": "name",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "avatar": {
-                    "name": "avatar",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "avatar_url": {
-                    "name": "avatar_url",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
-                "role": {
-                    "name": "role",
-                    "type": "user_roles",
-                    "typeSchema": "zipft",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "'user'"
-                },
-                "verified": {
-                    "name": "verified",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "deleted": {
-                    "name": "deleted",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "onboarded": {
-                    "name": "onboarded",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "users_avatar_objects_id_fk": {
-                    "name": "users_avatar_objects_id_fk",
-                    "tableFrom": "users",
-                    "tableTo": "objects",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["avatar"],
-                    "columnsTo": ["id"],
-                    "onDelete": "no action",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {
-                "users_email_unique": {
-                    "name": "users_email_unique",
-                    "nullsNotDistinct": false,
-                    "columns": ["email"]
-                }
-            },
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
-        },
-        "zipft.verification_challenges": {
-            "name": "verification_challenges",
-            "schema": "zipft",
-            "columns": {
-                "tokenHash": {
-                    "name": "tokenHash",
-                    "type": "text",
-                    "primaryKey": true,
-                    "notNull": true
-                },
-                "user_id": {
-                    "name": "user_id",
-                    "type": "uuid",
-                    "primaryKey": false,
-                    "notNull": true
-                },
-                "created_at": {
-                    "name": "created_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "now()"
-                },
-                "expires_at": {
-                    "name": "expires_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": "CURRENT_TIMESTAMP + INTERVAL '30 minutes'"
-                },
-                "used": {
-                    "name": "used",
-                    "type": "boolean",
-                    "primaryKey": false,
-                    "notNull": true,
-                    "default": false
-                },
-                "used_at": {
-                    "name": "used_at",
-                    "type": "timestamp",
-                    "primaryKey": false,
-                    "notNull": false
-                }
-            },
-            "indexes": {},
-            "foreignKeys": {
-                "verification_challenges_user_id_users_id_fk": {
-                    "name": "verification_challenges_user_id_users_id_fk",
-                    "tableFrom": "verification_challenges",
-                    "tableTo": "users",
-                    "schemaTo": "zipft",
-                    "columnsFrom": ["user_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                }
-            },
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {},
-            "policies": {},
-            "checkConstraints": {},
-            "isRLSEnabled": false
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
-    },
-    "enums": {
-        "zipft.communication_purpose": {
-            "name": "communication_purpose",
-            "schema": "zipft",
-            "values": ["verification", "recovery", "transfer", "deletion"]
-        },
-        "zipft.communication_type": {
-            "name": "communication_type",
-            "schema": "zipft",
-            "values": ["email"]
-        },
-        "zipft.object_buckets": {
-            "name": "object_buckets",
-            "schema": "zipft",
-            "values": ["zipft-cdn", "zipft-cdn-public"]
-        },
-        "zipft.user_roles": {
-            "name": "user_roles",
-            "schema": "zipft",
-            "values": ["user", "admin"]
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "communications_user_id_users_id_fk": {
+          "name": "communications_user_id_users_id_fk",
+          "tableFrom": "communications",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "schemas": {
-        "zipft": "zipft"
+    "zipft.deletion_challenges": {
+      "name": "deletion_challenges",
+      "schema": "zipft",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '30 minutes'"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "deletion_challenges_user_id_users_id_fk": {
+          "name": "deletion_challenges_user_id_users_id_fk",
+          "tableFrom": "deletion_challenges",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "sequences": {},
-    "roles": {},
-    "policies": {},
-    "views": {},
-    "_meta": {
-        "columns": {},
-        "schemas": {},
-        "tables": {}
+    "zipft.objects": {
+      "name": "objects",
+      "schema": "zipft",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "file_name": {
+          "name": "file_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_type": {
+          "name": "content_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "size": {
+          "name": "size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "md5": {
+          "name": "md5",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "s3_bucket": {
+          "name": "s3_bucket",
+          "type": "object_buckets",
+          "typeSchema": "zipft",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "s3_key": {
+          "name": "s3_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "verified_at": {
+          "name": "verified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '1 hour'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.recovery_challenges": {
+      "name": "recovery_challenges",
+      "schema": "zipft",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '10 minutes'"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recovery_challenges_user_id_users_id_fk": {
+          "name": "recovery_challenges_user_id_users_id_fk",
+          "tableFrom": "recovery_challenges",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.requests": {
+      "name": "requests",
+      "schema": "zipft",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "requests_id_seq",
+            "schema": "zipft",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_mobile": {
+          "name": "is_mobile",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "browser": {
+          "name": "browser",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platform": {
+          "name": "platform",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "made_at": {
+          "name": "made_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "requests_session_id_sessions_id_fk": {
+          "name": "requests_session_id_sessions_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "sessions",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.sessions": {
+      "name": "sessions",
+      "schema": "zipft",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
+          "tableFrom": "sessions",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.transfer_challenges": {
+      "name": "transfer_challenges",
+      "schema": "zipft",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '10 minutes'"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transfer_challenges_user_id_users_id_fk": {
+          "name": "transfer_challenges_user_id_users_id_fk",
+          "tableFrom": "transfer_challenges",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.users": {
+      "name": "users",
+      "schema": "zipft",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "user_roles",
+          "typeSchema": "zipft",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'user'"
+        },
+        "verified": {
+          "name": "verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "onboarded": {
+          "name": "onboarded",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_avatar_objects_id_fk": {
+          "name": "users_avatar_objects_id_fk",
+          "tableFrom": "users",
+          "tableTo": "objects",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "avatar"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.verification_challenges": {
+      "name": "verification_challenges",
+      "schema": "zipft",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '30 minutes'"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "verification_challenges_user_id_users_id_fk": {
+          "name": "verification_challenges_user_id_users_id_fk",
+          "tableFrom": "verification_challenges",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
+  },
+  "enums": {
+    "zipft.communication_purpose": {
+      "name": "communication_purpose",
+      "schema": "zipft",
+      "values": [
+        "verification",
+        "recovery",
+        "transfer",
+        "deletion"
+      ]
+    },
+    "zipft.communication_type": {
+      "name": "communication_type",
+      "schema": "zipft",
+      "values": [
+        "email"
+      ]
+    },
+    "zipft.object_buckets": {
+      "name": "object_buckets",
+      "schema": "zipft",
+      "values": [
+        "zipft-cdn",
+        "zipft-cdn-public"
+      ]
+    },
+    "zipft.user_roles": {
+      "name": "user_roles",
+      "schema": "zipft",
+      "values": [
+        "user",
+        "admin"
+      ]
+    }
+  },
+  "schemas": {
+    "zipft": "zipft"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }

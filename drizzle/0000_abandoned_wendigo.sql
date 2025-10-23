@@ -13,7 +13,7 @@ CREATE TABLE "zipft"."communications" (
 );
 --> statement-breakpoint
 CREATE TABLE "zipft"."deletion_challenges" (
-	"tokenHash" text PRIMARY KEY NOT NULL,
+	"token_hash" text PRIMARY KEY NOT NULL,
 	"user_id" uuid,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"expires_at" timestamp DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 minutes' NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE "zipft"."objects" (
 );
 --> statement-breakpoint
 CREATE TABLE "zipft"."recovery_challenges" (
-	"tokenHash" text PRIMARY KEY NOT NULL,
+	"token_hash" text PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"expires_at" timestamp DEFAULT CURRENT_TIMESTAMP + INTERVAL '10 minutes' NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE "zipft"."recovery_challenges" (
 --> statement-breakpoint
 CREATE TABLE "zipft"."requests" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "zipft"."requests_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"sessionId" text,
+	"session_id" text,
 	"path" text NOT NULL,
 	"method" text NOT NULL,
 	"ip_address" text,
@@ -66,7 +66,7 @@ CREATE TABLE "zipft"."sessions" (
 );
 --> statement-breakpoint
 CREATE TABLE "zipft"."transfer_challenges" (
-	"tokenHash" text PRIMARY KEY NOT NULL,
+	"token_hash" text PRIMARY KEY NOT NULL,
 	"email" text NOT NULL,
 	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE "zipft"."users" (
 );
 --> statement-breakpoint
 CREATE TABLE "zipft"."verification_challenges" (
-	"tokenHash" text PRIMARY KEY NOT NULL,
+	"token_hash" text PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"expires_at" timestamp DEFAULT CURRENT_TIMESTAMP + INTERVAL '30 minutes' NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE "zipft"."verification_challenges" (
 ALTER TABLE "zipft"."communications" ADD CONSTRAINT "communications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "zipft"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "zipft"."deletion_challenges" ADD CONSTRAINT "deletion_challenges_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "zipft"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "zipft"."recovery_challenges" ADD CONSTRAINT "recovery_challenges_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "zipft"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "zipft"."requests" ADD CONSTRAINT "requests_sessionId_sessions_id_fk" FOREIGN KEY ("sessionId") REFERENCES "zipft"."sessions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "zipft"."requests" ADD CONSTRAINT "requests_session_id_sessions_id_fk" FOREIGN KEY ("session_id") REFERENCES "zipft"."sessions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "zipft"."sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "zipft"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "zipft"."transfer_challenges" ADD CONSTRAINT "transfer_challenges_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "zipft"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "zipft"."users" ADD CONSTRAINT "users_avatar_objects_id_fk" FOREIGN KEY ("avatar") REFERENCES "zipft"."objects"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
