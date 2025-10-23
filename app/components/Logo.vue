@@ -5,25 +5,11 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
-        <rect
-            x="7"
-            y="30.8431"
-            width="26"
-            height="26"
-            stroke="currentColor"
-            stroke-width="6"
-        />
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M41.0196 22.8235H18.4314V15.2941H41.0196H48.549V22.8235V42.902H41.0196V22.8235Z"
-            fill="currentColor"
-        />
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M52.3137 11.5294H29.7255V4H52.3137H59.8431V11.5294V31.6078H52.3137V11.5294Z"
-            fill="currentColor"
-        />
+        <rect x="12" y="52" width="20" height="10" fill="currentColor" />
+        <rect x="32" y="42" width="20" height="10" fill="currentColor" />
+        <rect x="12" y="32" width="20" height="10" fill="currentColor" />
+        <rect x="32" y="22" width="20" height="10" fill="currentColor" />
+        <rect x="12" y="12" width="20" height="10" fill="currentColor" />
+        <rect x="32" y="2" width="20" height="10" fill="currentColor" />
     </svg>
 </template>

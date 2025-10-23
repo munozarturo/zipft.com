@@ -34,8 +34,8 @@
             <mj-section padding="0">
                 <mj-column>
                     <mj-image
-                        src="https://zipft.com/brand/logo-wide-light.png"
-                        width="235px"
+                        src="https://zipft.com/brand/logo-core-light.png"
+                        width="170px"
                         height="80px"
                         alt="Logo"
                         align="left"
