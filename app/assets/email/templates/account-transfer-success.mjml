@@ -1,0 +1,87 @@
+<mjml>
+    <mj-head>
+        <mj-preview>Your zipft account has been transferred</mj-preview>
+        <mj-attributes>
+            <mj-text
+                font-size="16px"
+                font-family="Arial, sans-serif"
+                color="#1e1e1e"
+                line-height="26px"
+            />
+        </mj-attributes>
+        <mj-style>
+            body {
+                min-height: 100vh !important;
+            }
+            .main-content {
+                margin-top: 20px;
+            }
+            @media only screen and (max-width: 480px) {
+                .main-content {
+                    margin-top: 0 !important;
+                }
+            }
+            .text-muted {
+                color: #6b7280 !important;
+                font-weight: 400 !important;
+            }
+        </mj-style>
+    </mj-head>
+    <mj-body background-color="#f4f4f4">
+        <mj-wrapper
+            background-color="#fafafa"
+            border="1px solid #f0f0f0"
+            padding="45px"
+            css-class="main-content"
+        >
+            <!-- Logo -->
+            <mj-section padding="0">
+                <mj-column>
+                    <mj-image
+                        src="https://zipft.com/brand/logo-wide-light.png"
+                        width="235px"
+                        height="80px"
+                        alt="Logo"
+                        align="left"
+                        padding="0 0 20px 0"
+                    />
+                </mj-column>
+            </mj-section>
+
+            <!-- Content -->
+            <mj-section padding="0">
+                <mj-column>
+                    <mj-text padding="0 0 16px 0"> Hi ${user.name}, </mj-text>
+
+                    <mj-text padding="0 0 16px 0">
+                        Your account transfer request has been successfully
+                        processed.
+                    </mj-text>
+
+                    <mj-text padding="0 0 16px 0">
+                        We transferred your account from
+                        <span class="text-muted">${oldEmail}</span> to
+                        <span class="text-muted">${newEmail}</span>.
+                    </mj-text>
+
+                    <mj-text padding="0 0 16px 0">
+                        You can now use your new email address to log in to your
+                        zipft account.
+                    </mj-text>
+
+                    <mj-text padding="0">
+                        Thank you for using zipft!
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+
+            <mj-section padding="20px 0 0 0">
+                <mj-column>
+                    <mj-text font-size="12px" color="#a0a0a0" align="center"
+                        >${communication.id}</mj-text
+                    >
+                </mj-column>
+            </mj-section>
+        </mj-wrapper>
+    </mj-body>
+</mjml>

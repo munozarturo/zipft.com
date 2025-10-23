@@ -1,0 +1,52 @@
+{
+    "name": "nuxt-app",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "db:generate": "drizzle-kit generate",
+        "db:push": "drizzle-kit push",
+        "db:migrate": "drizzle-kit migrate",
+        "db:studio": "drizzle-kit studio"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.899.0",
+        "@aws-sdk/client-sesv2": "^3.883.0",
+        "@aws-sdk/s3-presigned-post": "^3.899.0",
+        "@aws-sdk/s3-request-presigner": "^3.899.0",
+        "@nuxt/content": "^3.6.3",
+        "@nuxt/fonts": "^0.11.4",
+        "@nuxt/icon": "^2.0.0",
+        "@nuxt/image": "^1.11.0",
+        "@nuxt/ui": "^4.0.1",
+        "@tailwindcss/vite": "^4.1.12",
+        "argon2": "^0.44.0",
+        "better-sqlite3": "^12.2.0",
+        "crypto-js": "^4.2.0",
+        "dotenv": "^17.2.2",
+        "drizzle-orm": "^0.44.5",
+        "mjml": "^4.16.1",
+        "nodemailer": "^7.0.6",
+        "nuxt": "^4.1.0",
+        "pg": "^8.16.3",
+        "postgres": "^3.4.7",
+        "tailwindcss": "^4.1.12",
+        "vue": "^3.5.20",
+        "vue-router": "^4.5.1",
+        "yup": "^1.7.0"
+    },
+    "devDependencies": {
+        "@iconify-json/lucide": "^1.2.66",
+        "@types/crypto-js": "^4.2.2",
+        "@types/mjml": "^4.7.4",
+        "@types/node": "^24.3.1",
+        "@types/nodemailer": "^7.0.1",
+        "drizzle-kit": "^0.31.4",
+        "tsx": "^4.20.5",
+        "vue-tsc": "^3.1.1"
+    }
+}
