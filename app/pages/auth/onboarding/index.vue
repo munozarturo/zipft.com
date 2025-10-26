@@ -24,7 +24,7 @@
                 :avatar-src="
                     state.avatar
                         ? createObjectUrl(state.avatar)
-                        : $auth.user?.value?.avatarUrl
+                        : $auth.user?.value?.avatarUrl || undefined
                 "
                 :show-verified-badge="!isNameFieldFocused"
             />

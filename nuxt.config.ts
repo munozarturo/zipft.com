@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         enviornment: "development",
-        baseUrl: "http://localhost:3000",
+        baseUrl: "http://172.20.54.152:3000/",
         cookies: { domain: undefined },
         brand: { mailFrom: "zipft.com" },
     },
