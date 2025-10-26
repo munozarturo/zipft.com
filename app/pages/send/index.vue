@@ -8,7 +8,12 @@
                             class="flex flex-col gap-2 pt-2"
                             :schema="schema"
                             :state="state"
-                            @submit="onSubmit"
+                            @submit="
+                                (e) => {
+                                    state.mode = 'link';
+                                    onSubmit(e);
+                                }
+                            "
                         >
                             <!-- Title -->
                             <UFormField name="title" :ui="{ label: 'w-full' }">
@@ -253,33 +258,8 @@
                             </UButton>
 
                             <!-- Submit -->
-                            <div
-                                class="flex flex-row justify-between gap-2 w-full"
-                            >
-                                <div>
-                                    <UButton
-                                        v-if="$auth.isAuthenticated.value"
-                                        color="neutral"
-                                        variant="link"
-                                        icon="i-lucide-file"
-                                        class="cursor-pointer"
-                                    >
-                                        <span class="text-left w-full"
-                                            >Save as draft</span
-                                        >
-                                    </UButton>
-                                </div>
+                            <div class="flex flex-row justify-end gap-2 w-full">
                                 <div class="flex flex-row gap-2">
-                                    <UButton
-                                        color="neutral"
-                                        variant="link"
-                                        icon="i-lucide-eye"
-                                        class="cursor-pointer"
-                                    >
-                                        <span class="text-left w-full"
-                                            >Preview</span
-                                        >
-                                    </UButton>
                                     <UButton
                                         type="submit"
                                         color="neutral"
@@ -299,7 +279,17 @@
                         </UForm>
                     </template>
                     <template #mail>
-                        <UForm class="flex flex-col gap-2 pt-2">
+                        <UForm
+                            class="flex flex-col gap-2 pt-2"
+                            :schema="schema"
+                            :state="state"
+                            @submit="
+                                (e) => {
+                                    state.mode = 'mail';
+                                    onSubmit(e);
+                                }
+                            "
+                        >
                             <!-- From -->
                             <UFormField label="From" name="from">
                                 <UInput
@@ -588,33 +578,8 @@
                             </UButton>
 
                             <!-- Submit -->
-                            <div
-                                class="flex flex-row justify-between gap-2 w-full"
-                            >
-                                <div>
-                                    <UButton
-                                        v-if="$auth.isAuthenticated.value"
-                                        color="neutral"
-                                        variant="link"
-                                        icon="i-lucide-file"
-                                        class="cursor-pointer"
-                                    >
-                                        <span class="text-left w-full"
-                                            >Save as draft</span
-                                        >
-                                    </UButton>
-                                </div>
+                            <div class="flex flex-row justify-end gap-2 w-full">
                                 <div class="flex flex-row gap-2">
-                                    <UButton
-                                        color="neutral"
-                                        variant="link"
-                                        icon="i-lucide-eye"
-                                        class="cursor-pointer"
-                                    >
-                                        <span class="text-left w-full"
-                                            >Preview</span
-                                        >
-                                    </UButton>
                                     <UButton
                                         type="submit"
                                         color="neutral"
@@ -684,7 +649,10 @@ const maxRecipients = 5;
 const maxTitleLength = 64;
 const maxMessageLength = 256;
 
+// TODO: separate everything on this page into two forms + preview
 const schema = y.object({
+    mode: y.string(), // "link" | "mail"
+
     from: y.string().email().nullable(),
     to: y
         .array()
