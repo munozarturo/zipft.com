@@ -1,5 +1,5 @@
 <template>
-    <UHeader class="static border-none">
+    <UHeader class="static border-none" :ui="{ toggle: 'hidden' }">
         <template #title> <LogoLong class="h-12 xs:h-14" /> </template>
 
         <template #right>
