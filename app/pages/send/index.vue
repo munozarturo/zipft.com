@@ -94,8 +94,22 @@
 
                             <!-- Options -->
                             <div v-if="showOptions" class="flex flex-col gap-2">
+                                <!-- Anonimize -->
+                                <UCheckbox
+                                    color="neutral"
+                                    v-if="$auth.isAuthenticated.value"
+                                    label="Anonymous transfer"
+                                    description="The transfer will not be linked to your profile"
+                                    v-model="state.anonimize"
+                                />
+
                                 <!-- Beacon -->
-                                <UFormField name="beacon" class="w-full">
+                                <UCheckbox
+                                    color="neutral"
+                                    description="Transfer will never expire"
+                                    v-model="state.isBeacon"
+                                    :disabled="!$auth.isAuthenticated.value"
+                                >
                                     <template #label>
                                         <span
                                             :class="[
@@ -114,20 +128,13 @@
                                                     name="i-lucide-triangle-alert" /></UTooltip
                                         ></span>
                                     </template>
-
-                                    <UCheckbox
-                                        color="neutral"
-                                        description="Transfer will never expire"
-                                        v-model="state.isBeacon"
-                                        :disabled="!$auth.isAuthenticated.value"
-                                    />
-                                </UFormField>
+                                </UCheckbox>
 
                                 <!-- Duration -->
                                 <UFormField
                                     name="duration"
                                     label="Duration"
-                                    description="The period during which the transfer will be active."
+                                    description="The period during which the transfer will be active"
                                     v-if="!state.isBeacon"
                                 >
                                     <template #label>
@@ -207,12 +214,13 @@
 
                                 <!-- Maximum Downloads -->
                                 <UFormField
-                                    name="maxDownloads"
+                                    name="downloadLimit"
                                     label="Download limit"
-                                    description="The number of times a transfer can be downloaded."
+                                    description="Limit the number of times a transfer can be downloaded"
                                 >
                                     <UInputNumber
-                                        v-model="state.maxDownloads"
+                                        v-model="state.downloadLimit"
+                                        :min="1"
                                         color="neutral"
                                         orientation="vertical"
                                         placeholder="No limit"
@@ -245,18 +253,49 @@
                             </UButton>
 
                             <!-- Submit -->
-                            <UButton
-                                type="submit"
-                                color="neutral"
-                                trailing-icon="i-lucide-send-horizontal"
-                                class="group cursor-pointer"
-                                :ui="{
-                                    trailingIcon:
-                                        'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
-                                }"
+                            <div
+                                class="flex flex-row justify-between gap-2 w-full"
                             >
-                                <span class="text-left w-full">Send</span>
-                            </UButton>
+                                <div>
+                                    <UButton
+                                        v-if="$auth.isAuthenticated.value"
+                                        color="neutral"
+                                        variant="link"
+                                        icon="i-lucide-file"
+                                        class="cursor-pointer"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Save as draft</span
+                                        >
+                                    </UButton>
+                                </div>
+                                <div class="flex flex-row gap-2">
+                                    <UButton
+                                        color="neutral"
+                                        variant="link"
+                                        icon="i-lucide-eye"
+                                        class="cursor-pointer"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Preview</span
+                                        >
+                                    </UButton>
+                                    <UButton
+                                        type="submit"
+                                        color="neutral"
+                                        trailing-icon="i-lucide-send-horizontal"
+                                        class="group cursor-pointer"
+                                        :ui="{
+                                            trailingIcon:
+                                                'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
+                                        }"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Send</span
+                                        >
+                                    </UButton>
+                                </div>
+                            </div>
                         </UForm>
                     </template>
                     <template #mail>
@@ -400,7 +439,12 @@
                             <!-- Options -->
                             <div v-if="showOptions" class="flex flex-col gap-2">
                                 <!-- Beacon -->
-                                <UFormField name="beacon" class="w-full">
+                                <UCheckbox
+                                    color="neutral"
+                                    description="Transfer will never expire"
+                                    v-model="state.isBeacon"
+                                    :disabled="!$auth.isAuthenticated.value"
+                                >
                                     <template #label>
                                         <span
                                             :class="[
@@ -419,20 +463,13 @@
                                                     name="i-lucide-triangle-alert" /></UTooltip
                                         ></span>
                                     </template>
-
-                                    <UCheckbox
-                                        color="neutral"
-                                        description="Transfer will never expire"
-                                        v-model="state.isBeacon"
-                                        :disabled="!$auth.isAuthenticated.value"
-                                    />
-                                </UFormField>
+                                </UCheckbox>
 
                                 <!-- Duration -->
                                 <UFormField
                                     name="duration"
                                     label="Duration"
-                                    description="The period during which the transfer will be active."
+                                    description="The period during which the transfer will be active"
                                     v-if="!state.isBeacon"
                                 >
                                     <template #label>
@@ -512,12 +549,13 @@
 
                                 <!-- Maximum Downloads -->
                                 <UFormField
-                                    name="maxDownloads"
+                                    name="downloadLimit"
                                     label="Download limit"
-                                    description="The number of times a transfer can be downloaded."
+                                    description="Limit the number of times a transfer can be downloaded"
                                 >
                                     <UInputNumber
-                                        v-model="state.maxDownloads"
+                                        v-model="state.downloadLimit"
+                                        :min="1"
                                         color="neutral"
                                         orientation="vertical"
                                         placeholder="No limit"
@@ -550,18 +588,49 @@
                             </UButton>
 
                             <!-- Submit -->
-                            <UButton
-                                type="submit"
-                                color="neutral"
-                                trailing-icon="i-lucide-send-horizontal"
-                                class="group cursor-pointer"
-                                :ui="{
-                                    trailingIcon:
-                                        'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
-                                }"
+                            <div
+                                class="flex flex-row justify-between gap-2 w-full"
                             >
-                                <span class="text-left w-full">Send</span>
-                            </UButton>
+                                <div>
+                                    <UButton
+                                        v-if="$auth.isAuthenticated.value"
+                                        color="neutral"
+                                        variant="link"
+                                        icon="i-lucide-file"
+                                        class="cursor-pointer"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Save as draft</span
+                                        >
+                                    </UButton>
+                                </div>
+                                <div class="flex flex-row gap-2">
+                                    <UButton
+                                        color="neutral"
+                                        variant="link"
+                                        icon="i-lucide-eye"
+                                        class="cursor-pointer"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Preview</span
+                                        >
+                                    </UButton>
+                                    <UButton
+                                        type="submit"
+                                        color="neutral"
+                                        trailing-icon="i-lucide-send-horizontal"
+                                        class="group cursor-pointer"
+                                        :ui="{
+                                            trailingIcon:
+                                                'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
+                                        }"
+                                    >
+                                        <span class="text-left w-full"
+                                            >Send</span
+                                        >
+                                    </UButton>
+                                </div>
+                            </div>
                         </UForm>
                     </template>
                 </UTabs>
@@ -627,8 +696,9 @@ const schema = y.object({
     message: y.string().max(maxMessageLength).nullable(),
     files: y.array().of(y.mixed()),
 
+    anonimize: y.boolean().default(false),
     isBeacon: y.boolean().default(false),
-    maxDownloads: y.number().nullable(),
+    downloadLimit: y.number().nullable(),
 });
 type Schema = y.InferType<typeof schema>;
 
