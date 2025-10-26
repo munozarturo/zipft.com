@@ -18,7 +18,11 @@
                         color="neutral"
                         trailing-icon="i-lucide-arrow-right"
                         class="group cursor-pointer hidden xs:flex"
-                        @click="navigateTo('/auth/signin')"
+                        @click="
+                            navigateTo(
+                                withCallback('/auth/signin', route.fullPath)
+                            )
+                        "
                         :ui="{
                             trailingIcon:
                                 'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
@@ -50,7 +54,11 @@
                         variant="outline"
                         icon="i-lucide-log-in"
                         class="w-full"
-                        @click="navigateTo('/auth/signin')"
+                        @click="
+                            navigateTo(
+                                withCallback('/auth/signin', route.fullPath)
+                            )
+                        "
                         size="sm"
                     >
                         Sign in
@@ -59,7 +67,11 @@
                         color="neutral"
                         trailing-icon="i-lucide-arrow-right"
                         class="w-full justify-between"
-                        @click="navigateTo('/auth/signup')"
+                        @click="
+                            navigateTo(
+                                withCallback('/auth/signup', route.fullPath)
+                            )
+                        "
                         size="sm"
                     >
                         Sign up
@@ -95,8 +107,10 @@
 
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
+import useCallback from "~/composables/callback";
 
 const route = useRoute();
+const { withCallback } = useCallback();
 
 const items = computed<NavigationMenuItem[]>(() => [
     {
