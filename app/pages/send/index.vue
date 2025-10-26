@@ -22,7 +22,7 @@
                                             :class="[
                                                 'text-xs tabular-nums',
                                                 (state.title?.length || 0) >
-                                                maxTitleLength
+                                                maxTransferTitleLength
                                                     ? 'text-error'
                                                     : 'text-muted',
                                             ]"
@@ -30,7 +30,7 @@
                                             role="status"
                                         >
                                             {{ state.title?.length || 0 }}/{{
-                                                maxTitleLength
+                                                maxTransferTitleLength
                                             }}
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                             :class="[
                                                 'text-xs tabular-nums',
                                                 (state.message?.length || 0) >
-                                                maxMessageLength
+                                                maxTransferMessageLength
                                                     ? 'text-error'
                                                     : 'text-muted',
                                             ]"
@@ -66,7 +66,7 @@
                                             role="status"
                                         >
                                             {{ state.message?.length || 0 }}/{{
-                                                maxMessageLength
+                                                maxTransferMessageLength
                                             }}
                                         </div>
                                     </div>
@@ -308,7 +308,7 @@
                                             :class="[
                                                 'text-xs tabular-nums',
                                                 (state.to?.length || 0) >
-                                                maxRecipients
+                                                maxTransferRecipients
                                                     ? 'text-error'
                                                     : 'text-muted',
                                             ]"
@@ -316,7 +316,7 @@
                                             role="status"
                                         >
                                             {{ state.to?.length || 0 }}/{{
-                                                maxRecipients
+                                                maxTransferRecipients
                                             }}
                                         </div>
                                     </div>
@@ -346,7 +346,7 @@
                                             :class="[
                                                 'text-xs tabular-nums',
                                                 (state.title?.length || 0) >
-                                                maxTitleLength
+                                                maxTransferTitleLength
                                                     ? 'text-error'
                                                     : 'text-muted',
                                             ]"
@@ -354,7 +354,7 @@
                                             role="status"
                                         >
                                             {{ state.title?.length || 0 }}/{{
-                                                maxTitleLength
+                                                maxTransferTitleLength
                                             }}
                                         </div>
                                     </div>
@@ -382,7 +382,7 @@
                                             :class="[
                                                 'text-xs tabular-nums',
                                                 (state.message?.length || 0) >
-                                                maxMessageLength
+                                                maxTransferMessageLength
                                                     ? 'text-error'
                                                     : 'text-muted',
                                             ]"
@@ -390,7 +390,7 @@
                                             role="status"
                                         >
                                             {{ state.message?.length || 0 }}/{{
-                                                maxMessageLength
+                                                maxTransferMessageLength
                                             }}
                                         </div>
                                     </div>
@@ -603,6 +603,15 @@ import {
     getLocalTimeZone,
     today,
 } from "@internationalized/date";
+import {
+    maxTransferMessageLength,
+    transferMessageSchema,
+    maxTransferTitleLength,
+    transferTitleSchema,
+    linkSchema,
+    mailSchema,
+    maxTransferRecipients,
+} from "~~/shared/schema/transfer";
 
 useHead({ title: "Send :: zipft" });
 
@@ -635,10 +644,6 @@ const modelValue = shallowRef({
     end: oneWeekFromNow,
 });
 
-const maxRecipients = 5;
-const maxTitleLength = 64;
-const maxMessageLength = 256;
-
 // Shared state type that works with both forms
 interface FormState {
     // Shared fields
@@ -655,63 +660,6 @@ interface FormState {
     // Link-specific fields
     anonimize?: boolean;
 }
-
-// Shared field definitions to avoid duplication
-const sharedFields = {
-    title: y
-        .string()
-        .max(
-            maxTitleLength,
-            `Title must be ${maxTitleLength} characters or less`
-        )
-        .nullable(),
-    message: y
-        .string()
-        .max(
-            maxMessageLength,
-            `Message must be ${maxMessageLength} characters or less`
-        )
-        .nullable(),
-    isBeacon: y.boolean().default(false),
-    downloadLimit: y
-        .number()
-        .positive("Download limit must be a positive number")
-        .integer("Download limit must be a whole number")
-        .nullable(),
-};
-
-// Form-specific validation schemas
-const linkSchema = y.object({
-    ...sharedFields,
-    files: y
-        .array()
-        .of(y.mixed())
-        .min(1, "Please select at least one file to share via link")
-        .required("Files are required for link sharing"),
-    anonimize: y.boolean().default(false),
-});
-
-const mailSchema = y.object({
-    ...sharedFields,
-    files: y
-        .array()
-        .of(y.mixed())
-        .min(1, "Please select at least one file to send")
-        .required("Files are required"),
-    from: y
-        .string()
-        .email("Please enter a valid sender email address")
-        .required("Sender email is required"),
-    to: y
-        .array()
-        .of(y.string().email("Please enter valid email addresses").required())
-        .min(1, "Please add at least one recipient")
-        .max(
-            maxRecipients,
-            `You can send to a maximum of ${maxRecipients} recipients`
-        )
-        .required("At least one recipient is required"),
-});
 
 type LinkSchema = y.InferType<typeof linkSchema>;
 type MailSchema = y.InferType<typeof mailSchema>;

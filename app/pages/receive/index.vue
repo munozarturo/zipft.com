@@ -42,21 +42,12 @@
 <script setup lang="ts">
 import * as y from "yup";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { transferTokenSchema } from "~~/shared/schema/transfer";
 
 useHead({ title: "Receive :: zipft" });
 
 const schema = y.object({
-    token: y
-        .array(y.string().length(1))
-        .test(
-            "valid-characters",
-            "Token contains invalid characters",
-            (value) => {
-                if (!value) return false;
-                const joined = value.join("");
-                return /^[abcdefghijkmnpqrstuvwxyz23456789]{6}$/.test(joined);
-            }
-        ),
+    token: transferTokenSchema,
 });
 type Schema = y.InferType<typeof schema>;
 
