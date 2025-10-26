@@ -6,14 +6,9 @@
                     <template #link>
                         <UForm
                             class="flex flex-col gap-2 pt-2"
-                            :schema="schema"
-                            :state="state"
-                            @submit="
-                                (e) => {
-                                    state.mode = 'link';
-                                    onSubmit(e);
-                                }
-                            "
+                            :schema="linkSchema"
+                            :state="linkState"
+                            @submit="onLinkSubmit"
                         >
                             <!-- Title -->
                             <UFormField name="title" :ui="{ label: 'w-full' }">
@@ -281,14 +276,9 @@
                     <template #mail>
                         <UForm
                             class="flex flex-col gap-2 pt-2"
-                            :schema="schema"
-                            :state="state"
-                            @submit="
-                                (e) => {
-                                    state.mode = 'mail';
-                                    onSubmit(e);
-                                }
-                            "
+                            :schema="mailSchema"
+                            :state="mailState"
+                            @submit="onMailSubmit"
                         >
                             <!-- From -->
                             <UFormField label="From" name="from">
@@ -649,36 +639,119 @@ const maxRecipients = 5;
 const maxTitleLength = 64;
 const maxMessageLength = 256;
 
-// TODO: separate everything on this page into two forms + preview
-const linkSchema = y.object({});
+// Shared state type that works with both forms
+interface FormState {
+    // Shared fields
+    title?: string | null;
+    message?: string | null;
+    files?: any[];
+    isBeacon?: boolean;
+    downloadLimit?: number | null;
 
-const mailSchema = y.object({});
+    // Mail-specific fields
+    from?: string | null;
+    to?: string[];
 
-const schema = y.object({
-    mode: y.string(), // "link" | "mail"
+    // Link-specific fields
+    anonimize?: boolean;
+}
 
-    from: y.string().email().nullable(),
+// Shared field definitions to avoid duplication
+const sharedFields = {
+    title: y
+        .string()
+        .max(
+            maxTitleLength,
+            `Title must be ${maxTitleLength} characters or less`
+        )
+        .nullable(),
+    message: y
+        .string()
+        .max(
+            maxMessageLength,
+            `Message must be ${maxMessageLength} characters or less`
+        )
+        .nullable(),
+    isBeacon: y.boolean().default(false),
+    downloadLimit: y
+        .number()
+        .positive("Download limit must be a positive number")
+        .integer("Download limit must be a whole number")
+        .nullable(),
+};
+
+// Form-specific validation schemas
+const linkSchema = y.object({
+    ...sharedFields,
+    files: y
+        .array()
+        .of(y.mixed())
+        .min(1, "Please select at least one file to share via link")
+        .required("Files are required for link sharing"),
+    anonimize: y.boolean().default(false),
+});
+
+const mailSchema = y.object({
+    ...sharedFields,
+    files: y
+        .array()
+        .of(y.mixed())
+        .min(1, "Please select at least one file to send")
+        .required("Files are required"),
+    from: y
+        .string()
+        .email("Please enter a valid sender email address")
+        .required("Sender email is required"),
     to: y
         .array()
-        .of(y.string().email().required())
-        .min(1, "At least one recipient is required")
-        .max(maxRecipients, "Maximum number of recipients exceeded")
-        .nullable(),
-    title: y.string().max(maxTitleLength).nullable(),
-    message: y.string().max(maxMessageLength).nullable(),
-    files: y.array().of(y.mixed()),
-
-    anonimize: y.boolean().default(false),
-    isBeacon: y.boolean().default(false),
-    downloadLimit: y.number().nullable(),
-});
-type Schema = y.InferType<typeof schema>;
-
-const state = reactive<Partial<Schema>>({
-    from: $auth.user.value?.email,
+        .of(y.string().email("Please enter valid email addresses").required())
+        .min(1, "Please add at least one recipient")
+        .max(
+            maxRecipients,
+            `You can send to a maximum of ${maxRecipients} recipients`
+        )
+        .required("At least one recipient is required"),
 });
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-    console.log(event.data);
+type LinkSchema = y.InferType<typeof linkSchema>;
+type MailSchema = y.InferType<typeof mailSchema>;
+
+const state = reactive<FormState>({
+    from: $auth.user.value?.email || null,
+    title: null,
+    message: null,
+    files: [],
+    isBeacon: false,
+    downloadLimit: null,
+    to: [],
+    anonimize: false,
+});
+
+// Create properly typed states for each form
+const linkState = computed(() => ({
+    title: state.title,
+    message: state.message,
+    files: state.files || [],
+    isBeacon: state.isBeacon || false,
+    downloadLimit: state.downloadLimit,
+    anonimize: state.anonimize || false,
+}));
+
+const mailState = computed(() => ({
+    title: state.title,
+    message: state.message,
+    files: state.files || [],
+    isBeacon: state.isBeacon || false,
+    downloadLimit: state.downloadLimit,
+    from: state.from || "",
+    to: state.to || [],
+}));
+
+async function onLinkSubmit(event: FormSubmitEvent<LinkSchema>) {
+    console.log("Link form submitted:", event.data);
+}
+
+async function onMailSubmit(event: FormSubmitEvent<MailSchema>) {
+    console.log("Mail form submitted:", event.data);
 }
 </script>
