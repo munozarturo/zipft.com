@@ -1,7 +1,7 @@
 <template>
     <NuxtLayout name="content">
         <div class="w-full h-full flex flex-col items-center pt-2 pb-4">
-            <div class="w-full max-w-2xl">
+            <div class="w-full px-4 sm:px-0 sm:max-w-lg lg:max-w-2xl">
                 <UTabs :items="tabs" variant="link" color="neutral">
                     <template #link>
                         <UForm
@@ -653,7 +653,7 @@ useHead({ title: "Send :: zipft" });
 
 const { $auth } = useNuxtApp();
 
-const showOptions = ref<boolean>(true); // false
+const showOptions = ref<boolean>(false);
 
 const tabs: TabsItem[] = [
     {
