@@ -1,12 +1,20 @@
 import * as y from "yup";
 
-const transferTokenSchema = y
+const transferTokenArraySchema = y
     .array(y.string().length(1))
     .test("valid-characters", "Token contains invalid characters", (value) => {
         if (!value) return false;
         const joined = value.join("");
         return /^[abcdefghijkmnpqrstuvwxyz23456789]{6}$/.test(joined);
     });
+
+const transferTokenSchema = y
+    .string()
+    .matches(
+        /^[abcdefghijkmnpqrstuvwxyz23456789]{6}$/,
+        "Token must be exactly 6 characters using only lowercase letters (excluding i, l, o, u) and numbers (excluding 0, 1)"
+    )
+    .required("Token is required");
 
 const maxTransferTitleLength = 64;
 const transferTitleSchema = y
@@ -74,6 +82,7 @@ const mailSchema = y.object({
 
 export {
     transferTokenSchema,
+    transferTokenArraySchema,
     maxTransferTitleLength,
     transferTitleSchema,
     maxTransferMessageLength,
