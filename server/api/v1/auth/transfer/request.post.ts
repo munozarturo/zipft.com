@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
             .insert(transferChallenges)
             .values({ userId: user.id, email, tokenHash });
 
-        const transferUrl = new URL("/auth/transfer", config.baseUrl);
+        const transferUrl = new URL("/auth/transfer", config.public.baseUrl);
         transferUrl.searchParams.set("t", token);
 
         const body = await compileAccountTransferRequestTemplate({

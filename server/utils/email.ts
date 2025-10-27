@@ -163,3 +163,17 @@ export async function compileAccountTransferFailureTemplate(props: {
         communication: props.communication,
     });
 }
+
+export async function compileVerifyTransferEmailTemplate(props: {
+    user: { name: string | null };
+    verificationUrl: string;
+    communication: { id: string };
+}): Promise<EmailTemplate> {
+    props.user.name = props.user.name || "there";
+
+    return compileMjmlTemplate("verify-transfer-email", {
+        verificationUrl: props.verificationUrl,
+        user: props.user,
+        communication: props.communication,
+    });
+}

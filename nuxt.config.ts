@@ -9,13 +9,18 @@ export default defineNuxtConfig({
             enviornment: "production",
             baseUrl: "https://zipft.com",
             cookies: { domain: ".zipft.com" },
+            public: {
+                baseUrl: "https://zipft.com",
+            },
         },
     },
     runtimeConfig: {
         enviornment: "development",
-        baseUrl: "http://172.20.54.152:3000/",
         cookies: { domain: undefined },
         brand: { mailFrom: "zipft.com" },
+        public: {
+            baseUrl: "http://127.0.0.1:3000",
+        },
     },
     app: {
         head: {

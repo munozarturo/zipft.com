@@ -1,5 +1,5 @@
 {
-  "id": "4af231e9-9415-4f0f-8b4a-c421cd37099a",
+  "id": "83d416ee-6bc2-48fa-b516-7b7b6d14f112",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -15,11 +15,11 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "type": {
           "name": "type",
@@ -44,22 +44,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "communications_user_id_users_id_fk": {
-          "name": "communications_user_id_users_id_fk",
-          "tableFrom": "communications",
-          "tableTo": "users",
-          "schemaTo": "zipft",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -516,6 +501,210 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "zipft.transfer_verification_challenges": {
+      "name": "transfer_verification_challenges",
+      "schema": "zipft",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "transferToken": {
+          "name": "transferToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP + INTERVAL '30 minutes'"
+        },
+        "used": {
+          "name": "used",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transfer_verification_challenges_transferToken_transfers_token_fk": {
+          "name": "transfer_verification_challenges_transferToken_transfers_token_fk",
+          "tableFrom": "transfer_verification_challenges",
+          "tableTo": "transfers",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "transferToken"
+          ],
+          "columnsTo": [
+            "token"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "zipft.transfers": {
+      "name": "transfers",
+      "schema": "zipft",
+      "columns": {
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "transfer_type": {
+          "name": "transfer_type",
+          "type": "transfer_type",
+          "typeSchema": "zipft",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anonymous": {
+          "name": "anonymous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "from": {
+          "name": "from",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fromVerified": {
+          "name": "fromVerified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "to": {
+          "name": "to",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "objectId": {
+          "name": "objectId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "beacon": {
+          "name": "beacon",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "download_limit": {
+          "name": "download_limit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration_start": {
+          "name": "duration_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration_end": {
+          "name": "duration_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transfers_user_id_users_id_fk": {
+          "name": "transfers_user_id_users_id_fk",
+          "tableFrom": "transfers",
+          "tableTo": "users",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "transfers_objectId_objects_id_fk": {
+          "name": "transfers_objectId_objects_id_fk",
+          "tableFrom": "transfers",
+          "tableTo": "objects",
+          "schemaTo": "zipft",
+          "columnsFrom": [
+            "objectId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "zipft.users": {
       "name": "users",
       "schema": "zipft",
@@ -693,7 +882,8 @@
       "values": [
         "verification",
         "recovery",
-        "transfer",
+        "transfer/verification",
+        "transfer/recipient",
         "deletion"
       ]
     },
@@ -710,6 +900,14 @@
       "values": [
         "zipft-cdn",
         "zipft-cdn-public"
+      ]
+    },
+    "zipft.transfer_type": {
+      "name": "transfer_type",
+      "schema": "zipft",
+      "values": [
+        "mail",
+        "link"
       ]
     },
     "zipft.user_roles": {

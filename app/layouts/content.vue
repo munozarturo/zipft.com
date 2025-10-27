@@ -117,7 +117,7 @@ const items = computed<NavigationMenuItem[]>(() => [
         label: "Send",
         to: "/send",
         icon: "i-lucide-send",
-        active: route.path === "/send",
+        active: route.path.startsWith("/send"),
     },
     {
         label: "Receive",

@@ -2,68 +2,67 @@ import * as y from "yup";
 
 import { and, eq, gte } from "drizzle-orm";
 import {
-    communications,
-    users,
-    verificationChallenges,
+    incognitoCommunications,
+    transferVerificationChallenges,
+    transfers,
 } from "~~/server/db/schema";
 
-import { compileVerifyEmailTemplate } from "~~/server/utils/email";
 import { db } from "~~/server/db/client";
-import { emailSchema } from "~~/shared/schema/auth";
 import { generateTokenHashPair } from "~~/server/utils/crypto";
 import { sendEmail } from "~~/server/aws/ses";
 
 const schema = y.object({
-    email: emailSchema.required("Required"),
-    callback: y.string().optional(),
+    token: y.string().required("Required"),
 });
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig();
 
-    const { email, callback } = await schema.validate(await readBody(event));
+    const { token: transferToken } = await schema.validate(
+        await readBody(event)
+    );
 
     // create token, tokenHash
     const { token, tokenHash } = generateTokenHashPair(32);
 
-    // if user email doesn't exist redirect to signup
-    const userRes = await db
-        .select({
-            id: users.id,
-            name: users.name,
-            email: users.email,
-            verified: users.verified,
-        })
-        .from(users)
-        .where(eq(users.email, email));
-    if (userRes.length <= 0)
+    // if transfer doesn't exist return error
+    const transferRes = await db
+        .select()
+        .from(transfers)
+        .where(eq(transfers.token, transferToken));
+    if (transferRes.length <= 0)
         return createError({
             statusCode: 404,
-            statusMessage: "User Not Found",
-            message: "No account found for this email address.",
+            statusMessage: "Transfer Not Found",
+            message: "No transfer found for this token.",
         });
-    const user = userRes[0];
+    const transfer = transferRes[0];
 
-    // if user is verified redirect to signin
-    if (user.verified)
+    // if transfer sender is undefined error
+    if (!transfer.from) return createError({});
+
+    // if transfer isn't mail transfer error
+    if (transfer.transferType !== "mail") return createError({});
+
+    // if transfer is verified redirect to signin
+    if (transfer.fromVerified)
         return createError({
             statusCode: 409,
             statusMessage: "Already Verified",
-            message:
-                "This email address is already verified. Please sign in instead.",
+            message: "This transfer has already been verified.",
         });
 
     // check for rate limit with verification emails
     const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     const lastCommunicationRes = await db
-        .select({ createdAt: communications.createdAt })
-        .from(communications)
+        .select({ createdAt: incognitoCommunications.createdAt })
+        .from(incognitoCommunications)
         .where(
             and(
-                eq(communications.type, "email"),
-                eq(communications.purpose, "verification"),
-                eq(communications.userId, user.id),
-                gte(communications.createdAt, oneMinuteAgo)
+                eq(incognitoCommunications.identifier, transfer.from),
+                eq(incognitoCommunications.type, "email"),
+                eq(incognitoCommunications.purpose, "transfer/verification"),
+                gte(incognitoCommunications.createdAt, oneMinuteAgo)
             )
         )
         .limit(1);
@@ -84,34 +83,33 @@ export default defineEventHandler(async (event) => {
 
     // create verification challenge
     await db
-        .insert(verificationChallenges)
-        .values({ userId: user.id, tokenHash });
+        .insert(transferVerificationChallenges)
+        .values({ transferToken, tokenHash });
 
     // create communication
     const communicationRes = await db
-        .insert(communications)
+        .insert(incognitoCommunications)
         .values({
-            userId: user.id,
+            identifier: transfer.from,
             type: "email",
             purpose: "verification",
         })
-        .returning({ id: communications.id });
+        .returning({ id: incognitoCommunications.id });
     const communication = communicationRes[0];
 
-    const verificationUrl = new URL("/auth/verify", config.public.baseUrl);
+    const verificationUrl = new URL("/send/verify", config.public.baseUrl);
     verificationUrl.searchParams.set("t", token);
-    if (callback) verificationUrl.searchParams.set("c", callback);
 
-    const body = await compileVerifyEmailTemplate({
-        user,
+    const body = await compileVerifyTransferEmailTemplate({
+        user: { name: transfer.from },
         verificationUrl: verificationUrl.toString(),
         communication,
     });
 
     await sendEmail({
         source: `"zipft" <account@${config.brand.mailFrom}>`,
-        subject: "Verify your zipft account",
-        destination: { to: email },
+        subject: "Verify your zipft transfer",
+        destination: { to: transfer.from },
         body,
     });
 

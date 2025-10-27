@@ -84,6 +84,7 @@
                             <!-- Files -->
                             <UFormField name="files" label="Files">
                                 <UFileUpload
+                                    v-model="state.files"
                                     multiple
                                     label="Drop your files here"
                                     class="w-full min-h-64"
@@ -260,6 +261,8 @@
                                         color="neutral"
                                         trailing-icon="i-lucide-send-horizontal"
                                         class="group cursor-pointer"
+                                        :loading="submitting"
+                                        :disabled="submitting"
                                         :ui="{
                                             trailingIcon:
                                                 'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
@@ -408,6 +411,7 @@
                             <!-- Files -->
                             <UFormField name="files" label="Files">
                                 <UFileUpload
+                                    v-model="state.files"
                                     multiple
                                     label="Drop your files here"
                                     class="w-full min-h-64"
@@ -575,14 +579,16 @@
                                         color="neutral"
                                         trailing-icon="i-lucide-send-horizontal"
                                         class="group cursor-pointer"
+                                        :loading="submitting"
+                                        :disabled="submitting"
                                         :ui="{
                                             trailingIcon:
                                                 'group-enabled:group-hover:translate-x-1 group-enabled:group-focus-visible:translate-x-1 transition-transform duration-300',
                                         }"
                                     >
-                                        <span class="text-left w-full"
-                                            >Send</span
-                                        >
+                                        <span class="text-left w-full">{{
+                                            submitting ? "Sending..." : "Send"
+                                        }}</span>
                                     </UButton>
                                 </div>
                             </div>
@@ -605,13 +611,13 @@ import {
 } from "@internationalized/date";
 import {
     maxTransferMessageLength,
-    transferMessageSchema,
     maxTransferTitleLength,
-    transferTitleSchema,
     linkSchema,
     mailSchema,
     maxTransferRecipients,
 } from "~~/shared/schema/transfer";
+import JSZip from "jszip";
+import CryptoJS from "crypto-js";
 
 useHead({ title: "Send :: zipft" });
 
@@ -643,6 +649,21 @@ const modelValue = shallowRef({
     start: now,
     end: oneWeekFromNow,
 });
+
+// API response interfaces
+interface LinkTransferResponse {
+    token: string;
+    file: {
+        key: string;
+        path: string;
+        method: string;
+    };
+}
+
+interface UploadResponse {
+    url: string;
+    fields: Record<string, string>;
+}
 
 // Shared state type that works with both forms
 interface FormState {
@@ -695,11 +716,215 @@ const mailState = computed(() => ({
     to: state.to || [],
 }));
 
+// Helper functions
+async function calculateMD5(file: File): Promise<string> {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const arrayBuffer = e.target?.result as ArrayBuffer;
+            const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+
+            // Calculate MD5 hash and convert to base64
+            const hash = CryptoJS.MD5(wordArray);
+            const base64Hash = CryptoJS.enc.Base64.stringify(hash);
+
+            resolve(base64Hash);
+        };
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+async function createZipFile(files: File[]): Promise<File> {
+    const zip = new JSZip();
+
+    // Add all files to the zip
+    for (const file of files) {
+        zip.file(file.name, file);
+    }
+
+    // Generate the zip file
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+
+    // Create a File object from the blob
+    const zipFile = new File([zipBlob], "transfer.zip", {
+        type: "application/zip",
+    });
+
+    return zipFile;
+}
+
+// State management
+const toast = useToast();
+const submitting = ref<boolean>(false);
+
 async function onLinkSubmit(event: FormSubmitEvent<LinkSchema>) {
-    console.log("Link form submitted:", event.data);
+    if (!event.data.files || event.data.files.length === 0) {
+        toast.add({
+            title: "No files selected",
+            description: "Please select at least one file to share",
+            icon: "i-lucide-x",
+            color: "error",
+        });
+        return;
+    }
+
+    submitting.value = true;
+
+    try {
+        // Create zip file from all selected files
+        const zipFile = await createZipFile(event.data.files as File[]);
+
+        // Calculate MD5 hash for the zip file
+        const md5Hash = await calculateMD5(zipFile);
+
+        // Prepare the request data for the transfer API
+        const transferData = {
+            title: event.data.title,
+            message: event.data.message,
+            isBeacon: event.data.isBeacon,
+            downloadLimit: event.data.downloadLimit,
+            anonimize: event.data.anonimize,
+            file: {
+                name: zipFile.name,
+                type: zipFile.type,
+                md5: md5Hash,
+                size: zipFile.size,
+            },
+            duration: event.data.isBeacon
+                ? null
+                : {
+                      start: modelValue.value.start.toDate(getLocalTimeZone()),
+                      end: modelValue.value.end.toDate(getLocalTimeZone()),
+                  },
+        };
+
+        // Create the transfer
+        const transferResponse = await $fetch<LinkTransferResponse>(
+            "/api/v1/transfer/link",
+            {
+                method: "POST",
+                body: transferData,
+            }
+        );
+
+        // Get presigned URL for upload
+        const uploadResponse = await $fetch<UploadResponse>(
+            "/api/v1/object/upload",
+            {
+                method: "POST",
+                body: { key: transferResponse.file.key },
+            }
+        );
+
+        // Upload to S3 using presigned URL
+        const s3FormData = new FormData();
+
+        // Add all presigned fields first
+        Object.entries(uploadResponse.fields).forEach(([key, value]) => {
+            s3FormData.append(key, value as string);
+        });
+
+        // Add the file last (S3 requires this)
+        s3FormData.append("file", zipFile);
+
+        // Use fetch directly for S3 upload instead of $fetch to handle non-JSON responses
+        const s3Response = await fetch(uploadResponse.url, {
+            method: "POST",
+            body: s3FormData,
+        });
+
+        if (!s3Response.ok) {
+            const responseText = await s3Response.text();
+            console.error("S3 response body:", responseText);
+            throw new Error(
+                `S3 upload failed: ${s3Response.status} ${s3Response.statusText} - ${responseText}`
+            );
+        }
+
+        // Verify the upload
+        await $fetch("/api/v1/object/verify", {
+            method: "POST",
+            body: { key: transferResponse.file.key },
+        });
+
+        // Show success message
+        toast.add({
+            title: "Transfer created successfully",
+            description: "Your files have been uploaded and are ready to share",
+            icon: "i-lucide-check",
+            color: "success",
+        });
+
+        navigateTo(`/send/share?t=${transferResponse.token}`);
+
+        // Reset form
+        state.title = null;
+        state.message = null;
+        state.files = [];
+        state.downloadLimit = null;
+        state.anonimize = false;
+    } catch (e: any) {
+        console.error("Transfer creation failed:", e);
+
+        let title = e.statusMessage || "Transfer failed";
+        let description = "Please try again";
+
+        // Handle specific error cases
+        if (e.statusCode === 413) {
+            title = "File too large";
+            description = e.message || "Please reduce file size and try again";
+        } else if (e.statusCode === 429) {
+            title = "Too many requests";
+            const customMessage = e.data?.message || e.message;
+            const waitTime = e.data?.waitTime;
+
+            if (customMessage && customMessage !== e.toString()) {
+                description = customMessage;
+            } else if (waitTime) {
+                description = `Please wait ${waitTime} seconds before trying again.`;
+            } else {
+                description = "Please wait before trying again.";
+            }
+        } else if (e.message && e.message.includes("S3 upload failed")) {
+            title = "Upload failed";
+            description =
+                "Failed to upload file to storage. Please check your internet connection and try again.";
+        } else {
+            description = e.message || description;
+        }
+        toast.add({
+            title,
+            description,
+            icon: "i-lucide-x",
+            color: "error",
+        });
+    } finally {
+        submitting.value = false;
+    }
 }
 
 async function onMailSubmit(event: FormSubmitEvent<MailSchema>) {
-    console.log("Mail form submitted:", event.data);
+    submitting.value = true;
+
+    try {
+        // TODO: Implement mail transfer functionality
+        toast.add({
+            title: "Mail transfer not implemented",
+            description: "This feature is coming soon",
+            icon: "i-lucide-info",
+            color: "info",
+        });
+    } catch (e: any) {
+        console.error("Mail transfer failed:", e);
+
+        toast.add({
+            title: "Transfer failed",
+            description: e.message || "Please try again",
+            icon: "i-lucide-x",
+            color: "error",
+        });
+    } finally {
+        submitting.value = false;
+    }
 }
 </script>

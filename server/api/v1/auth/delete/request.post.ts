@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
         .returning({ id: communications.id });
     const communication = communicationRes[0];
 
-    const deletionUrl = new URL("/auth/delete", config.baseUrl);
+    const deletionUrl = new URL("/auth/delete", config.public.baseUrl);
     deletionUrl.searchParams.set("t", token);
 
     const body = await compileAccountDeletionRequestTemplate({

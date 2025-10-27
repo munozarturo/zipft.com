@@ -92,7 +92,8 @@ export const communicationType = zipft.enum("communication_type", ["email"]);
 export const communicationPurpose = zipft.enum("communication_purpose", [
     "verification",
     "recovery",
-    "transfer",
+    "transfer/verification",
+    "transfer/recipient",
     "deletion",
 ]);
 export const communications = zipft.table("communications", {
@@ -112,6 +113,23 @@ export const communications = zipft.table("communications", {
         .defaultNow(),
 });
 export type Communication = InferSelectModel<typeof communications>;
+
+export const incognitoCommunications = zipft.table("communications", {
+    id: t.uuid().primaryKey().defaultRandom(),
+
+    identifier: t.text(),
+
+    type: communicationType().notNull(),
+    purpose: communicationPurpose().notNull(),
+
+    createdAt: t
+        .timestamp("created_at", { withTimezone: true })
+        .notNull()
+        .defaultNow(),
+});
+export type IncognitoCommunication = InferSelectModel<
+    typeof incognitoCommunications
+>;
 export type CommunicationType = typeof communications.$inferSelect.type;
 export type CommunicationPurpose = typeof communications.$inferSelect.purpose;
 
@@ -191,3 +209,58 @@ export const deletionChallenges = zipft.table("deletion_challenges", {
     usedAt: t.timestamp("used_at"),
 });
 export type DeletionChallenge = InferSelectModel<typeof deletionChallenges>;
+
+export const transferType = zipft.enum("transfer_type", ["mail", "link"]);
+export const transfers = zipft.table("transfers", {
+    token: t.text("token").primaryKey().notNull(),
+
+    transferType: transferType("transfer_type").notNull(),
+
+    userId: t
+        .uuid("user_id")
+        .references(() => users.id, { onDelete: "cascade" }),
+    anonymous: t.boolean().default(false),
+
+    from: t.text(),
+    fromVerified: t.boolean().default(false),
+    to: t.text().array(),
+
+    objectId: t
+        .text()
+        .notNull()
+        .references(() => objects.id),
+
+    createdAt: t.timestamp("created_at").notNull().defaultNow(),
+
+    beacon: t.boolean().default(false),
+    downloadLimit: t.integer("download_limit"),
+    durationStart: t.timestamp("duration_start"),
+    durationEnd: t.timestamp("duration_end"),
+
+    title: t.text(),
+    message: t.text(),
+});
+export type Transfer = InferSelectModel<typeof transfers>;
+
+export const transferVerificationChallenges = zipft.table(
+    "transfer_verification_challenges",
+    {
+        tokenHash: t.text("token_hash").primaryKey(),
+        transferToken: t
+            .text()
+            .notNull()
+            .references(() => transfers.token, { onDelete: "cascade" }),
+
+        createdAt: t.timestamp("created_at").notNull().defaultNow(),
+        expiresAt: t
+            .timestamp("expires_at")
+            .notNull()
+            .default(sql`CURRENT_TIMESTAMP + INTERVAL '30 minutes'`),
+
+        used: t.boolean().notNull().default(false), // enforce: used is false
+        usedAt: t.timestamp("used_at"), // enforce: createdAt <= usedAt <= expiresAt
+    }
+);
+export type TransferVerificationChallenge = InferSelectModel<
+    typeof transferVerificationChallenges
+>;
